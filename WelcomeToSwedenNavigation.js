@@ -16,7 +16,7 @@ import SocietyFunctions from "./screens/homeScreens/SocietyFunctions";
 import UserProfile from "./screens/homeScreens/UserProfile";
 import DrawerComponent from "./components/DrawerComponent";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
-import  Ionicons  from '@expo/vector-icons/Ionicons';
+import  {Ionicons, FontAwesome,MaterialCommunityIcons}  from '@expo/vector-icons';
 import Fika from "./screens/socialLifeScreens/Fika";
 import Food from "./screens/socialLifeScreens/Food";
 import Traditions from "./screens/socialLifeScreens/Traditions";
@@ -26,6 +26,8 @@ import HealthCare from "./screens/societalFunctionsScreens/HealthCare";
 import SplashScreen from "./screens/SplashScreen";
 import { useSelector } from "react-redux";
 import useAuthenticatedUser from "./hooks/useaAuthenticateUser"
+import ButtonComponent from "./components/ButtonComponent";
+import FeedBack from "./screens/settingScreens/FeedBack";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -78,19 +80,21 @@ const HomeTabNavigator = () => {
         tabBarIcon: ({ focused, color }) => {
           let iconName;
           if (route.name === "Home") {
-            iconName = focused ? "ios-home" : "ios-home";
+            iconName = focused ? "home-outline" : "home-outline";
             color = focused ? "#2f3030" : "#7d7d7d";
           } else if (route.name === "SocialLife") {
-            iconName = "ios-people";
+            iconName = "human-male-male";
             color = focused ? "#2f3030" : "#7d7d7d";
-          } else if (route.name === "Profile") {
-            iconName = "ios-person";
-            color = focused ? "#2f3030" : "#7d7d7d";
+          // } else if (route.name === "Profile") {
+          //   iconName = "ios-person";
+          //   color = focused ? "#2f3030" : "#7d7d7d";
           } else if (route.name === "SocietalFunctions") {
-            iconName = "md-trophy";
+            iconName = "office-building";
             color = focused ? "#2f3030" : "#7d7d7d";
           }
-          return <Ionicons name={iconName} size={30} color={color} />;
+          // <FontAwesome name="building-o" size={24} />
+
+          return  <MaterialCommunityIcons name={iconName} size={30} color={color} />;
         },
       })}
       tabBarOptions={{
@@ -239,6 +243,14 @@ const DrawerNavigator = () => (
       name="Settings"
       component={MenuStackNavigator}
     />
+    <Drawer.Screen
+   options={{
+     drawerIcon: () => <Ionicons name="ios-apps" size={24}/>
+   }}
+    name ="Feedback"
+    component={FeedBack}
+    />
+ 
   </Drawer.Navigator>
 );
 
