@@ -1,9 +1,9 @@
 {
-  "name": "book-app",
-  "displayName": "book-app",
+  "name": "Fullstack-projekt-welcomeToSweden",
+  "displayName": "Fullstack-projekt-welcomeToSweden",
   "expo": {
-    "name": "book-app",
-    "slug": "book-app",
+    "name": "Fullstack-projekt-welcomeToSweden",
+    "slug": "Fullstack-projekt-welcomeToSweden",
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"

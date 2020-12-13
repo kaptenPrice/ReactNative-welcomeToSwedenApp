@@ -1,4 +1,4 @@
-package com.bookapp.generated;
+package com.fullstackprojectwelcometosweden.generated;
 
 import java.util.Arrays;
 import java.util.List;
