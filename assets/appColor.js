@@ -9,5 +9,6 @@ const appColors = {
   iconInActive: "#989c9c",
   bgChildComp: "#eea4f5",
   bgChildContainers: "#e8e6e8",
+  spinner: "#42f56c"
 };
 export default appColors;

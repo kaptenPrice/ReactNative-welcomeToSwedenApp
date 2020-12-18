@@ -51,7 +51,7 @@ const HealthCare = () => {
       }
       thirdConentViewStyle={Styles.childComponentContentView}
       children5={
-        <Text style={Styles.childComponentHeaders}>Assistance:{}</Text>
+        <Text style={Styles.childComponentHeaders}>Assistance:</Text>
       }
       children6={
         <Text style={Styles.childComponentTextContainers}>

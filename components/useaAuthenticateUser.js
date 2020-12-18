@@ -5,6 +5,8 @@ import "firebase/firestore"
 import "firebase/auth"
 
 
+//TODO refakt to SWR
+
 
 export default function useAuthenticateUser() {
     const dispatch = useDispatch()

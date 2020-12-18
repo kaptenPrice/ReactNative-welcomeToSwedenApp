@@ -16,7 +16,11 @@ import SocietyFunctions from "./screens/homeScreens/SocietyFunctions";
 import UserProfile from "./screens/homeScreens/UserProfile";
 import DrawerComponent from "./components/DrawerComponent";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
-import  {Ionicons, FontAwesome,MaterialCommunityIcons}  from '@expo/vector-icons';
+import {
+  Ionicons,
+  FontAwesome,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 import Fika from "./screens/socialLifeScreens/Fika";
 import Food from "./screens/socialLifeScreens/Food";
 import Traditions from "./screens/socialLifeScreens/Traditions";
@@ -25,7 +29,7 @@ import Job from "./screens/societalFunctionsScreens/Job";
 import HealthCare from "./screens/societalFunctionsScreens/HealthCare";
 import SplashScreen from "./screens/SplashScreen";
 import { useSelector } from "react-redux";
-import useAuthenticatedUser from "./hooks/useaAuthenticateUser"
+import useAuthenticatedUser from "./components/useaAuthenticateUser";
 import ButtonComponent from "./components/ButtonComponent";
 import FeedBack from "./screens/settingScreens/FeedBack";
 
@@ -34,15 +38,21 @@ const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 
 const WelcomeToSweden = () => {
-  const authentication=useSelector((state)=> state.authentication)
-  useAuthenticatedUser()
+  const { isloading, isSignedIn } = useSelector(
+    (state) => state.authentication
+  );
+  useAuthenticatedUser();
 
-  if (authentication.isloading) {
+  // if(currentUser){
+  //   const {name}=currentUser
+  //   console.log((name))}
+
+  if (isloading) {
     return <SplashScreen />;
   }
   return (
     <NavigationContainer>
-      {!authentication.isSignedIn ? (
+      {!isSignedIn ? (
         <Stack.Navigator
           screenOptions={{
             headerStyle: { backgroundColor: appColors.bgColor },
@@ -70,13 +80,9 @@ const WelcomeToSweden = () => {
   );
 };
 const HomeTabNavigator = () => {
-  const [isActive, setIsActive] = useState(false);
-  
   return (
     <Tab.Navigator
-    
       screenOptions={({ route }) => ({
-        // eslint-disable-next-line react/display-name
         tabBarIcon: ({ focused, color }) => {
           let iconName;
           if (route.name === "Home") {
@@ -85,16 +91,14 @@ const HomeTabNavigator = () => {
           } else if (route.name === "SocialLife") {
             iconName = "human-male-male";
             color = focused ? "#2f3030" : "#7d7d7d";
-          // } else if (route.name === "Profile") {
-          //   iconName = "ios-person";
-          //   color = focused ? "#2f3030" : "#7d7d7d";
           } else if (route.name === "SocietalFunctions") {
             iconName = "office-building";
             color = focused ? "#2f3030" : "#7d7d7d";
           }
-          // <FontAwesome name="building-o" size={24} />
 
-          return  <MaterialCommunityIcons name={iconName} size={30} color={color} />;
+          return (
+            <MaterialCommunityIcons name={iconName} size={30} color={color} />
+          );
         },
       })}
       tabBarOptions={{
@@ -108,7 +112,6 @@ const HomeTabNavigator = () => {
         name="SocietalFunctions"
         component={SocietyFunctionsNavigator}
       />
-      {/* <Tab.Screen name="Profile" component={UserProfile} /> */}
     </Tab.Navigator>
   );
 };
@@ -169,10 +172,16 @@ const SocietyFunctionsNavigator = () => (
 );
 
 const getHeaderTitle = (route) => {
+  const { currentUser } = useSelector((state) => state.authentication);
+
   const routeName = getFocusedRouteNameFromRoute(route) ?? "Home";
   switch (routeName) {
     case "Home":
-      return "Home";
+      if(currentUser.name!==undefined)
+      return `Welcome ${currentUser.name}`
+      else{(currentUser===undefined) 
+        return `Welcome ${currentUser.email}`
+      }
     case "SocialLife":
       return "Social life";
     case "SocietalFunctions":
@@ -181,13 +190,11 @@ const getHeaderTitle = (route) => {
       return "My profile";
   }
 };
-// eslint-disable-next-line react/prop-types
 const HomeStackNavigator = ({ navigation }) => (
   <Stack.Navigator
     screenOptions={{
       headerStyle: { backgroundColor: appColors.bgColor },
       headerTintColor: appColors.textColor,
-      // eslint-disable-next-line react/display-name
       headerRight: () => (
         <Ionicons
           onPress={() => navigation.openDrawer()}
@@ -244,13 +251,12 @@ const DrawerNavigator = () => (
       component={MenuStackNavigator}
     />
     <Drawer.Screen
-   options={{
-     drawerIcon: () => <Ionicons name="ios-apps" size={24}/>
-   }}
-    name ="Feedback"
-    component={FeedBack}
+      options={{
+        drawerIcon: () => <Ionicons name="ios-apps" size={24} />,
+      }}
+      name="Feedback"
+      component={FeedBack}
     />
- 
   </Drawer.Navigator>
 );
 

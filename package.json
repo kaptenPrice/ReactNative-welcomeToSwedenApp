@@ -21,6 +21,7 @@
     "axios": "^0.21.0",
     "eslint": "^7.15.0",
     "expo": "~39.0.2",
+    "expo-google-app-auth": "^8.1.4",
     "expo-image-picker": "~9.1.1",
     "expo-permissions": "~9.3.0",
     "firebase": "^8.1.1",
@@ -44,7 +45,8 @@
     "react-native-web": "~0.13.12",
     "react-navigation": "^3.11.0",
     "react-redux": "^7.2.2",
-    "redux": "^4.0.5"
+    "redux": "^4.0.5",
+    "expo-google-sign-in": "~8.3.0"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",
