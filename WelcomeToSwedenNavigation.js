@@ -43,9 +43,6 @@ const WelcomeToSweden = () => {
   );
   useAuthenticatedUser();
 
-  // if(currentUser){
-  //   const {name}=currentUser
-  //   console.log((name))}
 
   if (isloading) {
     return <SplashScreen />;
