@@ -7,7 +7,6 @@ import { useNavigation } from "@react-navigation/native";
 //Logo?
 const WelcomeScreen = () => {
   const navigation = useNavigation();
-  console.log("WelcomeScreen");
   return (
     <View style={Styles.welcomeView}>
       <View style={Styles.welcomeViewUpper}>

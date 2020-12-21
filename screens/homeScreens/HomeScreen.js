@@ -25,12 +25,10 @@ import Loading from "../../components/Loading";
 // Key:Sbpk7Dz6Xl862AgdaUuUAW8p2cnpd1QvS5S-kA8AE5g
 
 export default function HomeScreen() {
-  console.log("HomeScreen");
   const { isLoading, currentUser } = useSelector(
     (state) => state.authentication
   );
 
-  console.log(currentUser.email, isLoading);
 
   const [homeScreenImage, setHomeScreenImage] = useState([]);
   const { width, height } = Dimensions.get("screen");

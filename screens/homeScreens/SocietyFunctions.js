@@ -15,7 +15,6 @@ export default function SocietalFunctions() {
   const { isLoading, currentUser } = useSelector(
     (state) => state.authentication
   );
-  console.log("Societal Functions", currentUser.uid);
 
   const navigation = useNavigation();
   const { width, height } = Dimensions.get("screen");

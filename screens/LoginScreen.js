@@ -10,16 +10,12 @@ import "firebase/auth";
 import * as Google from "expo-google-app-auth";
 
 const LoginScreen = () => {
-console.log("LoginScreen")
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isAuthorized, setIsAuthorized] = useState(true);
 
   const dispatch = useDispatch();
-  console.log(email);
-  console.log(password);
 
   const signInWithGoogleAsync = async () => {
     try {
@@ -30,6 +26,7 @@ console.log("LoginScreen")
       });
       if (res.type === "success") {
         dispatch({ type: "SIGN_IN", payload: res.user });
+
         return res.accessToken;
       } else {
         return { cancelled: true };
@@ -80,8 +77,6 @@ console.log("LoginScreen")
           dispatch({ type: "SIGN_IN", payload: res.user });
         }
       } catch (error) {
-        // alert(error.code)
-
         if (error.code == "auth/email-already-in-use") {
           alert(
             `Email: ${email} is already registerd, dont worry, press login`

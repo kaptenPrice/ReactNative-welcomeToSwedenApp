@@ -8,7 +8,7 @@ import { useNavigation } from "@react-navigation/native";
 import firebase from "firebase/app";
 import "firebase-auth";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { TextInputComponent } from "react-native";
 import appColors from "../../assets/appColor";
 
@@ -16,6 +16,9 @@ const FeedBack = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const { width, height } = Dimensions.get("window");
+  const {phone, city}= useSelector((state)=> state.userAdditionalInfo)
+
+
 
   return (
     <View style={Styles.welcomeView}>
@@ -33,13 +36,13 @@ const FeedBack = () => {
           placeholder="feedback "
           style={{
             backgroundColor: appColors.bgChildContainers,
-            height: height / 2,
+            height: height/1.2,
             width: width / 2,
             borderRadius: 7,
             marginBottom: 20,
             textAlign:"left"
           }}
-        > </TextInput>
+        > {`My phone nr: ${phone} \n City: ${city}` }</TextInput>
         <View style={{flexDirection: "row-reverse"}} >
 
         <ButtonComponent buttonStyle={{marginLeft:width/2.2}} onTouch={() => console.log("feedback send")}>

@@ -18,7 +18,6 @@ export default function SocialLife() {
   const { isLoading, currentUser } = useSelector(
     (state) => state.authentication
   );
-  console.log("SocialLife", currentUser.uid);
 
   return (
     <ScrollView style={{ flex: 1 }}>
