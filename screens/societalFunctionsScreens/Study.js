@@ -11,7 +11,7 @@ import Styles from "../../css/Styles";
 import study_unsplash from "../../assets/images/study_unsplash.jpg";
 import appColors from "../../assets/appColor";
 
-const HealthCare = () => {
+const Study = () => {
   const { width, height } = Dimensions.get("window");
   const [studyContentOne, setstudyContentOne] = useState(
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
@@ -30,12 +30,12 @@ const HealthCare = () => {
       iamgeViewStyle={{ flex: 1, width, height: height / 4 }}
       imageStyle={{ flex: 1, width: null, height: null }}
       imgSource={study_unsplash}
-      firstContentStyle={Styles.childComponentContentView}
+      // firstContentStyle={Styles.childComponentContentView}
       children1={
         <Text style={Styles.childComponentHeaders}>Like a Swede:</Text>
       }
       children2={studyContentOne}
-      // seeMoreText="more"
+      seeMoreText="more"
       seeMoreStyle={{ color: appColors.textColor }}
       backgroundColor={appColors.bgChildContainers}
       // seeLessText
@@ -44,14 +44,14 @@ const HealthCare = () => {
       // numberOfLines
       // customTextComponent
       style={Styles.childComponentTextContainers}
-      secondContentView={Styles.childComponentContentView}
+      // secondContentView={Styles.childComponentContentView}
       children3={<Text style={Styles.childComponentHeaders}>Lingo</Text>}
       children4={
         <Text style={Styles.childComponentTextContainers}>
           {studyContentTwo}
         </Text>
       }
-      thirdConentViewStyle={Styles.childComponentContentView}
+      // thirdConentViewStyle={Styles.childComponentContentView}
       children5={
         <Text style={Styles.childComponentHeaders}>Assistance:{}</Text>
       }
@@ -61,31 +61,45 @@ const HealthCare = () => {
         </Text>
       }
       children7={
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            flex: 1,
-            flexWrap: "wrap",
-            margin: 10,
-          }}
-        >
-          <Text>ADD </Text>
-          <TouchableOpacity>
-            <Text
-              style={{ color: "darkblue" }}
-              onPress={() => Linking.openURL("https://www.google.com")}
-            >
-              LINKS
-            </Text>
-          </TouchableOpacity>
-          <Text> HERE.</Text>
-          <Text onPress={() => Linking.openURL(`Tel:${phoneNumber}`)}>
-            CALL UP
+        <TouchableOpacity style={{ margin: 7, flexDirection: "row" }}>
+          <Text
+            style={{ color: "blue", marginRight:10 }}
+            onPress={() => Linking.openURL("https://www.google.com")}
+          >
+            google
           </Text>
-        </View>
+          <Text onPress={() => Linking.openURL(`Tel:${phoneNumber}`)}>
+            Call up
+          </Text>
+        </TouchableOpacity>
       }
+
+      // children7={
+      //   <View
+      //     style={{
+      //       display: "flex",
+      //       flexDirection: "row",
+      //       flex: 1,
+      //       flexWrap: "wrap",
+      //       margin: 10,
+      //     }}
+      //   >
+      //     <Text>ADD </Text>
+      //     <TouchableOpacity>
+      //       <Text
+      //         style={{ color: "darkblue" }}
+      //         onPress={() => Linking.openURL("https://www.google.com")}
+      //       >
+      //         LINKS
+      //       </Text>
+      //     </TouchableOpacity>
+      //     <Text> HERE.</Text>
+      //     <Text onPress={() => Linking.openURL(`Tel:${phoneNumber}`)}>
+      //       CALL UP
+      //     </Text>
+      //   </View>
+      // }
     />
   );
 };
-export default HealthCare;
+export default Study;

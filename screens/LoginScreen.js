@@ -46,7 +46,6 @@ const LoginScreen = () => {
         if (res) {
           dispatch({ type: "SIGN_IN", payload: res.user });
         }
-        alert("success");
       } catch (error) {
         switch (error.code) {
           case "auth/user-not-found":

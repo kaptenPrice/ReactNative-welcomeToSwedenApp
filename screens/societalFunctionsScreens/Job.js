@@ -11,7 +11,7 @@ import Styles from "../../css/Styles";
 import work_pic from "../../assets/images/work.jpg";
 import appColors from "../../assets/appColor";
 
-const HealthCare = () => {
+const Job = () => {
   const { width, height } = Dimensions.get("window");
   const [jobContentOne, setjobContentOne] = useState(
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
@@ -58,32 +58,32 @@ const HealthCare = () => {
           {jobContentThree}
         </Text>
       }
-      children7={
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            flex: 1,
-            flexWrap: "wrap",
-            margin: 10,
-          }}
-        >
-          <Text>ADD </Text>
-          <TouchableOpacity>
-            <Text
-              style={{ color: "darkblue" }}
-              onPress={() => Linking.openURL("https://www.google.com")}
-            >
-              LINKS
-            </Text>
-          </TouchableOpacity>
-          <Text> HERE.</Text>
-          <Text onPress={() => Linking.openURL(`Tel:${phoneNumber}`)}>
-            CALL UP
-          </Text>
-        </View>
-      }
+      // children7={
+      //   <View
+      //     style={{
+      //       display: "flex",
+      //       flexDirection: "row",
+      //       flex: 1,
+      //       flexWrap: "wrap",
+      //       margin: 10,
+      //     }}
+      //   >
+      //     <Text>ADD </Text>
+      //     <TouchableOpacity>
+      //       <Text
+      //         style={{ color: "darkblue" }}
+      //         onPress={() => Linking.openURL("https://www.google.com")}
+      //       >
+      //         LINKS
+      //       </Text>
+      //     </TouchableOpacity>
+      //     <Text> HERE.</Text>
+      //     <Text onPress={() => Linking.openURL(`Tel:${phoneNumber}`)}>
+      //       CALL UP
+      //     </Text>
+      //   </View>
+      // }
     />
   );
 };
-export default HealthCare;
+export default Job;

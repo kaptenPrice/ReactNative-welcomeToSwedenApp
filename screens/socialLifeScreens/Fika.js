@@ -8,10 +8,11 @@ import appColors from "../../assets/appColor";
 import ButtonComponent from "../../components/ButtonComponent";
 import { Ionicons, MaterialIcons, Feather } from "@expo/vector-icons";
 import { TextInput } from "react-native-gesture-handler";
+import ViewMoreText from "react-native-view-more-text";
 
 const Fika = () => {
   const likeASwedeDummie =
-    "Fika is the famous Swedish word for a break with coffee and bakery,Fika is the famous Swedish word for a break with coffee and bakery,Fika is the famous Swedish word for a break with coffee and bakery";
+    "Fika is the famous SwedisFika is the famous Swedish word for a break with coffee and bakery,Fika is theFika isFika is the famous Swedish word for a break with coffee and bakery,Fika is theFika ish word for a break with coffee and bakery,Fika is theFika is the famous Swedish word for a break with coffee and bakery,Fika is theFika is the famous Swedish word for a break with coffee and bakery,Fika is theFika is the famous Swedish word for a break with coffee and bakery,Fika is theFika is the famous Swedish word for a break with coffee and bakery,Fika is the ";
   const lingoDummie = " Bulle : cinnamon bum \n påtår: refill";
   const prirceLevelDummie = "Fika for one person costs between 40-60 kr";
   const adminId = "118005229206246600125";
@@ -37,8 +38,22 @@ const Fika = () => {
     setIsEditable(false);
   };
   console.log(isEditable);
-  const renderViewMore = (onPress) => <Text style={{color:appColors.textColor, fontWeight:"600"}} onPress={onPress}> More</Text>;
-  const renderViewLess = (onPress) => <Text style={{color:appColors.textColor, fontWeight:"600"}} onPress={onPress}>Less</Text>;
+  const renderViewMore = (onPress) => (
+    <Text
+      style={{ color: appColors.textColor, fontWeight: "600" }}
+      onPress={onPress}
+    >
+      More
+    </Text>
+  );
+  const renderViewLess = (onPress) => (
+    <Text
+      style={{ color: appColors.textColor, fontWeight: "600" }}
+      onPress={onPress}
+    >
+      Less
+    </Text>
+  );
 
   return (
     <ChildComponent
@@ -46,8 +61,6 @@ const Fika = () => {
       iamgeViewStyle={{ flex: 1, width, height: height / 4 }}
       imageStyle={{ flex: 1, width: null, height: null }}
       imgSource={fika_pic}
-      containerStyle={{ margin: 20 }}
-      firstContentStyle={Styles.childComponentContentView}
       children1={<Text style={Styles.childComponentHeaders}>Like a Swede</Text>}
       editButton1={
         currentUser.id === adminId && (
@@ -62,18 +75,6 @@ const Fika = () => {
         )
       }
       children2={<Text>{fikaContentOne}</Text>}
-      // seeMoreText="more"
-      // seeMoreStyle={{ color: appColors.textColor }}
-      // backgroundColor={appColors.bgChildContainers}
-      // seeLessText
-      // seeLessStyle
-      // wrapperStyle
-      // numberOfLines
-      // customTextComponent
-      numberOfLines={3}
-      renderViewMore={renderViewMore}
-      renderViewLess={renderViewLess}
-      textStyle={{ textAlign:"left" }}
       editBox1={
         isEditable && (
           <>
@@ -91,8 +92,7 @@ const Fika = () => {
           </>
         )
       }
-      style={Styles.childComponentTextContainers}
-      secondContentView={Styles.childComponentContentView}
+      style={[Styles.childComponentTextContainers]}
       children3={<Text style={Styles.childComponentHeaders}>Lingo</Text>}
       children4={
         <Text editable={isEditable} style={Styles.childComponentTextContainers}>
@@ -111,7 +111,6 @@ const Fika = () => {
           </>
         )
       }
-      thirdConentViewStyle={Styles.childComponentContentView}
       children5={<Text style={Styles.childComponentHeaders}>Price level</Text>}
       children6={
         <Text style={Styles.childComponentTextContainers}>

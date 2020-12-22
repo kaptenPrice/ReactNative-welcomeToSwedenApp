@@ -159,25 +159,28 @@ const Styles = StyleSheet.create({
   childComponentHeaders: {
     fontSize: 24,
     fontWeight: "bold",
-    paddingBottom: 15,
+    // paddingBottom: 15,
     marginLeft: 5,
     // alignItems: "baseline"
   },
   childComponentTextContainers: {
     fontWeight: "400",
     fontSize: 18,
-    paddingBottom: 35,
+    paddingBottom: 30,
+    marginLeft:5, 
+    marginRight:5,
+    marginTop:10 
   },
 
   childComponentContentView: {
-    paddingTop: 20,
+    paddingTop: 10,
     flex: 2,
     alignItems: "flex-start",
     justifyContent: "center",
     backgroundColor: appColors.bgChildContainers,
     // marginLeft: 7,
     // marginRight: 7,
-    marginTop: 5,
+    marginTop: 10,
   },
   profileScreen: {
     flex: 1,
