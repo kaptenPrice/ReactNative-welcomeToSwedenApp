@@ -8,6 +8,7 @@ import Styles from "../css/Styles";
 import firebase from "firebase/app";
 import "firebase/auth";
 import * as Google from "expo-google-app-auth";
+import * as db from "../firestore/FirebaseUtils"
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
@@ -128,6 +129,7 @@ const LoginScreen = () => {
 
         <ButtonComponent
           buttonStyle={Styles.signinRegisterButton}
+          // onTouch={signInWithGoogleAsync}
           onTouch={signInWithGoogleAsync}
         >
           <Text style={Styles.signinRegisterButtonText}>Sign with Google</Text>

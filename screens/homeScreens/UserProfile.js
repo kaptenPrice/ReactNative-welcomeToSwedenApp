@@ -7,7 +7,6 @@ import firebase from "firebase/app";
 import "firebase-auth";
 import { Ionicons, MaterialIcons, Feather } from "@expo/vector-icons";
 
-import { Card } from "react-native-paper";
 
 import { addPhone, signOut } from "../../redux/store/actions";
 import { useDispatch, useSelector } from "react-redux";

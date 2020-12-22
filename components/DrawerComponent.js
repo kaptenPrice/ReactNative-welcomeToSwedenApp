@@ -9,18 +9,18 @@ import { DrawerItemList } from "@react-navigation/drawer";
 
 export default function DrawerComponent(props) {
   return (
-    <ScrollView>
-      <SafeAreaView>
+    
+      <SafeAreaView style={{backgroundColor:appColors.bgColor, flex:1}}>
         <View style={Styles.drawerComponentView}>
           <Ionicons
             name="ios-heart"
             size={50}
             color={appColors.placeHolderColor}
           />
-          <Text style={Styles.drawerComponentText}> My profile</Text>
+          <Text style={Styles.drawerComponentText}>Menu</Text>
         </View>
         <DrawerItemList {...props} />
       </SafeAreaView>
-    </ScrollView>
+
   );
 }

@@ -30,6 +30,7 @@ const HealthCare = () => {
       iamgeViewStyle={{ flex: 1, width, height: height / 4 }}
       imageStyle={{ flex: 1, width: null, height: null }}
       imgSource={treatment_pic}
+      containerStyle={{margin:20}}
       firstContentStyle={Styles.childComponentContentView}
       children1={
         <Text style={Styles.childComponentHeaders}>Like a Swede:</Text>
@@ -63,11 +64,11 @@ const HealthCare = () => {
       children7={
         <View
           style={{
-            display: "flex",
+            // display: "flex",
             flexDirection: "row",
             flex: 1,
-            flexWrap: "wrap",
-            margin: 10,
+            // flexWrap: "wrap",
+            // margin:0 ,
           }}
         >
           <Text>ADD </Text>

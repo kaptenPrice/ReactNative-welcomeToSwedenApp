@@ -184,7 +184,7 @@ const getHeaderTitle = (route) => {
     case "SocietalFunctions":
       return "Society functions";
     case "Profile":
-      return "My profile";
+      return "Menu";
   }
 };
 const HomeStackNavigator = ({ navigation }) => (

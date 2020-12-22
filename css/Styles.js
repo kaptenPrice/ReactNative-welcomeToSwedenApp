@@ -96,7 +96,7 @@ const Styles = StyleSheet.create({
   },
   drawerComponentView: {
     height: 150,
-    backgroundColor: appColors.whiteColor,
+    backgroundColor: appColors.bgColor,
     alignItems: "center",
     justifyContent: "center",
     paddingTop: Platform.OS == "android" ? 20 : 0,
@@ -166,8 +166,6 @@ const Styles = StyleSheet.create({
   childComponentTextContainers: {
     fontWeight: "400",
     fontSize: 18,
-    marginLeft: 5,
-    marginRight: 5,
     paddingBottom: 35,
   },
 
@@ -177,29 +175,26 @@ const Styles = StyleSheet.create({
     alignItems: "flex-start",
     justifyContent: "center",
     backgroundColor: appColors.bgChildContainers,
-    marginLeft: 7,
-    marginRight: 7,
+    // marginLeft: 7,
+    // marginRight: 7,
     marginTop: 5,
   },
   profileScreen: {
     flex: 1,
-    backgroundColor: appColors.bgColor
+    backgroundColor: appColors.bgColor,
   },
 
   userProfileImage: {
     height: 140,
     width: 140,
-    marginBottom:20
-
+    marginBottom: 20,
   },
- 
 });
 
 export default Styles;
 
 textInputStyleProps: {
-   
-    "display",
+  "display",
     "width",
     "height",
     "start",
@@ -303,5 +298,5 @@ textInputStyleProps: {
     "textDecorationStyle",
     "textDecorationColor",
     "textTransform",
-    "writingDirection"
+    "writingDirection";
 }
