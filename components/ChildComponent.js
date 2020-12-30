@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { View, Image, Dimensions, Text } from "react-native";
-import ReadMore from "@fawazahmed/react-native-read-more";
 import { ScrollView, TextInput } from "react-native-gesture-handler";
 import ViewMoreText from "react-native-view-more-text";
 import Styles from "../css/Styles";
 import appColors from "../assets/appColor";
+import ReadMore from "react-native-read-more-text";
 
 const ChildComponent = ({
+  adminButtonStyle,
   scrollViewStyle,
   containerStyle,
   iamgeViewStyle,
@@ -26,6 +27,7 @@ const ChildComponent = ({
   children7,
   secondContentView,
   thirdConentViewStyle,
+  editBox4,
   ...props
 }) => {
   return (
@@ -33,37 +35,67 @@ const ChildComponent = ({
       <View style={iamgeViewStyle}>
         <Image style={imageStyle} source={imgSource}></Image>
       </View>
+      <View
+        style={{
+          position: "relative",
+          marginRight: 20,
+          flexDirection: "row",
+          justifyContent: "flex-end",
+        }}
+      >
+        {editButton1}
+      </View>
       <View style={{ margin: 10 }}>
         <View style={Styles.childComponentContentView}>
-          {editButton1}
           {children1}
           {editBox1}
           <ReadMore
-            seeMoreText="More"
-            seeMoreStyle={{ color: appColors.textColor, fontWeight: "bold" }}
-            backgroundColor={appColors.bgChildContainers}
-            seeLessText="Less"
-            seeLessStyle={{ color: appColors.textColor, fontWeight: "bold" }}
+            renderTruncatedFooter={null}
+            renderRevealedFooter={null}
             numberOfLines={3}
-            {...props}
           >
             {children2}
           </ReadMore>
         </View>
         <View style={Styles.childComponentContentView}>
           {children3}
-          {children4}
+          <ReadMore
+            renderTruncatedFooter={null}
+            renderRevealedFooter={null}
+            numberOfLines={3}
+          >
+            {children4}
+          </ReadMore>
           {editBox2}
         </View>
         <View style={Styles.childComponentContentView}>
           {children5}
-          {children6}
+          <ReadMore
+            renderTruncatedFooter={null}
+            renderRevealedFooter={null}
+            numberOfLines={3}
+          >
+            {children6}
+          </ReadMore>
           {editBox3}
         </View>
-        <View style={[Styles.childComponentContentView, {paddingBottom:20, flexDirection:"column"}]}>{children7}</View>
+        <View
+          style={[
+            Styles.childComponentContentView,
+            { paddingBottom: 20, flexDirection: "column" },
+          ]}
+        >
+          {children7}
+          {editBox4}
+        </View>
       </View>
     </ScrollView>
   );
 };
 
 export default ChildComponent;
+
+// seeMoreStyle={{ color: appColors.textColor, fontWeight: "bold" }}
+// backgroundColor={appColors.bgChildContainers}
+// seeLessText="Less"
+// seeLessStyle={{ color: appColors.textColor, fontWeight: "bold" }}

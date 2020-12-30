@@ -164,6 +164,8 @@ const Styles = StyleSheet.create({
     // alignItems: "baseline"
   },
   childComponentTextContainers: {
+    borderColor:"red",
+    borderWidth:0.5,
     fontWeight: "400",
     fontSize: 18,
     paddingBottom: 30,

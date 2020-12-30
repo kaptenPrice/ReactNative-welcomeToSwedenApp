@@ -9,51 +9,53 @@ import ButtonComponent from "../../components/ButtonComponent";
 import { Ionicons, MaterialIcons, Feather } from "@expo/vector-icons";
 import { TextInput } from "react-native-gesture-handler";
 import ViewMoreText from "react-native-view-more-text";
+import firebase from "firebase/app";
+import AdminButtons from "../../components/AdminButtonsComponent";
+// import {db, auth, storage} from "../../firestore/FirebaseUtils"
 
 const Fika = () => {
-  const likeASwedeDummie =
-    "Fika is the famous SwedisFika is the famous Swedish word for a break with coffee and bakery,Fika is theFika isFika is the famous Swedish word for a break with coffee and bakery,Fika is theFika ish word for a break with coffee and bakery,Fika is theFika is the famous Swedish word for a break with coffee and bakery,Fika is theFika is the famous Swedish word for a break with coffee and bakery,Fika is theFika is the famous Swedish word for a break with coffee and bakery,Fika is theFika is the famous Swedish word for a break with coffee and bakery,Fika is the ";
-  const lingoDummie = " Bulle : cinnamon bum \n påtår: refill";
-  const prirceLevelDummie = "Fika for one person costs between 40-60 kr";
-  const adminId = "118005229206246600125";
+  const db = firebase.firestore();
+
+
+  // const likeASwedeDummie =
+  //   "Fika is the famous SwedisFika is the famous Swedish word for "
+  // const lingoDummie =
+  //   " Bulle : cinnamon bum \n påtår: refillBulle : cinnamon bum \n påtår: refill Bulle : cinnamon bum \n påtår: refillBulle : cinnamon bum \n påtår: refill";
+  // const prirceLevelDummie =
+  //   "Fika for one person costs between 40-60 kr, Fika for one person costs between 40-60 kr, Fika for one person costs between 40-60 kr, Fika for one person costs between 40-60 kr";
+  // const adminId = "118005229206246600125";
+  const adminId = "KnlUK9tJpdRlvFV15ujBQogiR5k2";
   const { isLoading, currentUser } = useSelector(
     (state) => state.authentication
   );
+
+  // console.log(`adminID: ${adminId}, currenUserUid: ${currentUser.uid}`)
   const { width, height } = Dimensions.get("screen");
   const [isEditable, setIsEditable] = useState(false);
   const [fikaContentOne, setFikaContentOne] = useState("");
   const [fikaContentTwo, setFikaContentTwo] = useState("");
   const [fikaContentThree, setfikaContentThree] = useState("");
-  useEffect(() => {
-    setFikaContentOne(likeASwedeDummie);
-    setFikaContentTwo(lingoDummie);
-    setfikaContentThree(prirceLevelDummie);
-  }, [isEditable]);
+  // useEffect(() => {
+  //   setFikaContentOne(likeASwedeDummie);
+  //   setFikaContentTwo(lingoDummie);
+  //   setfikaContentThree(prirceLevelDummie);
+  // }, []);
 
-  const handleEdit = () => {
+  const _handleEdit = () => {
+    console.log("HandleEdit");
+
     setIsEditable(true);
   };
-  const handleSave = () => {
+  const _handleSave = () => {
+    db.collection("welcome-to-sweden")
+      .doc("social-life")
+      .collection("fika")
+      .doc("like-a-swede")
+      .set({like_a_swede: fikaContentOne});
     //TODO update
     setIsEditable(false);
   };
-  console.log(isEditable);
-  const renderViewMore = (onPress) => (
-    <Text
-      style={{ color: appColors.textColor, fontWeight: "600" }}
-      onPress={onPress}
-    >
-      More
-    </Text>
-  );
-  const renderViewLess = (onPress) => (
-    <Text
-      style={{ color: appColors.textColor, fontWeight: "600" }}
-      onPress={onPress}
-    >
-      Less
-    </Text>
-  );
+  // console.log(isEditable);
 
   return (
     <ChildComponent
@@ -63,15 +65,8 @@ const Fika = () => {
       imgSource={fika_pic}
       children1={<Text style={Styles.childComponentHeaders}>Like a Swede</Text>}
       editButton1={
-        currentUser.id === adminId && (
-          <>
-            <ButtonComponent onTouch={handleEdit}>
-              <MaterialIcons name="edit" size={30} color="black" />
-            </ButtonComponent>
-            <ButtonComponent style={{ marginLeft: 20 }} onTouch={handleSave}>
-              <Feather name="save" size={30} color="black" />
-            </ButtonComponent>
-          </>
+        currentUser.uid === adminId && (
+          <AdminButtons handleEdit={_handleEdit} handleSave={_handleSave} />
         )
       }
       children2={<Text>{fikaContentOne}</Text>}
@@ -85,6 +80,7 @@ const Fika = () => {
                 width: width,
                 height: height / 10,
               }}
+              placeholder="Update content"
               editable={isEditable}
               name="like-a-swede"
               onChangeText={(e) => setFikaContentOne(e)}
@@ -95,7 +91,7 @@ const Fika = () => {
       style={[Styles.childComponentTextContainers]}
       children3={<Text style={Styles.childComponentHeaders}>Lingo</Text>}
       children4={
-        <Text editable={isEditable} style={Styles.childComponentTextContainers}>
+        <Text style={Styles.childComponentTextContainers}>
           {fikaContentTwo}
         </Text>
       }
@@ -103,7 +99,13 @@ const Fika = () => {
         isEditable && (
           <>
             <TextInput
-              style={{ borderWidth: 0.5, borderColor: "red", width: 500 }}
+              style={{
+                borderWidth: 0.5,
+                borderColor: "red",
+                width: width,
+                height: height / 10,
+              }}
+              placeholder="Update content"
               editable={isEditable}
               name="lingo"
               onChangeText={(e) => setFikaContentTwo(e)}
@@ -121,7 +123,13 @@ const Fika = () => {
         isEditable && (
           <>
             <TextInput
-              style={{ borderWidth: 0.5, borderColor: "red", width: 500 }}
+              style={{
+                borderWidth: 0.5,
+                borderColor: "red",
+                width: width,
+                height: height / 10,
+              }}
+              placeholder="Update content"
               editable={isEditable}
               name="price-level"
               onChangeText={(e) => setfikaContentThree(e)}
@@ -133,5 +141,3 @@ const Fika = () => {
   );
 };
 export default Fika;
-
-const styles = StyleSheet.create({});

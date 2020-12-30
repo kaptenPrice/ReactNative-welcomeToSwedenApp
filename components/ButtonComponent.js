@@ -12,4 +12,3 @@ const ButtonComponent = ({ children, onTouch, buttonStyle, ...props }) => {
 
 export default ButtonComponent;
 
-const styles = StyleSheet.create({});

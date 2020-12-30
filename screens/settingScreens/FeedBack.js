@@ -16,9 +16,7 @@ const FeedBack = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const { width, height } = Dimensions.get("window");
-  const {phone, city}= useSelector((state)=> state.userAdditionalInfo)
-
-
+  const { phone, city } = useSelector((state) => state.userAdditionalInfo);
 
   return (
     <View style={Styles.welcomeView}>
@@ -36,26 +34,39 @@ const FeedBack = () => {
           placeholder="feedback "
           style={{
             backgroundColor: appColors.bgChildContainers,
-            height: height/1.2,
+            height: height / 1.2,
             width: width / 2,
             borderRadius: 7,
             marginBottom: 20,
-            textAlign:"left"
+            textAlign: "left",
           }}
-        > {`My phone nr: ${phone} \n City: ${city}` }</TextInput>
-        <View style={{flexDirection: "row-reverse"}} >
-
-        <ButtonComponent buttonStyle={{marginLeft:width/2.2}} onTouch={() => console.log("feedback send")}>
-          <Ionicons name="ios-send" color={appColors.iconInActive} size={30} />
-        </ButtonComponent>
-        <ButtonComponent onPress={() => navigation.navigate("Home")}>
-          <MaterialCommunityIcons name="home" size={30} color={appColors.iconInActive}/>
-        </ButtonComponent>
+        >
+          {" "}
+          {`My phone nr: ${phone} \n City: ${city}`}
+        </TextInput>
+        <View style={{ flexDirection: "row-reverse" }}>
+          <ButtonComponent
+            buttonStyle={{ marginLeft: width / 2.2 }}
+            onTouch={() => console.log("feedback send")}
+          >
+            <Ionicons
+              name="ios-send"
+              color={appColors.iconInActive}
+              size={30}
+            />
+          </ButtonComponent>
+          <ButtonComponent onPress={() => navigation.navigate("Home")}>
+            <MaterialCommunityIcons
+              name="home"
+              size={30}
+              color={appColors.iconInActive}
+            />
+          </ButtonComponent>
         </View>
       </View>
-      <View style={{flex:1,alignSelf:"flex-start", marginLeft:250 }}>
-    
-      </View>
+      <View
+        style={{ flex: 1, alignSelf: "flex-start", marginLeft: 250 }}
+      ></View>
     </View>
   );
 };

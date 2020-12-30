@@ -6,9 +6,9 @@ import firebase  from "firebase/app"
 import reduxStore from "./redux/store/";
 import WelcomeToSwedenNavigation from "./WelcomeToSwedenNavigation";
 
-!firebase.apps.lenght
-?firebase.initializeApp(firebaseConfig)
-: firebase.app()
+// if(!firebase.apps.lenght){firebase.initializeApp(firebaseConfig)
+// }
+// // : firebase.app()
 
 export default function App() {
   return (
