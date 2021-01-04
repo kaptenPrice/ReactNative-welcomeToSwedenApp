@@ -10,52 +10,102 @@ import { Ionicons, MaterialIcons, Feather } from "@expo/vector-icons";
 import { TextInput } from "react-native-gesture-handler";
 import ViewMoreText from "react-native-view-more-text";
 import firebase from "firebase/app";
-import AdminButtons from "../../components/AdminButtonsComponent";
-// import {db, auth, storage} from "../../firestore/FirebaseUtils"
+import AdminButtons from "../../components/EditBox";
+import * as db from "../../firestore/FirebaseUtils";
+import useSwr from "swr";
+import EditBox from "../../components/EditBox";
+import ContentComponent from "../../components/ContentComponent";
 
 const Fika = () => {
-  const db = firebase.firestore();
-
-
-  // const likeASwedeDummie =
-  //   "Fika is the famous SwedisFika is the famous Swedish word for "
-  // const lingoDummie =
-  //   " Bulle : cinnamon bum \n påtår: refillBulle : cinnamon bum \n påtår: refill Bulle : cinnamon bum \n påtår: refillBulle : cinnamon bum \n påtår: refill";
-  // const prirceLevelDummie =
-  //   "Fika for one person costs between 40-60 kr, Fika for one person costs between 40-60 kr, Fika for one person costs between 40-60 kr, Fika for one person costs between 40-60 kr";
   // const adminId = "118005229206246600125";
   const adminId = "KnlUK9tJpdRlvFV15ujBQogiR5k2";
   const { isLoading, currentUser } = useSelector(
     (state) => state.authentication
   );
 
-  // console.log(`adminID: ${adminId}, currenUserUid: ${currentUser.uid}`)
   const { width, height } = Dimensions.get("screen");
   const [isEditable, setIsEditable] = useState(false);
   const [fikaContentOne, setFikaContentOne] = useState("");
   const [fikaContentTwo, setFikaContentTwo] = useState("");
   const [fikaContentThree, setfikaContentThree] = useState("");
-  // useEffect(() => {
-  //   setFikaContentOne(likeASwedeDummie);
-  //   setFikaContentTwo(lingoDummie);
-  //   setfikaContentThree(prirceLevelDummie);
-  // }, []);
+  
+
+  useEffect(() => {
+    db.getContentData(
+      "welcome-to-sweden",
+      "social-life",
+      "fika",
+      "like-a-swede"
+    ).then((data) => {
+      setFikaContentOne(JSON.stringify(data.content).slice(1, -1));
+    });
+    db.getContentData("welcome-to-sweden", "social-life", "fika", "lingo").then(
+      (data) => {
+        setFikaContentTwo(JSON.stringify(data.content).slice(1, -1));
+      }
+    );
+    db.getContentData(
+      "welcome-to-sweden",
+      "social-life",
+      "fika",
+      "price-level"
+    ).then((data) => {
+      setfikaContentThree(JSON.stringify(data.content).slice(1, -1));
+    });
+  }, []);
 
   const _handleEdit = () => {
-    console.log("HandleEdit");
-
-    setIsEditable(true);
+    if (isEditable === false) {
+      setIsEditable(true);
+    } else {
+      setIsEditable(false);
+    }
   };
-  const _handleSave = () => {
-    db.collection("welcome-to-sweden")
-      .doc("social-life")
-      .collection("fika")
-      .doc("like-a-swede")
-      .set({like_a_swede: fikaContentOne});
-    //TODO update
-    setIsEditable(false);
+  const handleSaveFikaContentOne = () => {
+    try {
+      db.handleSaveToDB(
+        "welcome-to-sweden",
+        "social-life",
+        "fika",
+        "like-a-swede",
+        fikaContentOne
+      );
+    } catch (error) {
+      console.log(error);
+    } finally {
+      // setIsEditable(false);
+    }
   };
-  // console.log(isEditable);
+  const handleSaveFikaContentTwo = () => {
+    try {
+      db.handleSaveToDB(
+        "welcome-to-sweden",
+        "social-life",
+        "fika",
+        "lingo",
+        fikaContentTwo
+      );
+    } catch (error) {
+      console.log(error);
+    } finally {
+      // setIsEditable(false);
+    }
+  };
+  const handleSaveFikaContentThree = () => {
+    try {
+      db.handleSaveToDB(
+        "welcome-to-sweden",
+        "social-life",
+        "fika",
+        "price-level",
+        fikaContentThree
+      );
+    } catch (error) {
+      console.log(error);
+    } finally {
+      // setIsEditable(false);
+    }
+  };
 
   return (
     <ChildComponent
@@ -63,29 +113,35 @@ const Fika = () => {
       iamgeViewStyle={{ flex: 1, width, height: height / 4 }}
       imageStyle={{ flex: 1, width: null, height: null }}
       imgSource={fika_pic}
-      children1={<Text style={Styles.childComponentHeaders}>Like a Swede</Text>}
+   
       editButton1={
         currentUser.uid === adminId && (
-          <AdminButtons handleEdit={_handleEdit} handleSave={_handleSave} />
+          <View>
+            <ButtonComponent
+              onTouch={_handleEdit}
+              style={{
+                alignItems: "center",
+              }}
+            >
+              <MaterialIcons name="edit" size={30} color="black" />
+            </ButtonComponent>
+          </View>
         )
       }
-      children2={<Text>{fikaContentOne}</Text>}
+      
+      children1={<Text style={Styles.childComponentHeaders}>Like a Swede</Text>}
+      children2={
+        <Text style={Styles.childComponentTextContainers}>
+          {fikaContentOne}
+        </Text>
+      }
       editBox1={
         isEditable && (
-          <>
-            <TextInput
-              style={{
-                borderWidth: 0.5,
-                borderColor: "red",
-                width: width,
-                height: height / 10,
-              }}
-              placeholder="Update content"
-              editable={isEditable}
-              name="like-a-swede"
-              onChangeText={(e) => setFikaContentOne(e)}
-            ></TextInput>
-          </>
+          <EditBox
+            editable={isEditable}
+            onChangeText={(e) => setFikaContentOne(e)}
+            onTouch={handleSaveFikaContentOne}
+          />
         )
       }
       style={[Styles.childComponentTextContainers]}
@@ -97,20 +153,11 @@ const Fika = () => {
       }
       editBox2={
         isEditable && (
-          <>
-            <TextInput
-              style={{
-                borderWidth: 0.5,
-                borderColor: "red",
-                width: width,
-                height: height / 10,
-              }}
-              placeholder="Update content"
-              editable={isEditable}
-              name="lingo"
-              onChangeText={(e) => setFikaContentTwo(e)}
-            ></TextInput>
-          </>
+          <EditBox
+          editable={isEditable}
+          onChangeText={(e) => setFikaContentTwo(e)}
+          onTouch={handleSaveFikaContentTwo}
+        />
         )
       }
       children5={<Text style={Styles.childComponentHeaders}>Price level</Text>}
@@ -121,20 +168,11 @@ const Fika = () => {
       }
       editBox3={
         isEditable && (
-          <>
-            <TextInput
-              style={{
-                borderWidth: 0.5,
-                borderColor: "red",
-                width: width,
-                height: height / 10,
-              }}
-              placeholder="Update content"
-              editable={isEditable}
-              name="price-level"
-              onChangeText={(e) => setfikaContentThree(e)}
-            ></TextInput>
-          </>
+          <EditBox
+          editable={isEditable}
+          onChangeText={(e) => setfikaContentThree(e)}
+          onTouch={handleSaveFikaContentThree}
+        />
         )
       }
     />

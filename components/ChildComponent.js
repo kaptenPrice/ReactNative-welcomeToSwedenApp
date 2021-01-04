@@ -7,13 +7,10 @@ import appColors from "../assets/appColor";
 import ReadMore from "react-native-read-more-text";
 
 const ChildComponent = ({
-  adminButtonStyle,
   scrollViewStyle,
-  containerStyle,
   iamgeViewStyle,
   imageStyle,
   imgSource,
-  firstContentStyle,
   children1,
   editButton1,
   editBox1,
@@ -25,8 +22,6 @@ const ChildComponent = ({
   children6,
   editBox3,
   children7,
-  secondContentView,
-  thirdConentViewStyle,
   editBox4,
   ...props
 }) => {
@@ -35,16 +30,7 @@ const ChildComponent = ({
       <View style={iamgeViewStyle}>
         <Image style={imageStyle} source={imgSource}></Image>
       </View>
-      <View
-        style={{
-          position: "relative",
-          marginRight: 20,
-          flexDirection: "row",
-          justifyContent: "flex-end",
-        }}
-      >
-        {editButton1}
-      </View>
+      <View>{editButton1}</View>
       <View style={{ margin: 10 }}>
         <View style={Styles.childComponentContentView}>
           {children1}
@@ -81,7 +67,7 @@ const ChildComponent = ({
         </View>
         <View
           style={[
-            Styles.childComponentContentView,
+            // Styles.childComponentContentView,
             { paddingBottom: 20, flexDirection: "column" },
           ]}
         >
@@ -95,7 +81,3 @@ const ChildComponent = ({
 
 export default ChildComponent;
 
-// seeMoreStyle={{ color: appColors.textColor, fontWeight: "bold" }}
-// backgroundColor={appColors.bgChildContainers}
-// seeLessText="Less"
-// seeLessStyle={{ color: appColors.textColor, fontWeight: "bold" }}

@@ -25,7 +25,6 @@ const UserProfile = () => {
   const { isLoading, currentUser } = useSelector(
     (state) => state.authentication
   );
-  console.log(currentUser)
   const { phone, city } = useSelector((state) => state.userAdditionalInfo);
 
   const [userName, setUserName] = useState(currentUser.name);

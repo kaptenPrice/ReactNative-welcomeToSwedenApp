@@ -41,7 +41,6 @@ const FeedBack = () => {
             textAlign: "left",
           }}
         >
-          {" "}
           {`My phone nr: ${phone} \n City: ${city}`}
         </TextInput>
         <View style={{ flexDirection: "row-reverse" }}>
@@ -72,6 +71,3 @@ const FeedBack = () => {
 };
 
 export default FeedBack;
-{
-  /* <ion-icon name="filter-outline"></ion-icon> */
-}

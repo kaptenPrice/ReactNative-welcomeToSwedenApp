@@ -11,91 +11,100 @@ import * as Google from "expo-google-app-auth";
 import * as db from '../firestore/FirebaseUtils'
 
 const LoginScreen = () => {
+  const dispatch=useDispatch()
   const {currentUser,isLoading}=useSelector(state=>state.authentication)
-  // console.log(currentUser)
+
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   // const [isLoading, setIsLoading] = useState(false);
   const [isAuthorized, setIsAuthorized] = useState(true);
 
+  // const signIn=(email, password)=>{
+  //  const res= db.signIn(email, password)
+  //  if (res) {
+  //   dispatch({ type: "SIGN_IN", payload: res.user });
+  //  }
+
+  // }
+
 
   // const dispatch = useDispatch();
 
-  // const signInWithGoogleAsync = async () => {
-  //   try {
-  //     const res = await Google.logInAsync({
-  //       iosClientId:
-  //         "383691417994-fc40nclpp83r5jln1ou434lkptsc6oq4.apps.googleusercontent.com",
-  //         // default: "383691417994-1i9ac782aafjs5bpqqucshuaa9i1fh54.apps.googleusercontent.com",
-  //       scopes: ["profile", "email"],
-  //     });
-  //     if (res.type === "success") {
-  //       dispatch({ type: "SIGN_IN", payload: res.user });
-  //       return res.accessToken;
-  //     } else {
-  //       return { cancelled: true };
-  //     }
-  //   } catch (e) {
-  //     return { error: true };
-  //   }
-  // };
+  const signInWithGoogleAsync = async () => {
+    try {
+      const res = await Google.logInAsync({
+        iosClientId:
+          "383691417994-fc40nclpp83r5jln1ou434lkptsc6oq4.apps.googleusercontent.com",
+          // default: "383691417994-1i9ac782aafjs5bpqqucshuaa9i1fh54.apps.googleusercontent.com",
+        scopes: ["profile", "email"],
+      });
+      if (res.type === "success") {
+        dispatch({ type: "SIGN_IN", payload: res.user });
+        return res.accessToken;
+      } else {
+        return { cancelled: true };
+      }
+    } catch (e) {
+      return { error: true };
+    }
+  };
 
-  // const signIn = async () => {
-  //   if (email && password) {
-  //     try {
-  //       const res = await firebase
-  //         .auth()
-  //         .signInWithEmailAndPassword(email, password);
-  //       if (res) {
-  //         dispatch({ type: "SIGN_IN", payload: res.user });
-  //       }
-  //     } catch (error) {
-  //       switch (error.code) {
-  //         case "auth/user-not-found":
-  //           alert(
-  //             `${email} is not recognized, no worries , just register a new account `
-  //           );
-  //           break;
-  //         case "auth/invalid-email":
-  //           alert(`${email} is misspelled? Try again`);
-  //           break;
-  //         default:
-  //           alert(error.code);
-  //       }
-  //     }
-  //   }
-  // };
-  // const register = async () => {
-  //   if (email && password) {
-  //     try {
-  //       const res = await firebase
-  //         .auth()
-  //         .createUserWithEmailAndPassword(email, password);
-  //       if (res) {
-  //         const user = await firebase
-  //           .database()
-  //           .ref("users")
-  //           .child(res.user.uid)
-  //           .set({ email: res.user.email, uid: res.user.uid });
-  //         dispatch({ type: "SIGN_IN", payload: res.user });
-  //       }
-  //     } catch (error) {
-  //       if (error.code == "auth/email-already-in-use") {
-  //         alert(
-  //           `Email: ${email} is already registerd, dont worry, press login`
-  //         );
-  //       }
-  //       if (error.code == "auth/invalid-password") {
-  //         alert(
-  //           "The provided value for the password user property is invalid. It must be a string with at least six characters. "
-  //         );
-  //       } else {
-  //         alert("Please enter both email and password");
-  //       }
-  //     }
-  //   }
-  // };
+  const signIn = async () => {
+    if (email && password) {
+      try {
+        const res = await firebase
+          .auth()
+          .signInWithEmailAndPassword(email, password);
+        if (res) {
+          dispatch({ type: "SIGN_IN", payload: res.user });
+        }
+      } catch (error) {
+        switch (error.code) {
+          case "auth/user-not-found":
+            alert(
+              `${email} is not recognized, no worries , just register a new account `
+            );
+            break;
+          case "auth/invalid-email":
+            alert(`${email} is misspelled? Try again`);
+            break;
+          default:
+            alert(error.code);
+        }
+      }
+    }
+  };
+  const register = async () => {
+    if (email && password) {
+      try {
+        const res = await firebase
+          .auth()
+          .createUserWithEmailAndPassword(email, password);
+        if (res) {
+          const user = await firebase
+            .database()
+            .ref("users")
+            .child(res.user.uid)
+            .set({ email: res.user.email, uid: res.user.uid });
+          dispatch({ type: "SIGN_IN", payload: res.user });
+        }
+      } catch (error) {
+        if (error.code == "auth/email-already-in-use") {
+          alert(
+            `Email: ${email} is already registerd, dont worry, press login`
+          );
+        }
+        if (error.code == "auth/invalid-password") {
+          alert(
+            "The provided value for the password user property is invalid. It must be a string with at least six characters. "
+          );
+        } else {
+          signIn()
+        }
+      }
+    }
+  };
 
   // passwordreminder to e-mail TODO set currentuser by redux useState
   // const actionCodeSettings =  {
@@ -125,7 +134,7 @@ const LoginScreen = () => {
 
 
   return (
-    <View style={{ flex: 0.7 }}>
+    <View style={{ flex:1 }}>
       <View style={Styles.welcomeViewLoginScreen}>
         <Text style={Styles.loginScreenMain}>Welcome</Text>
         <Text style={Styles.loginScreenMain}>Free for everyone to join</Text>
@@ -153,7 +162,7 @@ const LoginScreen = () => {
       <View style={Styles.viewSigninRegisterButtons}>
         <ButtonComponent
           buttonStyle={Styles.signinRegisterButton}
-          onTouch={db.signIn}
+          onTouch={signIn}
         >
           <Text style={Styles.signinRegisterButtonText}>Sign in by email </Text>
         </ButtonComponent>
@@ -161,27 +170,27 @@ const LoginScreen = () => {
         <ButtonComponent
           buttonStyle={Styles.signinRegisterButton}
           // onTouch={signInWithGoogleAsync}
-          onTouch={db.signInWithGoogleAsync}
+          onTouch={signInWithGoogleAsync}
         >
           <Text style={Styles.signinRegisterButtonText}>Sign with Google</Text>
         </ButtonComponent>
-        <Text style={Styles.infoText}>
-          No Google-account? dont worry sign in with another email{" "}
-        </Text>
+        {/* <Text style={Styles.infoText}>
+          No Google-account? dont worry sign in with another email
+        </Text> */}
 
         <ButtonComponent
           buttonStyle={Styles.signinRegisterButton}
           // onTouch={register}
-           onTouch={db.register}
+           onTouch={register}
 
         >
           <Text style={Styles.signinRegisterButtonText}>Register</Text>
         </ButtonComponent>
         <ButtonComponent
-          buttonStyle={Styles.signinRegisterButton}
+          buttonStyle={Styles.forgotPasswordButton}
           // onTouch={register}
         >
-          <Text style={Styles.signinRegisterButtonText}>Forgot</Text>
+          <Text style={Styles.signinRegisterButtonText}>Forgot password</Text>
         </ButtonComponent>
       </View>
     </View>

@@ -52,7 +52,7 @@ const Styles = StyleSheet.create({
     fontSize: 40,
   },
   viewTextInput: {
-    flex: 1,
+    flex: 2,
     justifyContent: "center",
   },
   textInputStyle: {
@@ -66,16 +66,16 @@ const Styles = StyleSheet.create({
     borderRadius: 7,
   },
   viewSigninRegisterButtons: {
-    flex: 1,
+    flex: 2,
     flexDirection: "column",
-    justifyContent: "center",
+    justifyContent: "space-between",
     alignItems: "center",
-    marginTop: 30,
+    // marginTop: 30,
   },
   infoText: {
-    marginLeft: 20,
-    marginRight: 20,
-    marginTop: 10,
+    // marginLeft: 20,
+    // marginRight: 20,
+    // marginTop: 10,
     alignSelf: "center",
   },
   signinRegisterButton: {
@@ -87,12 +87,18 @@ const Styles = StyleSheet.create({
     borderColor: appColors.borderColor,
     borderRadius: 10,
     height: 40,
-    marginTop: 20,
+    // marginTop: 20,
   },
   signinRegisterButtonText: {
     color: appColors.borderColor,
     fontWeight: "600",
     fontSize: 18,
+  },
+  forgotPasswordButton:{
+    fontWeight: "600",
+    fontSize: 18,
+    marginBottom:20
+    
   },
   drawerComponentView: {
     height: 150,
@@ -164,14 +170,15 @@ const Styles = StyleSheet.create({
     // alignItems: "baseline"
   },
   childComponentTextContainers: {
-    borderColor:"red",
-    borderWidth:0.5,
-    fontWeight: "400",
+    // borderColor:"blue",
+    // borderWidth:0.5,
+    fontWeight: "bold",
     fontSize: 18,
     paddingBottom: 30,
     marginLeft:5, 
     marginRight:5,
-    marginTop:10 
+    marginTop:10,
+    color:appColors.textColor
   },
 
   childComponentContentView: {
