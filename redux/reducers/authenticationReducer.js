@@ -2,7 +2,6 @@ const initialState = {
   isLoading: true,
   isSignedIn: false,
   currentUser: null,
-  isAdmin: false,
 };
 const authentication = (state = initialState, action) => {
   switch (action.type) {
@@ -20,15 +19,7 @@ const authentication = (state = initialState, action) => {
         currentUser: null,
         isLoading: false,
       };
-      // case: "CHECK_ADMIN":
-      // if (currentUser.uid===action.payload.uid) {
-      //   return{    
-      //           isAdmin:true,
-      //   }
-        
-        
-      // }
-
+   
     default:
       return state;
   }

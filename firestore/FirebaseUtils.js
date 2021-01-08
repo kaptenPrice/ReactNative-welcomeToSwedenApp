@@ -14,78 +14,36 @@ export const db = firebase.firestore();
 export const auth = firebase.auth();
 export const storage = firebase.storage();
 
-
-export const register = async (email,password) => {
-  if (email && password) {
-    try {
-      const res = await firebase
-        .auth()
-        .createUserWithEmailAndPassword(email, password);
-      if (res) {
-        const user = await firebase
-          .database()
-          .ref("users")
-          .child(res.user.uid)
-          .set({ email: res.user.email, uid: res.user.uid });
-        dispatch({ type: "SIGN_IN", payload: res.user });
-      }
-    } catch (error) {
-      if (error.code == "auth/email-already-in-use") {
-        alert(`Email: ${email} is already registerd, dont worry, press login`);
-      }
-      if (error.code == "auth/invalid-password") {
-        alert(
-          "The provided value for the password user property is invalid. It must be a string with at least six characters. "
-        );
-      } else {
-        alert("Please enter both email and password");
-      }
-    }
-  }
-};
-export const signInWithGoogleAsync = async () => {
-  
-
+// export const actionCodeSettings = {
+//   url: "https://www.example.com/?email=" + auth.currentUser.email,
+//   iOS: {
+//     bundleId: "com.example.ios",
+//   },
+//   android: {
+//     packageName: "com.example.android",
+//     installApp: true,
+//     minimumVersion: "12",
+//   },
+//   handleCodeInApp: true,
+//   // When multiple custom dynamic link domains are defined, specify which
+//   // one to use.
+//   dynamicLinkDomain: "example.page.link",
+// };
+// auth.currentUser
+//   .sendEmailVerification(actionCodeSettings)
+//   .then(function () {
+//     // Verification email sent.
+//   })
+//   .catch(function (error) {
+//     // Error occurred. Inspect error.code.
+//   });
+export const signOut = async () => {
   try {
-      
-    const res = await Google.logInAsync({
-      iosClientId:
-        "383691417994-fc40nclpp83r5jln1ou434lkptsc6oq4.apps.googleusercontent.com",
-      // default: "383691417994-1i9ac782aafjs5bpqqucshuaa9i1fh54.apps.googleusercontent.com",
-      scopes: ["profile", "email"],
-    });
-    if (res.type === "success") {
-      dispatch({ type: "SIGN_IN", payload: res.user });
-      return res.accessToken;
-    } else {
-      return { cancelled: true };
-    }
-  } catch (e) {
-    return { error: true };
+    await firebase.auth().signOut();
+  } catch (error) {
+    alert("Something fishy occurred, try again, or restart the app");
   }
 };
-//   export const actionCodeSettings =  {
-//     url: 'https://www.example.com/?email=' + auth.currentUser.email,
-//     iOS: {
-//       bundleId: 'com.example.ios'
-//     },
-//     android: {
-//       packageName: 'com.example.android',
-//       installApp: true,
-//       minimumVersion: '12'
-//     },
-//     handleCodeInApp: true,
-//     // When multiple custom dynamic link domains are defined, specify which
-//     // one to use.
-//     dynamicLinkDomain: "example.page.link"
-//   };
-//   auth.currentUser.sendEmailVerification(actionCodeSettings)
-//     .then(function() {
-//       // Verification email sent.
-//     })
-//     .catch(function(error) {
-//       // Error occurred. Inspect error.code.
-//     });
 
 export const handleSaveToDB = async (
   collection1,
@@ -99,9 +57,7 @@ export const handleSaveToDB = async (
     .doc(doc1)
     .collection(collection2)
     .doc(doc2)
-    .set({content});
-  //TODO update
-  // setIsEditable(state);
+    .set({ content });
 };
 export const getContentData = async (
   collection1,
@@ -117,11 +73,42 @@ export const getContentData = async (
       .collection(collection2)
       .doc(doc2)
       .get();
-      if (!content.exists) {
-          console.log("no content")
-      }
-      return content.data()
+    if (!content.exists) {
+      console.log("no content");
+    }
+    return content.data();
   } catch (error) {
-      console.error(error)
+    console.error(error);
+  }
+};
+
+export const saveUserToDB = async (user, uid) => {
+  try {
+    const snapShot = await db.doc(`users/${uid}`).get();
+
+    // console.log("SnapShot: ",snapShot.exists)
+
+    if (!snapShot.exists) {
+      await db.collection("users").doc(uid).set(user);
+    }
+  } catch (error) {
+    console.log("error från firebase", error);
+  }
+};
+export const updateUserDataDB = async (user, uid) => {
+  try {
+    await db.collection("users").doc(uid).update(user);
+  } catch (error) {
+    console.log("error från firebase", error);
+  }
+};
+
+export const getUserData = async (uid, cb) => {
+ 
+  try {
+    return db.collection("users").doc(uid).onSnapshot(cb);
+   
+  } catch (error) {
+    console.log("User dosnt exist");
   }
 };

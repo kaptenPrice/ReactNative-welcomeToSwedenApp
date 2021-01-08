@@ -6,7 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 import firebase from "firebase/app";
 import "firebase-auth";
 import { Ionicons, MaterialIcons, Feather } from "@expo/vector-icons";
-
+import Input from 'react-native-input-style'
 
 import { addPhone, signOut } from "../../redux/store/actions";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,6 +14,7 @@ import { SafeAreaView } from "react-navigation";
 import { ImageBackground } from "react-native";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import appColors from "../../assets/appColor";
+import * as db from "../../firestore/FirebaseUtils";
 const pic =
   "https://i3.wp.com/hypebeast.com/image/2020/07/apple-memoji-update-headwear-masks-hairstyles-1.png?w=1600";
 
@@ -25,43 +26,72 @@ const UserProfile = () => {
   const { isLoading, currentUser } = useSelector(
     (state) => state.authentication
   );
-  const { phone, city } = useSelector((state) => state.userAdditionalInfo);
+  const { name, email, phone, city } = useSelector(
+    (state) => state.userAdditionalInfo
+  );
 
-  const [userName, setUserName] = useState(currentUser.name);
-  const [email, setEmail] = useState(currentUser.email);
-  const [_phone, setPhone] = useState("");
-  const [_city, setCity] = useState("");
+  const [localEmail, setLocalEmail] = useState(currentUser.email);
+
+  const [localUserName, setLocalUserName] = useState("");
+  const [localPhone, setLocalPhone] = useState("");
+  const [localCity, setLocalCity] = useState("");
+  const [uid, setUid] = useState(currentUser.uid);
+
+  const [userNameFromDB, setUserNameFromDB] = useState("");
+  const [phoneFromDB, setphoneFromDB] = useState("");
+  const [cityFromDB, setCityFromDB] = useState("");
 
   const [isEditable, setIsEditable] = useState(false);
   const [profielImage, setProfileImage] = useState(currentUser.photoUrl);
 
   useEffect(() => {
+    // getUser();
+    name && setLocalUserName(name);
+    phone && setLocalPhone(phone);
+    city && setLocalCity(city);
+
     if (!currentUser.photoUrl) {
       setProfileImage(pic);
     } else {
       setProfileImage(currentUser.photoUrl);
     }
-  }, []);
+  }, [name, phone, city]);
 
   useEffect(() => {
-    if (!currentUser.name) {
-      setUserName("Avatar");
-    } else {
-      setUserName(currentUser.name);
-    }
+    if (currentUser.uid) {
+      setUid(currentUser.uid);
+    } else if (currentUser.id) setUid(currentUser.id);
   }, []);
-  useEffect(() => {
-    if (!phone) {
-      setPhone(null);
-    } else {
-      setPhone(phone);
+
+  // const getUser = () => {
+  //   db.getUserData(uid)
+  //     .then((data) => {
+  //       const { admin, name, email, city, phone } = data;
+  //       setUserNameFromDB(name);
+  //       setphoneFromDB(phone);
+  //       setCityFromDB(city);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
+  //Ändra till en updatemetod i firebase utils
+  const handleSaveUserData = () => {
+    let data = {
+      name: localUserName,
+      phone: localPhone,
+      city: localCity,
+    };
+    try {
+      db.updateUserDataDB(data, uid);
+    } catch (error) {
+      console.log("Error från feedback", error);
     }
-  }, []);
+  };
 
   const handleSignOut = async () => {
     try {
-      await firebase.auth().signOut();
-
+      db.signOut();
       dispatch(signOut());
     } catch (error) {
       alert("Something fishy occurred, try again, or restart the app");
@@ -70,13 +100,6 @@ const UserProfile = () => {
 
   const handleEdit = () => {
     setIsEditable(true);
-  };
-  const handleSave = () => {
-    //TODO SET FIRESTORE USER SCHEMA
-    dispatch({ type: "ADD_PHONE", payload: _phone });
-    dispatch({ type: "ADD_CITY", payload: _city });
-
-    setIsEditable(false);
   };
 
   return (
@@ -107,13 +130,15 @@ const UserProfile = () => {
         </ButtonComponent>
       </View>
       <View style={{ flexDirection: "row", justifyContent: "center" }}>
+        
         <View
           style={{
-            flex: 1 / 13,
+            flex: 1 / 6,
             backgroundColor: "white",
             color: appColors.placeHolderColor,
           }}
         >
+          
           <Text style={{ height: 40, marginTop: 10, marginLeft: 5 }}>Name</Text>
           <Text style={{ height: 40, marginLeft: 5 }}>E-mail</Text>
           <Text style={{ height: 40, marginLeft: 5 }}>Phone</Text>
@@ -133,18 +158,22 @@ const UserProfile = () => {
               borderBottomWidth: 0.5,
             }}
             editable={isEditable}
-            value={`${userName}`}
-            name="name"
+            onChangeText={(e) => {
+              console.log(e);
+              setLocalUserName(e);
+            }}
+            value={localUserName}
+            placeholder="name"
           />
+          
           <TextInput
             style={{
               height: 40,
               borderBottomWidth: 0.5,
-
               color: appColors.placeHolderColor,
             }}
             editable={false}
-            value={`${email}`}
+            value={email}
             name="email"
           />
           <TextInput
@@ -156,10 +185,9 @@ const UserProfile = () => {
             dataDetectorTypes="phoneNumber"
             keyboardType="phone-pad"
             editable={isEditable}
-            onChangeText={(e) => setPhone(e)}
-            value={_phone}
+            onChangeText={(e) => setLocalPhone(e)}
+            value={localPhone}
             placeholder="Phone"
-            name="phone"
           />
           <TextInput
             style={{
@@ -167,10 +195,9 @@ const UserProfile = () => {
               color: appColors.placeHolderColor,
             }}
             editable={isEditable}
-            onChangeText={(e) => setCity(e)}
-            value={city}
+            onChangeText={(e) => setLocalCity(e)}
+            value={localCity}
             placeholder="City"
-            name="city"
           ></TextInput>
         </View>
       </View>
@@ -183,10 +210,17 @@ const UserProfile = () => {
           paddingHorizontal: 10,
         }}
       >
-        <ButtonComponent style={{ marginLeft: 20 }} onTouch={handleSave}>
+        <ButtonComponent
+          style={{ marginLeft: 20 }}
+          onTouch={handleSaveUserData}
+        >
           <Feather name="save" size={30} color="black" />
         </ButtonComponent>
       </View>
+   
+
+
+
       <View
         style={{
           flex: 1,
@@ -195,11 +229,12 @@ const UserProfile = () => {
           padding: 10,
         }}
       >
+        
         <ButtonComponent
           buttonStyle={Styles.signinRegisterButton}
           onPress={() => navigate("Home")}
         >
-          <Text style={Styles.signinRegisterButtonText}>Go back</Text>
+          <Text style={Styles.signinRegisterButtonText}>Home</Text>
         </ButtonComponent>
         <ButtonComponent
           buttonStyle={Styles.signinRegisterButton}

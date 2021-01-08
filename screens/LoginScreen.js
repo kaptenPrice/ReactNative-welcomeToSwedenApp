@@ -13,6 +13,7 @@ import * as db from '../firestore/FirebaseUtils'
 const LoginScreen = () => {
   const dispatch=useDispatch()
   const {currentUser,isLoading}=useSelector(state=>state.authentication)
+  // const { isAdmin,name, email, phone, city } = useSelector((state) => state.userAdditionalInfo);
 
 
   const [email, setEmail] = useState("");
@@ -20,17 +21,7 @@ const LoginScreen = () => {
   // const [isLoading, setIsLoading] = useState(false);
   const [isAuthorized, setIsAuthorized] = useState(true);
 
-  // const signIn=(email, password)=>{
-  //  const res= db.signIn(email, password)
-  //  if (res) {
-  //   dispatch({ type: "SIGN_IN", payload: res.user });
-  //  }
-
-  // }
-
-
-  // const dispatch = useDispatch();
-
+ 
   const signInWithGoogleAsync = async () => {
     try {
       const res = await Google.logInAsync({
@@ -58,12 +49,13 @@ const LoginScreen = () => {
           .signInWithEmailAndPassword(email, password);
         if (res) {
           dispatch({ type: "SIGN_IN", payload: res.user });
-        }
+
+             }console.log(email)
       } catch (error) {
         switch (error.code) {
           case "auth/user-not-found":
             alert(
-              `${email} is not recognized, no worries , just register a new account `
+              `${email} is not recognized, no worries , just klick on "Register"  to register account `
             );
             break;
           case "auth/invalid-email":
@@ -80,14 +72,17 @@ const LoginScreen = () => {
       try {
         const res = await firebase
           .auth()
-          .createUserWithEmailAndPassword(email, password);
+          .createUserWithEmailAndPassword(email,password);
         if (res) {
           const user = await firebase
             .database()
             .ref("users")
             .child(res.user.uid)
             .set({ email: res.user.email, uid: res.user.uid });
+            
           dispatch({ type: "SIGN_IN", payload: res.user });
+  
+
         }
       } catch (error) {
         if (error.code == "auth/email-already-in-use") {

@@ -18,7 +18,8 @@ import ContentComponent from "../../components/ContentComponent";
 
 const Fika = () => {
   // const adminId = "118005229206246600125";
-  const adminId = "KnlUK9tJpdRlvFV15ujBQogiR5k2";
+  // const adminId = "KnlUK9tJpdRlvFV15ujBQogiR5k2";
+  const { isAdmin } = useSelector((state) => state.userAdditionalInfo);
   const { isLoading, currentUser } = useSelector(
     (state) => state.authentication
   );
@@ -28,7 +29,6 @@ const Fika = () => {
   const [fikaContentOne, setFikaContentOne] = useState("");
   const [fikaContentTwo, setFikaContentTwo] = useState("");
   const [fikaContentThree, setfikaContentThree] = useState("");
-  
 
   useEffect(() => {
     db.getContentData(
@@ -113,9 +113,8 @@ const Fika = () => {
       iamgeViewStyle={{ flex: 1, width, height: height / 4 }}
       imageStyle={{ flex: 1, width: null, height: null }}
       imgSource={fika_pic}
-   
       editButton1={
-        currentUser.uid === adminId && (
+        isAdmin && (
           <View>
             <ButtonComponent
               onTouch={_handleEdit}
@@ -128,7 +127,6 @@ const Fika = () => {
           </View>
         )
       }
-      
       children1={<Text style={Styles.childComponentHeaders}>Like a Swede</Text>}
       children2={
         <Text style={Styles.childComponentTextContainers}>
@@ -154,10 +152,10 @@ const Fika = () => {
       editBox2={
         isEditable && (
           <EditBox
-          editable={isEditable}
-          onChangeText={(e) => setFikaContentTwo(e)}
-          onTouch={handleSaveFikaContentTwo}
-        />
+            editable={isEditable}
+            onChangeText={(e) => setFikaContentTwo(e)}
+            onTouch={handleSaveFikaContentTwo}
+          />
         )
       }
       children5={<Text style={Styles.childComponentHeaders}>Price level</Text>}
@@ -169,10 +167,10 @@ const Fika = () => {
       editBox3={
         isEditable && (
           <EditBox
-          editable={isEditable}
-          onChangeText={(e) => setfikaContentThree(e)}
-          onTouch={handleSaveFikaContentThree}
-        />
+            editable={isEditable}
+            onChangeText={(e) => setfikaContentThree(e)}
+            onTouch={handleSaveFikaContentThree}
+          />
         )
       }
     />

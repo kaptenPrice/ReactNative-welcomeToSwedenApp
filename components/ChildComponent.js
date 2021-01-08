@@ -34,7 +34,6 @@ const ChildComponent = ({
       <View style={{ margin: 10 }}>
         <View style={Styles.childComponentContentView}>
           {children1}
-          {editBox1}
           <ReadMore
             renderTruncatedFooter={null}
             renderRevealedFooter={null}
@@ -42,6 +41,7 @@ const ChildComponent = ({
           >
             {children2}
           </ReadMore>
+          {editBox1}
         </View>
         <View style={Styles.childComponentContentView}>
           {children3}
@@ -80,4 +80,3 @@ const ChildComponent = ({
 };
 
 export default ChildComponent;
-

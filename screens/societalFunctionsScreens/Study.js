@@ -38,7 +38,6 @@ const Study = () => {
       "study",
       "like-a-swede"
     ).then((data) => {
-      console.log(data.content)
       setstudyContentOne(JSON.stringify(data.content).slice(1, -1));
     });
     db.getContentData(
@@ -47,16 +46,14 @@ const Study = () => {
       "study",
       "lingo"
     ).then((data) => {
-      console.log(data.content)
       setstudyContentTwo(JSON.stringify(data.content).slice(1, -1));
     });
     db.getContentData(
       "welcome-to-sweden",
       "societal-functions",
       "study",
-      "assistence",
-      ).then((data) => {
-      console.log(data.content)
+      "assistence"
+    ).then((data) => {
       setstudyContentThree(JSON.stringify(data.content).slice(1, -1));
     });
   }, []);
@@ -77,6 +74,7 @@ const Study = () => {
         "like-a-swede",
         studyContentOne
       );
+      alert("Like a Swede uppdated");
     } catch (error) {
       console.log(error);
     }
@@ -90,6 +88,7 @@ const Study = () => {
         "lingo",
         studyContentTwo
       );
+      alert("Lingo uppdated");
     } catch (error) {
       console.log(error);
     }
@@ -103,6 +102,7 @@ const Study = () => {
         "assistence",
         studyContentThree
       );
+      alert("assistence uppdated");
     } catch (error) {
       console.log(error);
     }
@@ -114,19 +114,18 @@ const Study = () => {
       iamgeViewStyle={{ flex: 1, width, height: height / 4 }}
       imageStyle={{ flex: 1, width: null, height: null }}
       imgSource={study_unsplash}
-      adminButtonStyle={{
-        position: "relative",
-        marginRight: 20,
-        flexDirection: "row",
-        justifyContent: "flex-end",
-      }}
       editButton1={
         currentUser.uid === adminId && (
-          <>
-            <ButtonComponent onTouch={handleEdit}>
+          <View>
+            <ButtonComponent
+              onTouch={handleEdit}
+              style={{
+                alignItems: "center",
+              }}
+            >
               <MaterialIcons name="edit" size={30} color="black" />
             </ButtonComponent>
-          </>
+          </View>
         )
       }
       children1={
