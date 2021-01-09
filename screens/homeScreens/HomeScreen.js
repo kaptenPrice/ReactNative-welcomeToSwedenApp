@@ -77,7 +77,6 @@ export default function HomeScreen() {
         dispatch({ type: "ADD_NAME", payload: data.name || "" });
         dispatch({ type: "ADD_PHONE", payload: data.phone || "" });
         dispatch({ type: "ADD_CITY", payload: data.city || "" });
-        console.log("Redux in state Homescrreen",phone)
 
       })
       

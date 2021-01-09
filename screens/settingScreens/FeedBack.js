@@ -39,6 +39,8 @@ const FeedBack = () => {
             borderRadius: 7,
             marginBottom: 20,
             textAlign: "left",
+            multiline:true
+            
           }}
         >
           {`My phone nr: ${phone} \n City: ${city}`}

@@ -9,7 +9,6 @@
   },
   "dependencies": {
     "@expo/react-native-action-sheet": "^3.8.0",
-    "@fawazahmed/react-native-read-more": "^1.0.9",
     "@react-native-community/masked-view": "0.1.10",
     "@react-native-community/netinfo": "5.9.6",
     "@react-navigation/bottom-tabs": "^5.11.2",

@@ -5,14 +5,25 @@ import ButtonComponent from "../../components/ButtonComponent";
 import { useNavigation } from "@react-navigation/native";
 import firebase from "firebase/app";
 import "firebase-auth";
-import { Ionicons, MaterialIcons, Feather } from "@expo/vector-icons";
-import Input from 'react-native-input-style'
+import {
+  Ionicons,
+  MaterialIcons,
+  Feather,
+  AntDesign,
+  FontAwesome,
+  MaterialCommunityIcons
+} from "@expo/vector-icons";
+import { AwesomeTextInput } from "react-native-awesome-text-input";
 
 import { addPhone, signOut } from "../../redux/store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { SafeAreaView } from "react-navigation";
 import { ImageBackground } from "react-native";
-import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
+import {
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+} from "react-native-gesture-handler";
 import appColors from "../../assets/appColor";
 import * as db from "../../firestore/FirebaseUtils";
 const pic =
@@ -31,15 +42,11 @@ const UserProfile = () => {
   );
 
   const [localEmail, setLocalEmail] = useState(currentUser.email);
-
   const [localUserName, setLocalUserName] = useState("");
   const [localPhone, setLocalPhone] = useState("");
   const [localCity, setLocalCity] = useState("");
   const [uid, setUid] = useState(currentUser.uid);
-
-  const [userNameFromDB, setUserNameFromDB] = useState("");
-  const [phoneFromDB, setphoneFromDB] = useState("");
-  const [cityFromDB, setCityFromDB] = useState("");
+  const [editMode, setEditMode] = useState(false);
 
   const [isEditable, setIsEditable] = useState(false);
   const [profielImage, setProfileImage] = useState(currentUser.photoUrl);
@@ -63,19 +70,6 @@ const UserProfile = () => {
     } else if (currentUser.id) setUid(currentUser.id);
   }, []);
 
-  // const getUser = () => {
-  //   db.getUserData(uid)
-  //     .then((data) => {
-  //       const { admin, name, email, city, phone } = data;
-  //       setUserNameFromDB(name);
-  //       setphoneFromDB(phone);
-  //       setCityFromDB(city);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // };
-  //Ändra till en updatemetod i firebase utils
   const handleSaveUserData = () => {
     let data = {
       name: localUserName,
@@ -83,10 +77,25 @@ const UserProfile = () => {
       city: localCity,
     };
     try {
-      db.updateUserDataDB(data, uid);
+      if (
+        localUserName !== name ||
+        localPhone !== phone ||
+        localCity !== city
+      ) {
+        db.updateUserDataDB(data, uid);
+      }
     } catch (error) {
       console.log("Error från feedback", error);
     }
+    setIsEditable(false);
+    setEditMode(false);
+  };
+  const discardChanges = () => {
+    setLocalUserName(name);
+    setLocalPhone(phone);
+    setLocalCity(city);
+    setIsEditable(true);
+    setEditMode(false);
   };
 
   const handleSignOut = async () => {
@@ -100,14 +109,17 @@ const UserProfile = () => {
 
   const handleEdit = () => {
     setIsEditable(true);
+    setEditMode(true);
   };
 
   return (
-    <View style={Styles.profileScreen}>
-      <View style={{ alignItems: "center" }}>
+    <ScrollView style={Styles.profileScreen}>
+      <View
+        style={{ alignItems: "center", borderColor: "blue", borderWidth: 1 }}
+      >
         <ButtonComponent
           onTouch={() => console.log("clicked on image")} //TODO Change image from camera/library
-          style={{ marginTop: 20 }}
+          style={{ marginTop: 15, borderColor: "blue", borderWidth: 1 }}
         >
           <ImageBackground
             style={Styles.userProfileImage}
@@ -116,71 +128,178 @@ const UserProfile = () => {
           />
         </ButtonComponent>
       </View>
+
       <View
         style={{
-          flex: 1 / 6,
+          flex: 2,
+          justifyContent: "center",
           flexDirection: "row",
-          justifyContent: "flex-end",
-          marginEnd: width / 5,
-          paddingHorizontal: 10,
+          marginHorizontal: 2,
+          marginVertical: 5,
+          alignItems: "center",
+          marginTop: 5,
         }}
       >
-        <ButtonComponent onTouch={handleEdit} accessibilityRole="button">
-          <MaterialIcons name="edit" size={30} color="black" />
-        </ButtonComponent>
-      </View>
-      <View style={{ flexDirection: "row", justifyContent: "center" }}>
-        
-        <View
-          style={{
-            flex: 1 / 6,
-            backgroundColor: "white",
-            color: appColors.placeHolderColor,
-          }}
-        >
-          
-          <Text style={{ height: 40, marginTop: 10, marginLeft: 5 }}>Name</Text>
-          <Text style={{ height: 40, marginLeft: 5 }}>E-mail</Text>
-          <Text style={{ height: 40, marginLeft: 5 }}>Phone</Text>
-          <Text style={{ height: 40, marginLeft: 5 }}>City</Text>
-        </View>
-
-        <View
-          style={{
-            flex: 1 / 2,
-            backgroundColor: "white",
-            color: appColors.placeHolderColor,
-          }}
-        >
-          <TextInput
+        {!editMode && (
+          <ButtonComponent
             style={{
-              height: 40,
-              borderBottomWidth: 0.5,
+              flex: 1,
+              // borderWidth: 1,
+              // borderColor: "grey",
+              borderRadius: 5,
+              // marginRight: 20,
+              alignItems: "center",
+              justifyContent: "center",
+              width: 40,
+            }}
+            onTouch={handleEdit}
+          >
+            <Text style={{ paddingBottom: 10 }}>
+              <MaterialIcons name="edit" size={24} color="grey" />
+            </Text>
+          </ButtonComponent>
+        )}
+
+        {editMode && (
+          <>
+            <ButtonComponent
+              style={{
+                flex: 1,
+                // borderWidth: 1,
+                // borderColor: "grey",
+                borderRadius: 5,
+                // marginRight: 20,
+                alignItems: "center",
+                justifyContent: "center",
+                width: 40,
+              }}
+              onTouch={discardChanges}
+            >
+              <Text style={{ paddingBottom: 10 }}>
+                <AntDesign name="back" size={24} color="red" />
+                {/* <Ionicons name="md-close-circle-outline" size={24} color="red" /> */}
+              </Text>
+            </ButtonComponent>
+            <ButtonComponent
+              style={{
+                flex: 1,
+                borderRadius: 5,
+                alignItems: "center",
+                justifyContent: "center",
+                width: 40,
+              }}
+              onTouch={handleSaveUserData}
+            >
+              <Text style={{ paddingBottom: 10 }}>
+                <FontAwesome name="save" size={24} color="green" />
+              </Text>
+            </ButtonComponent>
+          </>
+        )}
+      </View>
+
+      <View
+        style={{
+          flex: 2,
+          justifyContent: "flex-start",
+          alignItems: "center",
+          flexDirection: "column",
+          // marginHorizontal: 10,
+        }}
+      >
+        <View style={{ flex: 1, marginTop: 0 }}>
+          <Text
+            style={{
+              flex: 1,
+              marginLeft: 15,
+              marginRight: "auto",
+              marginBottom: -9,
+              backgroundColor: "white",
+              color: appColors.labaleHeader,
+              zIndex: 1000,
+            }}
+          >
+            Name
+          </Text>
+          <AwesomeTextInput
+            customStyles={{
+              container: {
+                borderWidth: 1,
+                borderColor: "grey",
+                borderRadius: 10,
+                height: 45,
+                width: width / 1.5,
+              },
+              inputContainer: {
+                borderBottomWidth: 0,
+              },
             }}
             editable={isEditable}
             onChangeText={(e) => {
-              console.log(e);
               setLocalUserName(e);
             }}
             value={localUserName}
-            placeholder="name"
           />
-          
-          <TextInput
+        </View>
+
+        <View style={{ flex: 1, marginTop: 10 }}>
+          <Text
             style={{
-              height: 40,
-              borderBottomWidth: 0.5,
-              color: appColors.placeHolderColor,
+              flex: 1,
+              marginLeft: 15,
+              marginRight: "auto",
+              marginBottom: -9,
+              backgroundColor: "white",
+              color: appColors.labaleHeader,
+              zIndex: 1000,
+            }}
+          >
+            Email
+          </Text>
+
+          <AwesomeTextInput
+            customStyles={{
+              container: {
+                borderWidth: 1,
+                borderColor: "grey",
+                borderRadius: 10,
+                height: 45,
+                width: width / 1.5,
+              },
+              inputContainer: {
+                borderBottomWidth: 0,
+              },
             }}
             editable={false}
             value={email}
-            name="email"
           />
-          <TextInput
+        </View>
+        <View style={{ flex: 1, marginTop: 10 }}>
+          <Text
             style={{
-              height: 40,
-              color: appColors.placeHolderColor,
-              borderBottomWidth: 0.5,
+              flex: 1,
+              marginLeft: 15,
+              marginRight: "auto",
+              marginBottom: -9,
+              backgroundColor: "white",
+              color: appColors.labaleHeader,
+              zIndex: 1000,
+            }}
+          >
+            Phone
+          </Text>
+          <AwesomeTextInput
+            customStyles={{
+              container: {
+                borderWidth: 1,
+                borderColor: "grey",
+                borderRadius: 10,
+                height: 45,
+                width: width / 1.5,
+              },
+              inputContainer: {
+                borderBottomWidth: 0,
+              },
             }}
             dataDetectorTypes="phoneNumber"
             keyboardType="phone-pad"
@@ -189,61 +308,68 @@ const UserProfile = () => {
             value={localPhone}
             placeholder="Phone"
           />
-          <TextInput
+        </View>
+        <View style={{ flex: 1, marginTop: 10 }}>
+          <Text
             style={{
-              height: 40,
-              color: appColors.placeHolderColor,
+              flex: 1,
+              marginLeft: 15,
+              marginRight: "auto",
+              marginBottom: -9,
+              backgroundColor: "white",
+              color: appColors.labaleHeader,
+              zIndex: 1000,
+            }}
+          >
+            City
+          </Text>
+
+          <AwesomeTextInput
+            customStyles={{
+              container: {
+                borderWidth: 1,
+                borderColor: "grey",
+                borderRadius: 10,
+                height: 45,
+                width: width / 1.5,
+              },
+              inputContainer: {
+                borderBottomWidth: 0,
+              },
             }}
             editable={isEditable}
             onChangeText={(e) => setLocalCity(e)}
             value={localCity}
-            placeholder="City"
-          ></TextInput>
+          />
         </View>
       </View>
-      <View
-        style={{
-          flex: 1 / 6,
-          flexDirection: "row",
-          justifyContent: "flex-end",
-          marginEnd: width / 5,
-          paddingHorizontal: 10,
-        }}
-      >
-        <ButtonComponent
-          style={{ marginLeft: 20 }}
-          onTouch={handleSaveUserData}
-        >
-          <Feather name="save" size={30} color="black" />
-        </ButtonComponent>
-      </View>
-   
-
-
 
       <View
+ 
         style={{
           flex: 1,
+          justifyContent: "space-between",
+          alignItems: "center",
           flexDirection: "row",
-          justifyContent: "space-around",
-          padding: 10,
+          height: height / 3,
+          marginHorizontal:5
         }}
       >
-        
         <ButtonComponent
-          buttonStyle={Styles.signinRegisterButton}
+          buttonStyle={Styles.profileButtons}
           onPress={() => navigate("Home")}
-        >
-          <Text style={Styles.signinRegisterButtonText}>Home</Text>
+        ><MaterialCommunityIcons name="home-outline" size={30} color={appColors.iconInActive} />
+          {/* <Text style={Styles.signinRegisterButtonText}>Home</Text> */}
         </ButtonComponent>
         <ButtonComponent
-          buttonStyle={Styles.signinRegisterButton}
+          buttonStyle={Styles.profileButtons}
           onTouch={handleSignOut}
         >
-          <Text style={Styles.signinRegisterButtonText}>Sign out</Text>
+          <FontAwesome name="sign-out" size={30} color={appColors.iconInActive} />
+          {/* <Text style={Styles.signinRegisterButtonText}>Sign out</Text> */}
         </ButtonComponent>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

@@ -10,5 +10,6 @@ const appColors = {
   bgChildComp: "#eea4f5",
   bgChildContainers: "#e8e6e8",
   spinner: "#42f56c",
+  labaleHeader:"#989c9c"
 };
 export default appColors;

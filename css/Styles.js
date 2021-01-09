@@ -66,7 +66,7 @@ const Styles = StyleSheet.create({
     borderRadius: 7,
   },
   viewSigninRegisterButtons: {
-    flex: 2,
+    flex: 1,
     flexDirection: "column",
     justifyContent: "space-between",
     alignItems: "center",
@@ -94,11 +94,10 @@ const Styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 18,
   },
-  forgotPasswordButton:{
+  forgotPasswordButton: {
     fontWeight: "600",
     fontSize: 18,
-    marginBottom:20
-    
+    marginBottom: 20,
   },
   drawerComponentView: {
     height: 150,
@@ -175,10 +174,10 @@ const Styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 18,
     paddingBottom: 30,
-    marginLeft:5, 
-    marginRight:5,
-    marginTop:10,
-    color:appColors.textColor
+    marginLeft: 5,
+    marginRight: 5,
+    marginTop: 10,
+    color: appColors.textColor,
   },
 
   childComponentContentView: {
@@ -193,9 +192,18 @@ const Styles = StyleSheet.create({
   },
   profileScreen: {
     flex: 1,
-    backgroundColor: appColors.bgColor,
+    backgroundColor: appColors.whiteColor,
   },
-
+  profileButtons: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: 120,
+    borderWidth: 1,
+    backgroundColor: "transparent",
+    borderColor: appColors.borderColor,
+    borderRadius: 10,
+    height:30,
+  },
   userProfileImage: {
     height: 140,
     width: 140,
