@@ -1,11 +1,11 @@
 const initialState = {
-  name:null,
-  email:null,
+  name: null,
+  email: null,
   phone: null,
   city: null,
   education: null,
   isAdmin: false,
-
+  reduxProfileAvatar: null,
 };
 const addPersonalInfo = (state = initialState, action) => {
   switch (action.type) {
@@ -24,21 +24,27 @@ const addPersonalInfo = (state = initialState, action) => {
         ...state,
         education: action.payload,
       };
-      case "ADD_NAME":
-        return{
-          ...state, 
-          name: action.payload,
-        };
-      case "ADD_EMAIL":
-        return{
-          ...state, 
-          email: action.payload,
-        };
-      case "IS_ADMIN":
-        return{
-          ...state, 
-          isAdmin: action.payload,
-        }
+    case "ADD_NAME":
+      return {
+        ...state,
+        name: action.payload,
+      };
+    case "ADD_EMAIL":
+      return {
+        ...state,
+        email: action.payload,
+      };
+    case "IS_ADMIN":
+      return {
+        ...state,
+        isAdmin: action.payload,
+      };
+    case "ADD_AVATAR":
+      return {
+        ...state,
+        
+        reduxProfileAvatar: action.payload,
+      };
 
     default:
       return state;

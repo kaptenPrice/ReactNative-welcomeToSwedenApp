@@ -2,8 +2,10 @@ import * as Permission from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
 import { Platform } from "react-native";
 
+
 export const openImageLibrary = async () => {
   const { status } = await Permission.askAsync(Permission.CAMERA_ROLL);
+
   if (status !== "granted") {
     alert("sorry no acess to camera from YOU");
     return false;
@@ -35,25 +37,22 @@ export const openCamera = async () => {
     return !result.cancelled ? result : false;
   }
 };
+
 export const prepareBlob = async (imageUrl) => {
   const blob = await new Promise((resolve, reject) => {
-    //new request
     const xml = new XMLHttpRequest();
-    //Succes resolved it
+
     xml.onload = function () {
       resolve(xml.response);
     };
-    //Error Throw error
     xml.onerror = function (e) {
-      reject(new TypeError("Image upload failed"));
+      console.log(e);
+      reject(new TypeError("IMAGE UPLOAD FAILED"));
     };
 
-    //set the responseType to get BLOB
     xml.responseType = "blob";
     xml.open("GET", imageUrl, true);
-    //Sen the request
     xml.send();
   });
-
   return blob;
 };

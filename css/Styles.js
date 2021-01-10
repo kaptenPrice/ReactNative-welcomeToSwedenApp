@@ -205,9 +205,11 @@ const Styles = StyleSheet.create({
     height:30,
   },
   userProfileImage: {
+    // flex:1,
     height: 140,
     width: 140,
-    marginBottom: 20,
+    borderRadius:70
+    // marginBottom: 20,
   },
 });
 

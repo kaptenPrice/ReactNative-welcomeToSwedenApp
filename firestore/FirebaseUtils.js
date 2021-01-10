@@ -98,6 +98,7 @@ export const saveUserToDB = async (user, uid) => {
 export const updateUserDataDB = async (user, uid) => {
   try {
     await db.collection("users").doc(uid).update(user);
+    alert('Succes')
   } catch (error) {
     console.log("error från firebase", error);
   }

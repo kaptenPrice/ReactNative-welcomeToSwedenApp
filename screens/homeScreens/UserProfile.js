@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, Button, Image, Dimensions } from "react-native";
-import Styles from "../../css/Styles";
-import ButtonComponent from "../../components/ButtonComponent";
 import { useNavigation } from "@react-navigation/native";
+import { useActionSheet } from "@expo/react-native-action-sheet";
+import {
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+} from "react-native-gesture-handler";
+import { AwesomeTextInput } from "react-native-awesome-text-input";
 import firebase from "firebase/app";
 import "firebase-auth";
 import {
@@ -11,64 +16,65 @@ import {
   Feather,
   AntDesign,
   FontAwesome,
-  MaterialCommunityIcons
+  MaterialCommunityIcons,
 } from "@expo/vector-icons";
-import { AwesomeTextInput } from "react-native-awesome-text-input";
-
 import { addPhone, signOut } from "../../redux/store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { SafeAreaView } from "react-navigation";
 import { ImageBackground } from "react-native";
-import {
-  ScrollView,
-  TextInput,
-  TouchableOpacity,
-} from "react-native-gesture-handler";
+
+import ButtonComponent from "../../components/ButtonComponent";
+import Styles from "../../css/Styles";
 import appColors from "../../assets/appColor";
 import * as db from "../../firestore/FirebaseUtils";
+import * as ImageHelpers from "../../helpers/ImageHelpers";
+import Loading from "../../components/Loading";
+
 const pic =
   "https://i3.wp.com/hypebeast.com/image/2020/07/apple-memoji-update-headwear-masks-hairstyles-1.png?w=1600";
 
 const UserProfile = () => {
   const { navigate } = useNavigation();
   const dispatch = useDispatch();
-  const { width, height } = Dimensions.get("screen");
+  const { showActionSheetWithOptions } = useActionSheet();
 
-  const { isLoading, currentUser } = useSelector(
-    (state) => state.authentication
-  );
-  const { name, email, phone, city } = useSelector(
+  const { currentUser } = useSelector((state) => state.authentication);
+  const { name, email, phone, city, reduxProfileAvatar } = useSelector(
     (state) => state.userAdditionalInfo
   );
-
+  const { width, height } = Dimensions.get("screen");
   const [localEmail, setLocalEmail] = useState(currentUser.email);
   const [localUserName, setLocalUserName] = useState("");
   const [localPhone, setLocalPhone] = useState("");
   const [localCity, setLocalCity] = useState("");
-  const [uid, setUid] = useState(currentUser.uid);
-  const [editMode, setEditMode] = useState(false);
-
-  const [isEditable, setIsEditable] = useState(false);
+  const [localAvatar, setLocalAvatar] = useState(null);
+  const [uid, setUid] = useState("");
   const [profielImage, setProfileImage] = useState(currentUser.photoUrl);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [editMode, setEditMode] = useState(false);
+  const [isEditable, setIsEditable] = useState(false);
 
   useEffect(() => {
-    // getUser();
     name && setLocalUserName(name);
     phone && setLocalPhone(phone);
     city && setLocalCity(city);
+    reduxProfileAvatar && setLocalAvatar(reduxProfileAvatar);
+    console.log("localAvatar: ", localAvatar);
+    // console.log(reduxProfileAvatar)
+    console.log("profileImg:" + reduxProfileAvatar);
 
-    if (!currentUser.photoUrl) {
-      setProfileImage(pic);
-    } else {
-      setProfileImage(currentUser.photoUrl);
-    }
-  }, [name, phone, city]);
+    // if (!localAvatar) {
+    //   setLocalAvatar(currentUser.photoUrl);
+    // }
+    // // else {
+    // //   setProfileImage(currentUser.photoUrl);
+    // // }
+  }, [name, phone, city, reduxProfileAvatar]);
 
   useEffect(() => {
-    if (currentUser.uid) {
-      setUid(currentUser.uid);
-    } else if (currentUser.id) setUid(currentUser.id);
-  }, []);
+    setUid(currentUser.uid || currentUser.id);
+  }, [uid]);
 
   const handleSaveUserData = () => {
     let data = {
@@ -111,27 +117,79 @@ const UserProfile = () => {
     setIsEditable(true);
     setEditMode(true);
   };
+  const handleUploadImage = async (image, profileAvatar) => {
+    setIsLoading(true);
+    const ref = firebase.storage().ref("profileAvatar").child(uid);
+    try {
+      const blob = await ImageHelpers.prepareBlob(image.uri);
+      const snapShot = await ref.put(blob);
+      const downLoadedUrl = await ref.getDownloadURL();
+      //Lägg till länken under users data
+      db.updateUserDataDB({ profileAvatar: downLoadedUrl }, uid);
+      blob.close();
+      setIsLoading(false);
+      return downLoadedUrl;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const openImageLibrary = async (profileAvatar) => {
+    const result = await ImageHelpers.openImageLibrary();
+    if (result) {
+      const downLoadURL = await handleUploadImage(result, profileAvatar);
+    }
+  };
+  const openCamera = async (profileAvatar) => {
+    const result = await ImageHelpers.openCamera();
+    if (result) {
+      const downLoadURL = await handleUploadImage(result, profileAvatar);
+    }
+  };
+  const addProfileImage = (profileAvatar) => {
+    const options = ["SELECT FROM PHOTOS", "CAMERA", "CANCEL"];
+    const cancelButtonIndex = 2;
+    showActionSheetWithOptions(
+      { options, cancelButtonIndex },
+      (buttonIndex) => {
+        if (buttonIndex == 0) {
+          openImageLibrary(profileAvatar);
+        }
+        if (buttonIndex == 1) {
+          openCamera(profileAvatar);
+        }
+      }
+    );
+  };
 
   return (
     <ScrollView style={Styles.profileScreen}>
-      <View
-        style={{ alignItems: "center", borderColor: "blue", borderWidth: 1 }}
-      >
-        <ButtonComponent
-          onTouch={() => console.log("clicked on image")} //TODO Change image from camera/library
-          style={{ marginTop: 15, borderColor: "blue", borderWidth: 1 }}
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <View
+          style={{
+            alignItems: "center",
+            justifyContent: "center",
+            borderColor: "blue",
+            borderWidth: 1,
+          }}
         >
-          <ImageBackground
-            style={Styles.userProfileImage}
-            imageStyle={{ borderRadius: 50 }}
-            source={{ uri: profielImage }}
-          />
-        </ButtonComponent>
-      </View>
+          <ButtonComponent
+            onTouch={() => addProfileImage()} //TODO Change image from camera/library
+            style={{ marginTop: 15 }}
+          >
+            <Image
+              style={Styles.userProfileImage}
+              // imageStyle={{ borderRadius: 70 }}
+              source={{ uri: localAvatar }}
+            />
+          </ButtonComponent>
+        </View>
+      )}
 
       <View
         style={{
-          flex: 2,
+          flex: 1,
           justifyContent: "center",
           flexDirection: "row",
           marginHorizontal: 2,
@@ -144,10 +202,7 @@ const UserProfile = () => {
           <ButtonComponent
             style={{
               flex: 1,
-              // borderWidth: 1,
-              // borderColor: "grey",
               borderRadius: 5,
-              // marginRight: 20,
               alignItems: "center",
               justifyContent: "center",
               width: 40,
@@ -165,10 +220,7 @@ const UserProfile = () => {
             <ButtonComponent
               style={{
                 flex: 1,
-                // borderWidth: 1,
-                // borderColor: "grey",
                 borderRadius: 5,
-                // marginRight: 20,
                 alignItems: "center",
                 justifyContent: "center",
                 width: 40,
@@ -200,7 +252,7 @@ const UserProfile = () => {
 
       <View
         style={{
-          flex: 2,
+          flex: 1,
           justifyContent: "flex-start",
           alignItems: "center",
           flexDirection: "column",
@@ -345,27 +397,35 @@ const UserProfile = () => {
       </View>
 
       <View
- 
         style={{
           flex: 1,
           justifyContent: "space-between",
           alignItems: "center",
           flexDirection: "row",
           height: height / 3,
-          marginHorizontal:5
+          marginHorizontal: 5,
         }}
       >
         <ButtonComponent
           buttonStyle={Styles.profileButtons}
           onPress={() => navigate("Home")}
-        ><MaterialCommunityIcons name="home-outline" size={30} color={appColors.iconInActive} />
+        >
+          <MaterialCommunityIcons
+            name="home-outline"
+            size={30}
+            color={appColors.iconInActive}
+          />
           {/* <Text style={Styles.signinRegisterButtonText}>Home</Text> */}
         </ButtonComponent>
         <ButtonComponent
           buttonStyle={Styles.profileButtons}
           onTouch={handleSignOut}
         >
-          <FontAwesome name="sign-out" size={30} color={appColors.iconInActive} />
+          <FontAwesome
+            name="sign-out"
+            size={30}
+            color={appColors.iconInActive}
+          />
           {/* <Text style={Styles.signinRegisterButtonText}>Sign out</Text> */}
         </ButtonComponent>
       </View>
