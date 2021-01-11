@@ -8,26 +8,39 @@ import Styles from "../css/Styles";
 import firebase from "firebase/app";
 import "firebase/auth";
 import * as Google from "expo-google-app-auth";
-import * as db from '../firestore/FirebaseUtils'
+import * as db from "../firestore/FirebaseUtils";
+import { SafeAreaView } from "react-native";
+import {
+  Ionicons,
+  MaterialIcons,
+  Feather,
+  AntDesign,
+  FontAwesome,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
+import { Dimensions } from "react-native";
 
 const LoginScreen = () => {
-  const dispatch=useDispatch()
-  const {currentUser,isLoading}=useSelector(state=>state.authentication)
+  const dispatch = useDispatch();
+  const { currentUser, isLoading } = useSelector(
+    (state) => state.authentication
+  );
+  const _width = Dimensions.get("screen").width;
   // const { isAdmin,name, email, phone, city } = useSelector((state) => state.userAdditionalInfo);
-
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   // const [isLoading, setIsLoading] = useState(false);
   const [isAuthorized, setIsAuthorized] = useState(true);
+  const [isSecure, setSecure] = useState(false);
 
- 
+
   const signInWithGoogleAsync = async () => {
     try {
       const res = await Google.logInAsync({
         iosClientId:
           "383691417994-fc40nclpp83r5jln1ou434lkptsc6oq4.apps.googleusercontent.com",
-          // default: "383691417994-1i9ac782aafjs5bpqqucshuaa9i1fh54.apps.googleusercontent.com",
+        // default: "383691417994-1i9ac782aafjs5bpqqucshuaa9i1fh54.apps.googleusercontent.com",
         scopes: ["profile", "email"],
       });
       if (res.type === "success") {
@@ -49,8 +62,8 @@ const LoginScreen = () => {
           .signInWithEmailAndPassword(email, password);
         if (res) {
           dispatch({ type: "SIGN_IN", payload: res.user });
-
-             }console.log(email)
+        }
+        console.log(email);
       } catch (error) {
         switch (error.code) {
           case "auth/user-not-found":
@@ -72,17 +85,15 @@ const LoginScreen = () => {
       try {
         const res = await firebase
           .auth()
-          .createUserWithEmailAndPassword(email,password);
+          .createUserWithEmailAndPassword(email, password);
         if (res) {
           const user = await firebase
             .database()
             .ref("users")
             .child(res.user.uid)
             .set({ email: res.user.email, uid: res.user.uid });
-            
-          dispatch({ type: "SIGN_IN", payload: res.user });
-  
 
+          dispatch({ type: "SIGN_IN", payload: res.user });
         }
       } catch (error) {
         if (error.code == "auth/email-already-in-use") {
@@ -95,7 +106,7 @@ const LoginScreen = () => {
             "The provided value for the password user property is invalid. It must be a string with at least six characters. "
           );
         } else {
-          signIn()
+          signIn();
         }
       }
     }
@@ -124,76 +135,122 @@ const LoginScreen = () => {
   //   .catch(function(error) {
   //     // Error occurred. Inspect error.code.
   //   });
-    
-
-
 
   return (
-    <View style={{ flex:1 }}>
+    <SafeAreaView style={{ flex: 1 }}>
+      {/* <View > */}
       <View style={Styles.welcomeViewLoginScreen}>
         <Text style={Styles.loginScreenMain}>Welcome</Text>
-        <Text style={Styles.loginScreenMain}>Free for everyone to join</Text>
+        <Text
+          style={{
+            color: appColors.textColor,
+            fontSize: 24,
+            fontWeight: "500",
+            marginTop: 5,
+          }}
+        >
+          Free for everyone to join
+        </Text>
       </View>
 
-      <View style={Styles.viewTextInput}>
-        <TextInput
-          style={Styles.textInputStyle}
-          placeholder="Email*"
-          placeholderTextColor={appColors.placeHolderColor}
-          keyboardType="email-address"
-          onChangeText={(email) => setEmail(email)}
-        />
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          borderColor: "red",
+        }}
+      >
+        <View
+        >
+          <TextInput
+            style={[Styles.textInputStyle]}
+            placeholder="Email*"
+            placeholderTextColor={appColors.placeHolderColor}
+            keyboardType="email-address"
+            onChangeText={(e) => setEmail(e)}
+          />
+          <MaterialIcons
+            style={{
+              position: "absolute",
+              right:45 ,
+              top:10,
+              zIndex: 100000,
+              alignSelf: "flex-end",
+            }}
+            name="email"
+            size={26}
+            color="grey"
+          />
+        </View>
+        <View>
 
         <TextInput
           style={Styles.textInputStyle}
           placeholder="Password*"
           placeholderTextColor={appColors.placeHolderColor}
           keyboardType="default"
-          secureTextEntry
+          secureTextEntry ={isSecure}
           onChangeText={(password) => setPassword(password)}
         />
+        {isSecure ? (<Feather
+         onPress={()=>setSecure(!isSecure)}
+            style={{
+              position: "absolute",
+              right:45 ,
+              top:10,
+              zIndex: 100000,
+              alignSelf: "flex-end",
+            }}
+            name="eye-off"
+            size={26}
+            color="grey"
+          />):(<Feather
+            onPress={()=>setSecure(!isSecure)}
+               style={{
+                 position: "absolute",
+                 right:45 ,
+                 top:10,
+                 zIndex: 100000,
+                 alignSelf: "flex-end",
+               }}
+               name="eye"
+               size={26}
+               color="grey"
+             />)}
+       
+         
+        </View>
       </View>
 
-      <View style={Styles.viewSigninRegisterButtons}>
-        <ButtonComponent
-          buttonStyle={Styles.signinRegisterButton}
-          onTouch={signIn}
-        >
-          <Text style={Styles.signinRegisterButtonText}>Sign in by email </Text>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "space-around",
+          alignItems: "center",
+          marginVertical: 10,
+        }}
+      >
+        <ButtonComponent buttonStyle={Styles.loginButton} onTouch={signIn}>
+          <Text style={Styles.signinRegisterButtonText}>Sign in by email</Text>
         </ButtonComponent>
-
         <ButtonComponent
-          buttonStyle={Styles.signinRegisterButton}
-          // onTouch={signInWithGoogleAsync}
+          buttonStyle={Styles.loginButton}
           onTouch={signInWithGoogleAsync}
         >
           <Text style={Styles.signinRegisterButtonText}>Sign with Google</Text>
         </ButtonComponent>
-        {/* <Text style={Styles.infoText}>
-          No Google-account? dont worry sign in with another email
-        </Text> */}
-
-        <ButtonComponent
-          buttonStyle={Styles.signinRegisterButton}
-          // onTouch={register}
-           onTouch={register}
-
-        >
+        <ButtonComponent buttonStyle={Styles.loginButton} onTouch={register}>
           <Text style={Styles.signinRegisterButtonText}>Register</Text>
         </ButtonComponent>
-        <ButtonComponent
-          buttonStyle={Styles.forgotPasswordButton}
-          // onTouch={register}
-        >
+        <ButtonComponent buttonStyle={Styles.loginButton}>
           <Text style={Styles.signinRegisterButtonText}>Forgot password</Text>
         </ButtonComponent>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
 export default LoginScreen;
-
 
 //TODO PASSWORD CHNANGE
 

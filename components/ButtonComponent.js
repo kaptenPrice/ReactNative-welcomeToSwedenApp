@@ -4,7 +4,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 
 const ButtonComponent = ({ children, onTouch, buttonStyle, ...props }) => {
   return (
-    <TouchableOpacity onPress={onTouch} {...props}>
+    <TouchableOpacity  onPress={onTouch} {...props}>
       <View style={buttonStyle}>{children}</View>
     </TouchableOpacity>
   );

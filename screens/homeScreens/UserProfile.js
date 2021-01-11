@@ -163,39 +163,47 @@ const UserProfile = () => {
 
   return (
     <ScrollView style={Styles.profileScreen}>
-      {isLoading ? (
-        <Loading />
-      ) : (
-        <View
-          style={{
-            alignItems: "center",
-            justifyContent: "center",
-            borderColor: "blue",
-            borderWidth: 1,
-          }}
-        >
+      <View
+        style={{
+          flex: 1,
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        {isLoading ? (
+          <Loading />
+        ) : (
           <ButtonComponent
             onTouch={() => addProfileImage()} //TODO Change image from camera/library
-            style={{ marginTop: 15 }}
+            style={{
+              marginTop: 5,
+              shadowColor: "#000",
+              shadowOffset: {
+                width: 0,
+                height: 5,
+              },
+              shadowOpacity: 0.4,
+              shadowRadius: 8,
+
+              elevation: 12,
+            }}
           >
             <Image
-              style={Styles.userProfileImage}
+              style={[Styles.userProfileImage]}
               // imageStyle={{ borderRadius: 70 }}
               source={{ uri: localAvatar }}
             />
           </ButtonComponent>
-        </View>
-      )}
+        )}
+      </View>
 
       <View
         style={{
           flex: 1,
-          justifyContent: "center",
+          justifyContent: "flex-end",
           flexDirection: "row",
           marginHorizontal: 2,
           marginVertical: 5,
-          alignItems: "center",
-          marginTop: 5,
         }}
       >
         {!editMode && (
@@ -203,8 +211,8 @@ const UserProfile = () => {
             style={{
               flex: 1,
               borderRadius: 5,
-              alignItems: "center",
-              justifyContent: "center",
+              // alignItems: "center",
+              // justifyContent: "center",
               width: 40,
             }}
             onTouch={handleEdit}
@@ -221,14 +229,17 @@ const UserProfile = () => {
               style={{
                 flex: 1,
                 borderRadius: 5,
-                alignItems: "center",
-                justifyContent: "center",
+                // borderWidth:1,
+                // borderColor:"red",
+                alignItems:"center" ,
+                justifyContent:"center",
                 width: 40,
               }}
               onTouch={discardChanges}
             >
               <Text style={{ paddingBottom: 10 }}>
-                <AntDesign name="back" size={24} color="red" />
+              <MaterialIcons name="cancel" size={24} color="red" />
+                {/* <AntDesign name="back" size={24} color="red" /> */}
                 {/* <Ionicons name="md-close-circle-outline" size={24} color="red" /> */}
               </Text>
             </ButtonComponent>
@@ -236,14 +247,15 @@ const UserProfile = () => {
               style={{
                 flex: 1,
                 borderRadius: 5,
-                alignItems: "center",
-                justifyContent: "center",
+                // alignItems: "center",
+                // justifyContent: "center",
                 width: 40,
               }}
               onTouch={handleSaveUserData}
             >
               <Text style={{ paddingBottom: 10 }}>
-                <FontAwesome name="save" size={24} color="green" />
+              <MaterialCommunityIcons name="check-all" size={24} color="green" />
+                {/* <FontAwesome name="save" size={24} color="green" /> */}
               </Text>
             </ButtonComponent>
           </>

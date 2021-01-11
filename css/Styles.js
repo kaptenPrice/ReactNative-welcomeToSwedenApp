@@ -28,11 +28,12 @@ const Styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     width: 200,
-    height: 60,
+    height: 40,
     borderRadius: 15,
     backgroundColor: "transparent",
-    borderWidth: 3,
+    borderWidth: 1,
     borderColor: appColors.borderColor,
+    
   },
   loginButtonText: {
     color: appColors.borderColor,
@@ -40,37 +41,50 @@ const Styles = StyleSheet.create({
     fontSize: 20,
   },
   welcomeViewLoginScreen: {
-    flex: 1,
+    flex: 0.5,
     alignItems: "center",
-    justifyContent: "flex-start",
-    marginBottom: 30,
+    justifyContent: "center",
+    // marginBottom: 30,
+    // borderColor:"green",
+    // borderWidth:4
   },
 
   loginScreenMain: {
-    color: appColors.borderColor,
-    fontWeight: "400",
+    color: appColors.textColor,
+    fontWeight: "600",
     fontSize: 40,
+    // borderColor:"red",
+    // borderWidth:1
   },
   viewTextInput: {
-    flex: 2,
+    flex: 1,
     justifyContent: "center",
+    borderColor:"red",
+    borderWidth:5
   },
   textInputStyle: {
     borderColor: appColors.borderColor,
     color: appColors.placeHolderColor,
     borderWidth: 1,
     height: 50,
+    // width:300,
     marginHorizontal: 40,
     marginBottom: 10,
     paddingHorizontal: 10,
     borderRadius: 7,
   },
-  viewSigninRegisterButtons: {
+  viewButtonContainer: {
     flex: 1,
-    flexDirection: "column",
-    justifyContent: "space-between",
-    alignItems: "center",
-    // marginTop: 30,
+        // width: 500,
+        // height: 500,
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+  },
+  loginButtons:{
+    flex:1,
+    width: 200,
+    height: 100,
+
   },
   infoText: {
     // marginLeft: 20,
@@ -81,12 +95,13 @@ const Styles = StyleSheet.create({
   signinRegisterButton: {
     justifyContent: "center",
     alignItems: "center",
-    width: 200,
+    // width: 200,
     borderWidth: 2,
     backgroundColor: "transparent",
-    borderColor: appColors.borderColor,
+    borderColor: "red",
+    // borderColor: appColors.borderColor,
     borderRadius: 10,
-    height: 40,
+    height: 60,
     // marginTop: 20,
   },
   signinRegisterButtonText: {
