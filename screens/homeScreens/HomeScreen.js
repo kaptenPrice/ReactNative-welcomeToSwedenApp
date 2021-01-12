@@ -120,7 +120,7 @@ export default function HomeScreen() {
             style={{
               flex: 1,
               flexDirection: "column",
-            }}
+marginHorizontal:20            }}
           >
             <ButtonComponent
               onTouch={() => navigation.navigate("SocialLife")}

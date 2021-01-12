@@ -41,7 +41,7 @@ export const signOut = async () => {
   try {
     await firebase.auth().signOut();
   } catch (error) {
-    alert("Something fishy occurred, try again, or restart the app");
+    alert("Something fishy occurred", error)
   }
 };
 
@@ -86,7 +86,6 @@ export const saveUserToDB = async (user, uid) => {
   try {
     const snapShot = await db.doc(`users/${uid}`).get();
 
-    // console.log("SnapShot: ",snapShot.exists)
 
     if (!snapShot.exists) {
       await db.collection("users").doc(uid).set(user);

@@ -1,8 +1,8 @@
 const appColors = {
   textColor: "#2c3630",
   placeHolderColor: "grey",
-  borderColor: "black",
-  bgColor: "#FE6666",
+  borderColor: "#989c9c",
+  bgColor: "#fffff5",
   whiteColor: "#fff",
   buttonBorderColor: "#e8edea",
   iconActive: "#2f3030",

@@ -18,7 +18,8 @@ import {
   FontAwesome,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
-import { addPhone, signOut } from "../../redux/store/actions";
+
+import {  signOut } from "../../redux/store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { SafeAreaView } from "react-navigation";
 import { ImageBackground } from "react-native";
@@ -60,16 +61,10 @@ const UserProfile = () => {
     phone && setLocalPhone(phone);
     city && setLocalCity(city);
     reduxProfileAvatar && setLocalAvatar(reduxProfileAvatar);
-    console.log("localAvatar: ", localAvatar);
-    // console.log(reduxProfileAvatar)
-    console.log("profileImg:" + reduxProfileAvatar);
 
-    // if (!localAvatar) {
-    //   setLocalAvatar(currentUser.photoUrl);
-    // }
-    // // else {
-    // //   setProfileImage(currentUser.photoUrl);
-    // // }
+
+    // localAvatar ? setLocalAvatar(localAvatar):setLocalAvatar(pic) 
+ 
   }, [name, phone, city, reduxProfileAvatar]);
 
   useEffect(() => {
@@ -163,40 +158,7 @@ const UserProfile = () => {
 
   return (
     <ScrollView style={Styles.profileScreen}>
-      <View
-        style={{
-          flex: 1,
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        {isLoading ? (
-          <Loading />
-        ) : (
-          <ButtonComponent
-            onTouch={() => addProfileImage()} //TODO Change image from camera/library
-            style={{
-              marginTop: 5,
-              shadowColor: "#000",
-              shadowOffset: {
-                width: 0,
-                height: 5,
-              },
-              shadowOpacity: 0.4,
-              shadowRadius: 8,
-
-              elevation: 12,
-            }}
-          >
-            <Image
-              style={[Styles.userProfileImage]}
-              // imageStyle={{ borderRadius: 70 }}
-              source={{ uri: localAvatar }}
-            />
-          </ButtonComponent>
-        )}
-      </View>
-
+      <View>
       <View
         style={{
           flex: 1,
@@ -238,7 +200,7 @@ const UserProfile = () => {
               onTouch={discardChanges}
             >
               <Text style={{ paddingBottom: 10 }}>
-              <MaterialIcons name="cancel" size={24} color="red" />
+              <MaterialIcons name="cancel" size={24} color="grey" />
                 {/* <AntDesign name="back" size={24} color="red" /> */}
                 {/* <Ionicons name="md-close-circle-outline" size={24} color="red" /> */}
               </Text>
@@ -254,13 +216,51 @@ const UserProfile = () => {
               onTouch={handleSaveUserData}
             >
               <Text style={{ paddingBottom: 10 }}>
-              <MaterialCommunityIcons name="check-all" size={24} color="green" />
+              <MaterialCommunityIcons name="check-all" size={24} color="grey" />
                 {/* <FontAwesome name="save" size={24} color="green" /> */}
               </Text>
             </ButtonComponent>
           </>
         )}
       </View>
+
+      </View>
+      <View
+        style={{
+          flex: 1,
+          alignItems: "center",
+          justifyContent: "center",
+          height:height/4
+        }}
+      >
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <ButtonComponent
+            onTouch={() => addProfileImage()} 
+            style={{
+              marginTop: 5,
+              shadowColor: "#000",
+              shadowOffset: {
+                width: 0,
+                height: 5,
+              },
+              shadowOpacity: 0.4,
+              shadowRadius: 8,
+
+              elevation: 12,
+            }}
+          >
+            <Image
+              style={[Styles.userProfileImage]}
+              // imageStyle={{ borderRadius: 70 }}
+              source={{ uri: localAvatar }}
+            />
+          </ButtonComponent>
+        )}
+      </View>
+
+     
 
       <View
         style={{
@@ -429,17 +429,7 @@ const UserProfile = () => {
           />
           {/* <Text style={Styles.signinRegisterButtonText}>Home</Text> */}
         </ButtonComponent>
-        <ButtonComponent
-          buttonStyle={Styles.profileButtons}
-          onTouch={handleSignOut}
-        >
-          <FontAwesome
-            name="sign-out"
-            size={30}
-            color={appColors.iconInActive}
-          />
-          {/* <Text style={Styles.signinRegisterButtonText}>Sign out</Text> */}
-        </ButtonComponent>
+ 
       </View>
     </ScrollView>
   );

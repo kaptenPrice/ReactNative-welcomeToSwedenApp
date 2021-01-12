@@ -32,7 +32,7 @@ const LoginScreen = () => {
   const [password, setPassword] = useState("");
   // const [isLoading, setIsLoading] = useState(false);
   const [isAuthorized, setIsAuthorized] = useState(true);
-  const [isSecure, setSecure] = useState(false);
+  const [isSecure, setSecure] = useState(true);
 
 
   const signInWithGoogleAsync = async () => {
@@ -157,7 +157,6 @@ const LoginScreen = () => {
         style={{
           flex: 1,
           justifyContent: "center",
-          borderColor: "red",
         }}
       >
         <View

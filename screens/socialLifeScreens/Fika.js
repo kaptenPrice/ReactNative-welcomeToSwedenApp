@@ -73,7 +73,6 @@ const Fika = () => {
     } catch (error) {
       console.log(error);
     } finally {
-      // setIsEditable(false);
     }
   };
   const handleSaveFikaContentTwo = () => {
@@ -103,7 +102,6 @@ const Fika = () => {
     } catch (error) {
       console.log(error);
     } finally {
-      // setIsEditable(false);
     }
   };
 
@@ -127,6 +125,7 @@ const Fika = () => {
           </View>
         )
       }
+      
       children1={<Text style={Styles.childComponentHeaders}>Like a Swede</Text>}
       children2={
         <Text style={Styles.childComponentTextContainers}>

@@ -32,6 +32,8 @@ import { useSelector } from "react-redux";
 import useAuthenticatedUser from "./components/useaAuthenticateUser";
 import ButtonComponent from "./components/ButtonComponent";
 import FeedBack from "./screens/settingScreens/FeedBack";
+import signoutScreen from "./screens/homeScreens/SignOutScreen";
+import SignOutScreen from "./screens/homeScreens/SignOutScreen";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -42,7 +44,6 @@ const WelcomeToSweden = () => {
     (state) => state.authentication
   );
   useAuthenticatedUser();
-
 
   if (isloading) {
     return <SplashScreen />;
@@ -174,10 +175,10 @@ const getHeaderTitle = (route) => {
   const routeName = getFocusedRouteNameFromRoute(route) ?? "Home";
   switch (routeName) {
     case "Home":
-      if(currentUser.name!==undefined)
-      return `Welcome ${currentUser.name}`
-      else{(currentUser===undefined) 
-        return `Welcome ${currentUser.email}`
+      if (currentUser.name !== undefined) return `Welcome ${currentUser.name}`;
+      else {
+        currentUser === undefined;
+        return `Welcome ${currentUser.email}`;
       }
     case "SocialLife":
       return "Social life";
@@ -220,7 +221,6 @@ const MenuStackNavigator = () => (
       headerTintColor: appColors.textColor,
     }}
   >
-    {/* TODO add more screens here for drawerMenu e.g feeback */}
     <Stack.Screen
       name="settings"
       component={UserProfile}
@@ -235,24 +235,50 @@ const DrawerNavigator = () => (
     drawerContent={(props) => <DrawerComponent {...props} />}
   >
     <Drawer.Screen
-      options={{ drawerIcon: () => <Ionicons name="ios-home" size={24} /> }}
+      options={{
+        drawerIcon: () => (
+          <Ionicons name="ios-home" size={24} color={appColors.iconInActive} />
+        ),
+      }}
       name="Home"
       component={HomeStackNavigator}
     />
+
     <Drawer.Screen
       options={{
         swipeEnabled: true,
-        drawerIcon: () => <Ionicons name="ios-settings" size={24} />,
+        drawerIcon: () => (
+          <Ionicons
+            name="ios-settings"
+            size={24}
+            color={appColors.iconInActive}
+          />
+        ),
       }}
       name="Settings"
       component={MenuStackNavigator}
     />
     <Drawer.Screen
       options={{
-        drawerIcon: () => <Ionicons name="ios-apps" size={24} />,
+        drawerIcon: () => (
+          <Ionicons name="ios-apps" size={24} color={appColors.iconInActive} />
+        ),
       }}
       name="Feedback"
       component={FeedBack}
+    />
+    <Drawer.Screen
+      options={{
+        drawerIcon: () => (
+          <FontAwesome
+            name="sign-out"
+            size={30}
+            color={appColors.iconInActive}
+          />
+        ),
+      }}
+      name="Sign out"
+      component={SignOutScreen}
     />
   </Drawer.Navigator>
 );

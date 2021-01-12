@@ -6,6 +6,8 @@ const Styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    marginVertical:150,
+    marginHorizontal:25,
     backgroundColor: appColors.bgColor,
   },
   welcomeViewUpper: {
