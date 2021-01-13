@@ -32,30 +32,41 @@ const Study = () => {
   const [phoneNumber, setPhoneNumber] = useState("0705083605"); //Testing callup function
 
   useEffect(() => {
-    db.getContentData(
-      "welcome-to-sweden",
+    const unsubscribe1 = db.getContentData(
       "societal-functions",
       "study",
-      "like-a-swede"
-    ).then((data) => {
-      setstudyContentOne(JSON.stringify(data.content).slice(1, -1));
-    });
-    db.getContentData(
-      "welcome-to-sweden",
+      "like-a-swede",
+      (cb) => {
+        const data = cb.data();
+        setstudyContentOne(JSON.stringify(data.content).slice(1, -1));
+      }
+    );
+    const unsubscribe2 = db.getContentData(
       "societal-functions",
       "study",
-      "lingo"
-    ).then((data) => {
-      setstudyContentTwo(JSON.stringify(data.content).slice(1, -1));
-    });
-    db.getContentData(
-      "welcome-to-sweden",
+      "lingo",
+      (cb) => {
+        const data = cb.data();
+        setstudyContentTwo(JSON.stringify(data.content).slice(1, -1));
+      }, 
+      (err)=>{
+        console.log(err)
+      }
+    );
+    const unsubscribe3 = db.getContentData(
       "societal-functions",
       "study",
-      "assistence"
-    ).then((data) => {
-      setstudyContentThree(JSON.stringify(data.content).slice(1, -1));
-    });
+      "assistence",
+      (cb) => {
+        const data = cb.data();
+        setstudyContentThree(JSON.stringify(data.content).slice(1, -1));
+      }
+    );
+    return () => {
+      unsubscribe1();
+      unsubscribe2();
+      unsubscribe3();
+    };
   }, []);
 
   const handleEdit = () => {
@@ -68,43 +79,43 @@ const Study = () => {
   const handleSaveStudyContentOne = () => {
     try {
       db.handleSaveToDB(
-        "welcome-to-sweden",
         "societal-functions",
         "study",
         "like-a-swede",
         studyContentOne
       );
-      alert("Like a Swede uppdated");
     } catch (error) {
-      console.log(error);
+      console.log("getContent study: ", error);
+    } finally {
+      setIsEditable(false);
     }
   };
   const handleSaveStudyContentTwo = () => {
     try {
       db.handleSaveToDB(
-        "welcome-to-sweden",
         "societal-functions",
         "study",
         "lingo",
         studyContentTwo
       );
-      alert("Lingo uppdated");
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsEditable(false);
     }
   };
   const handleSaveStudyContentThree = () => {
     try {
       db.handleSaveToDB(
-        "welcome-to-sweden",
         "societal-functions",
         "study",
         "assistence",
         studyContentThree
       );
-      alert("assistence uppdated");
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsEditable(false);
     }
   };
 
@@ -115,7 +126,7 @@ const Study = () => {
       imageStyle={{ flex: 1, width: null, height: null }}
       imgSource={study_unsplash}
       editButton1={
-        currentUser.uid === adminId && (
+        adminId && (
           <View>
             <ButtonComponent
               onTouch={handleEdit}

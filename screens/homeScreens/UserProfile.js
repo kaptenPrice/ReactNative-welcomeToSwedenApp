@@ -19,7 +19,7 @@ import {
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
 
-import {  signOut } from "../../redux/store/actions";
+import { signOut } from "../../redux/store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { SafeAreaView } from "react-navigation";
 import { ImageBackground } from "react-native";
@@ -60,11 +60,11 @@ const UserProfile = () => {
     name && setLocalUserName(name);
     phone && setLocalPhone(phone);
     city && setLocalCity(city);
-    reduxProfileAvatar && setLocalAvatar(reduxProfileAvatar);
+    reduxProfileAvatar
+      ? setLocalAvatar(reduxProfileAvatar)
+      : setLocalAvatar(pic);
 
-
-    // localAvatar ? setLocalAvatar(localAvatar):setLocalAvatar(pic) 
- 
+    // localAvatar ? setLocalAvatar(reduxProfileAvatar):setLocalAvatar(pic)
   }, [name, phone, city, reduxProfileAvatar]);
 
   useEffect(() => {
@@ -119,7 +119,6 @@ const UserProfile = () => {
       const blob = await ImageHelpers.prepareBlob(image.uri);
       const snapShot = await ref.put(blob);
       const downLoadedUrl = await ref.getDownloadURL();
-      //Lägg till länken under users data
       db.updateUserDataDB({ profileAvatar: downLoadedUrl }, uid);
       blob.close();
       setIsLoading(false);
@@ -159,86 +158,83 @@ const UserProfile = () => {
   return (
     <ScrollView style={Styles.profileScreen}>
       <View>
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "flex-end",
-          flexDirection: "row",
-          marginHorizontal: 2,
-          marginVertical: 5,
-        }}
-      >
-        {!editMode && (
-          <ButtonComponent
-            style={{
-              flex: 1,
-              borderRadius: 5,
-              // alignItems: "center",
-              // justifyContent: "center",
-              width: 40,
-            }}
-            onTouch={handleEdit}
-          >
-            <Text style={{ paddingBottom: 10 }}>
-              <MaterialIcons name="edit" size={24} color="grey" />
-            </Text>
-          </ButtonComponent>
-        )}
-
-        {editMode && (
-          <>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "flex-end",
+            flexDirection: "row",
+            marginHorizontal: 2,
+            marginVertical: 5,
+          }}
+        >
+          {!editMode && (
             <ButtonComponent
               style={{
                 flex: 1,
                 borderRadius: 5,
-                // borderWidth:1,
-                // borderColor:"red",
-                alignItems:"center" ,
-                justifyContent:"center",
                 width: 40,
               }}
-              onTouch={discardChanges}
+              onTouch={handleEdit}
             >
               <Text style={{ paddingBottom: 10 }}>
-              <MaterialIcons name="cancel" size={24} color="grey" />
-                {/* <AntDesign name="back" size={24} color="red" /> */}
-                {/* <Ionicons name="md-close-circle-outline" size={24} color="red" /> */}
+                <MaterialIcons name="edit" size={24} color="grey" />
               </Text>
             </ButtonComponent>
-            <ButtonComponent
-              style={{
-                flex: 1,
-                borderRadius: 5,
-                // alignItems: "center",
-                // justifyContent: "center",
-                width: 40,
-              }}
-              onTouch={handleSaveUserData}
-            >
-              <Text style={{ paddingBottom: 10 }}>
-              <MaterialCommunityIcons name="check-all" size={24} color="grey" />
-                {/* <FontAwesome name="save" size={24} color="green" /> */}
-              </Text>
-            </ButtonComponent>
-          </>
-        )}
-      </View>
+          )}
 
+          {editMode && (
+            <>
+              <ButtonComponent
+                style={{
+                  flex: 1,
+                  borderRadius: 5,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: 40,
+                }}
+                onTouch={discardChanges}
+              >
+                <Text style={{ paddingBottom: 10 }}>
+                  <MaterialIcons name="cancel" size={24} color="grey" />
+                </Text>
+              </ButtonComponent>
+              <ButtonComponent
+                style={{
+                  flex: 1,
+                  borderRadius: 5,
+
+                  width: 40,
+                }}
+                onTouch={handleSaveUserData}
+              >
+                <Text style={{ paddingBottom: 10 }}>
+                  <MaterialCommunityIcons
+                    name="check-all"
+                    size={24}
+                    color="grey"
+                  />
+                  <FontAwesome name="save" size={24} color="green" />
+                </Text>
+              </ButtonComponent>
+            </>
+          )}
+        </View>
       </View>
       <View
         style={{
           flex: 1,
           alignItems: "center",
           justifyContent: "center",
-          height:height/4
+          height: height / 4,
         }}
       >
         {isLoading ? (
           <Loading />
         ) : (
           <ButtonComponent
-            onTouch={() => addProfileImage()} 
+            onTouch={() => addProfileImage()}
             style={{
+              borderRadius:70,
               marginTop: 5,
               shadowColor: "#000",
               shadowOffset: {
@@ -253,14 +249,12 @@ const UserProfile = () => {
           >
             <Image
               style={[Styles.userProfileImage]}
-              // imageStyle={{ borderRadius: 70 }}
+              imageStyle={{ borderRadius: 70 }}
               source={{ uri: localAvatar }}
             />
           </ButtonComponent>
         )}
       </View>
-
-     
 
       <View
         style={{
@@ -414,25 +408,27 @@ const UserProfile = () => {
           justifyContent: "space-between",
           alignItems: "center",
           flexDirection: "row",
-          height: height / 3,
-          marginHorizontal: 5,
+          height: height /2.7,
+          marginHorizontal: 10,
         }}
       >
         <ButtonComponent
-          buttonStyle={Styles.profileButtons}
+          buttonStyle={{
+   
+          }}
           onPress={() => navigate("Home")}
         >
           <MaterialCommunityIcons
             name="home-outline"
-            size={30}
+            size={40}
             color={appColors.iconInActive}
           />
-          {/* <Text style={Styles.signinRegisterButtonText}>Home</Text> */}
         </ButtonComponent>
- 
       </View>
     </ScrollView>
   );
 };
+
+
 
 export default UserProfile;

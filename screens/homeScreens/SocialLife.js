@@ -1,20 +1,20 @@
 import React from "react";
-import { View, Text, Dimensions, Platform } from "react-native";
+import { View, Text, Dimensions, Platform, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, Fontisto, MaterialCommunityIcons } from "@expo/vector-icons";
 import appColors from "../../assets/appColor";
 import ButtonComponent from "../../components/ButtonComponent";
 import Styles from "../../css/Styles";
 import { Image } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import Loading from "../../components/Loading";
+import SwedenMapSvg from "../../assets/svg/SwedenMapSvg";
 
 export default function SocialLife() {
-
   const navigation = useNavigation();
-  const { width, height } = Dimensions.get("window");
+  const { width, height } = Dimensions.get("screen");
   const { isLoading, currentUser } = useSelector(
     (state) => state.authentication
   );
@@ -27,60 +27,48 @@ export default function SocialLife() {
         <>
           <View
             style={{
-              flex: 0.2,
+              flex: 1,
               alignItems: "center",
             }}
           >
-            <Ionicons
-              name="ios-arrow-dropright"
-              size={200}
-              color={appColors.bgColor}
+            <Fontisto
+              name="coffeescript"
+              size={24}
+              color={appColors.iconInActive}
             />
           </View>
-          <View
-            style={{
-              flex: 1,
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              marginVertical: 55,
-            }}
-          >
+          <View style={childStyle.buttonContainer}>
             <ButtonComponent
-              style={{}}
+              style={childStyle.childButtons}
               onTouch={() => navigation.navigate("Fika")}
-              buttonStyle={Styles.socialLifeButtonComp}
+              buttonStyle={childStyle.buttonStyle}
             >
-              <Text style={Styles.socialLifeButtonText}> Fika</Text>
-              <Ionicons
-                name="ios-man"
-                size={30}
-                color={appColors.placeHolderColor}
+              <Text style={childStyle.buttonTextStyle}> Fika</Text>
+              <Fontisto
+                name="coffeescript"
+                size={24}
+                color={appColors.iconInActive}
               />
             </ButtonComponent>
             <ButtonComponent
-              style={{}}
+              style={childStyle.childButtons}
               onTouch={() => navigation.navigate("Food")}
-              buttonStyle={Styles.socialLifeButtonComp}
+              buttonStyle={childStyle.buttonStyle}
             >
-              <Text style={Styles.socialLifeButtonText}>Food</Text>
-              <Ionicons
-                name="ios-man"
-                size={30}
-                color={appColors.placeHolderColor}
+              <Text style={childStyle.buttonTextStyle}>Food</Text>
+              <MaterialCommunityIcons
+                name="food-fork-drink"
+                size={24}
+                color={appColors.iconInActive}
               />
             </ButtonComponent>
             <ButtonComponent
-              style={{}}
+              style={childStyle.childButtons}
               onTouch={() => navigation.navigate("Traditions")}
-              buttonStyle={Styles.socialLifeButtonComp}
+              buttonStyle={childStyle.buttonStyle}
             >
-              <Text style={Styles.socialLifeButtonText}>Traditions</Text>
-              <Ionicons
-                name="ios-man"
-                size={30}
-                color={appColors.placeHolderColor}
-              />
+              <Text style={childStyle.buttonTextStyle}>Traditions</Text>
+              <SwedenMapSvg style={{ fill: appColors.iconActive }} />
             </ButtonComponent>
           </View>
         </>
@@ -88,3 +76,39 @@ export default function SocialLife() {
     </ScrollView>
   );
 }
+
+export const childStyle = StyleSheet.create({
+  buttonContainer: {
+    flex: 1,
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: 55,
+  },
+  childButtons: {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 12,
+  },
+  buttonStyle: {
+    alignItems: "center",
+    // borderWidth: 2,
+    // borderColor: appColors.borderColor,
+    backgroundColor: appColors.bgColor,
+    borderRadius: 10,
+    padding: 5,
+    width: 350,
+    marginBottom: 10,
+  },
+  buttonTextStyle: {
+    color: appColors.textColor,
+    fontWeight: "bold",
+    fontSize: 24,
+    textAlign: "left",
+  },
+});

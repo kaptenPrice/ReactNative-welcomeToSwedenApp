@@ -1,8 +1,7 @@
 import React from "react";
 import { Svg, Path } from "react-native-svg";
-import { StyleSheet, Text, View } from "react-native";
 
-const BuildingSvg = (props) => {
+const SocieltalFunctionsSvg = (props) => {
   return (
     <Svg
       stroke="currentColor"
@@ -19,6 +18,5 @@ const BuildingSvg = (props) => {
   );
 };
 
-export default BuildingSvg;
+export default SocieltalFunctionsSvg;
 
-const styles = StyleSheet.create({});

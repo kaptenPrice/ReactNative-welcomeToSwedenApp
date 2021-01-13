@@ -17,8 +17,6 @@ import EditBox from "../../components/EditBox";
 import ContentComponent from "../../components/ContentComponent";
 
 const Fika = () => {
-  // const adminId = "118005229206246600125";
-  // const adminId = "KnlUK9tJpdRlvFV15ujBQogiR5k2";
   const { isAdmin } = useSelector((state) => state.userAdditionalInfo);
   const { isLoading, currentUser } = useSelector(
     (state) => state.authentication
@@ -31,30 +29,23 @@ const Fika = () => {
   const [fikaContentThree, setfikaContentThree] = useState("");
 
   useEffect(() => {
-    db.getContentData(
-      "welcome-to-sweden",
-      "social-life",
-      "fika",
-      "like-a-swede"
-    ).then((data) => {
-      setFikaContentOne(JSON.stringify(data.content).slice(1, -1));
-    });
-    db.getContentData("welcome-to-sweden", "social-life", "fika", "lingo").then(
-      (data) => {
-        setFikaContentTwo(JSON.stringify(data.content).slice(1, -1));
-      }
-    );
-    db.getContentData(
-      "welcome-to-sweden",
-      "social-life",
-      "fika",
-      "price-level"
-    ).then((data) => {
-      setfikaContentThree(JSON.stringify(data.content).slice(1, -1));
-    });
+    db.getContentData("social-life", "fika", "like-a-swede", (cb)=>{
+      const data= cb.data()
+      setFikaContentOne(JSON.stringify(data.content).slice(1,-1))
+    })
+ 
+    db.getContentData("social-life", "fika", "lingo", (cb)=>{
+      const data= cb.data()
+      setFikaContentTwo(JSON.stringify(data.content).slice(1,-1))
+    })
+    db.getContentData("social-life", "fika", "price-level", (cb)=>{
+      const data= cb.data()
+      setfikaContentThree(JSON.stringify(data.content).slice(1,-1))
+    })
+
   }, []);
 
-  const _handleEdit = () => {
+  const handleEdit = () => {
     if (isEditable === false) {
       setIsEditable(true);
     } else {
@@ -63,42 +54,25 @@ const Fika = () => {
   };
   const handleSaveFikaContentOne = () => {
     try {
-      db.handleSaveToDB(
-        "welcome-to-sweden",
-        "social-life",
-        "fika",
-        "like-a-swede",
-        fikaContentOne
-      );
+      db.handleSaveToDB("social-life", "fika", "like-a-swede", fikaContentOne);
     } catch (error) {
       console.log(error);
     } finally {
+      setIsEditable(false);
     }
   };
   const handleSaveFikaContentTwo = () => {
     try {
-      db.handleSaveToDB(
-        "welcome-to-sweden",
-        "social-life",
-        "fika",
-        "lingo",
-        fikaContentTwo
-      );
+      db.handleSaveToDB("social-life", "fika", "lingo", fikaContentTwo);
     } catch (error) {
       console.log(error);
     } finally {
-      // setIsEditable(false);
+      setIsEditable(false);
     }
   };
   const handleSaveFikaContentThree = () => {
     try {
-      db.handleSaveToDB(
-        "welcome-to-sweden",
-        "social-life",
-        "fika",
-        "price-level",
-        fikaContentThree
-      );
+      db.handleSaveToDB("social-life", "fika", "price-level", fikaContentThree);
     } catch (error) {
       console.log(error);
     } finally {
@@ -115,7 +89,7 @@ const Fika = () => {
         isAdmin && (
           <View>
             <ButtonComponent
-              onTouch={_handleEdit}
+              onTouch={handleEdit}
               style={{
                 alignItems: "center",
               }}
@@ -125,8 +99,7 @@ const Fika = () => {
           </View>
         )
       }
-      
-      children1={<Text style={Styles.childComponentHeaders}>Like a Swede</Text>}
+      children1={<Text style={style.headers}>Like a Swede</Text>}
       children2={
         <Text style={Styles.childComponentTextContainers}>
           {fikaContentOne}
@@ -142,7 +115,7 @@ const Fika = () => {
         )
       }
       style={[Styles.childComponentTextContainers]}
-      children3={<Text style={Styles.childComponentHeaders}>Lingo</Text>}
+      children3={<Text style={style.headers}>Lingo</Text>}
       children4={
         <Text style={Styles.childComponentTextContainers}>
           {fikaContentTwo}
@@ -157,7 +130,7 @@ const Fika = () => {
           />
         )
       }
-      children5={<Text style={Styles.childComponentHeaders}>Price level</Text>}
+      children5={<Text style={style.headers}>Price level</Text>}
       children6={
         <Text style={Styles.childComponentTextContainers}>
           {fikaContentThree}
@@ -176,3 +149,20 @@ const Fika = () => {
   );
 };
 export default Fika;
+export const style = StyleSheet.create({
+  headers: {
+    fontSize: 24,
+    fontWeight: "bold",
+    // paddingBottom: 15,
+    marginLeft: 5,
+  },
+});
+       // db.getContentData("social-life", "fika", "like-a-swede").then((data) => {
+    //   setFikaContentOne(JSON.stringify(data.content).slice(1, -1));
+    // });
+    // db.getContentData("social-life", "fika", "lingo").then((data) => {
+    //   setFikaContentTwo(JSON.stringify(data.content).slice(1, -1));
+    // });
+    // db.getContentData("social-life", "fika", "price-level").then((data) => {
+    //   setfikaContentThree(JSON.stringify(data.content).slice(1, -1));
+    // });

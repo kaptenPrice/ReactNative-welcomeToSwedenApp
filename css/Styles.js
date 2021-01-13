@@ -6,8 +6,8 @@ const Styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    marginVertical:150,
-    marginHorizontal:25,
+    marginVertical: 150,
+    marginHorizontal: 25,
     backgroundColor: appColors.bgColor,
   },
   welcomeViewUpper: {
@@ -35,7 +35,6 @@ const Styles = StyleSheet.create({
     backgroundColor: "transparent",
     borderWidth: 1,
     borderColor: appColors.borderColor,
-    
   },
   loginButtonText: {
     color: appColors.borderColor,
@@ -61,8 +60,8 @@ const Styles = StyleSheet.create({
   viewTextInput: {
     flex: 1,
     justifyContent: "center",
-    borderColor:"red",
-    borderWidth:5
+    borderColor: "red",
+    borderWidth: 5,
   },
   textInputStyle: {
     borderColor: appColors.borderColor,
@@ -77,16 +76,15 @@ const Styles = StyleSheet.create({
   },
   viewButtonContainer: {
     flex: 1,
-        // width: 500,
-        // height: 500,
-        justifyContent: 'space-evenly',
-        alignItems: 'center',
+    // width: 500,
+    // height: 500,
+    justifyContent: "space-evenly",
+    alignItems: "center",
   },
-  loginButtons:{
-    flex:1,
+  loginButtons: {
+    flex: 1,
     width: 200,
     height: 100,
-
   },
   infoText: {
     // marginLeft: 20,
@@ -131,13 +129,13 @@ const Styles = StyleSheet.create({
   homeButtonTouchStyle: {
     justifyContent: "center",
     alignItems: "center",
-    borderWidth: 3,
-    borderColor: appColors.iconInActive,
-    backgroundColor: "transparent",
+    // borderWidth: 0.5,
+    // borderColor: appColors.iconInActive,
+    backgroundColor:appColors.bgColor,
     borderRadius: 10,
-    paddingTop: 10,
+    paddingTop: 12,
     paddingBottom: 10,
-    marginTop: 10,
+    margin:10
   },
   homeButtonText: {
     color: appColors.textColor,
@@ -156,10 +154,11 @@ const Styles = StyleSheet.create({
 
   socialLifeButtonComp: {
     alignItems: "center",
-    borderWidth: 3,
-    borderColor: appColors.iconActive,
-    backgroundColor: "transparent",
+    borderWidth: 2,
+    borderColor: appColors.borderColor,
+    backgroundColor:appColors.bgColor,
     borderRadius: 10,
+    padding:5,
     width: 350,
     marginBottom: 10,
   },
@@ -219,13 +218,13 @@ const Styles = StyleSheet.create({
     backgroundColor: "transparent",
     borderColor: appColors.borderColor,
     borderRadius: 10,
-    height:30,
+    height: 30,
   },
   userProfileImage: {
     // flex:1,
     height: 140,
     width: 140,
-    borderRadius:70
+    borderRadius: 70,
     // marginBottom: 20,
   },
 });

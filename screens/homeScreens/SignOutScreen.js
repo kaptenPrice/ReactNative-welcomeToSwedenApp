@@ -1,6 +1,8 @@
 import React, {useEffect} from 'react'
 import { StyleSheet } from 'react-native'
 import { useDispatch } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
+
 import * as db from '../../firestore/FirebaseUtils'
 import {  signOut } from "../../redux/store/actions";
 

@@ -46,39 +46,43 @@ export const signOut = async () => {
 };
 
 export const handleSaveToDB = async (
-  collection1,
   doc1,
   collection2,
   doc2,
   content
 ) => {
   await db
-    .collection(collection1)
+    .collection("welcome-to-sweden")
     .doc(doc1)
     .collection(collection2)
     .doc(doc2)
     .set({ content });
 };
 export const getContentData = async (
-  collection1,
   doc1,
   collection2,
   doc2,
-  content
+  cb,err
 ) => {
   try {
-    const content = await db
-      .collection(collection1)
+   return  db
+      .collection("welcome-to-sweden")
       .doc(doc1)
       .collection(collection2)
       .doc(doc2)
-      .get();
-    if (!content.exists) {
-      console.log("no content");
-    }
-    return content.data();
+      .onSnapshot(cb);
+   
   } catch (error) {
     console.error(error);
+  }
+};
+export const getUserData = async (uid, cb) => {
+ 
+  try {
+    return  db.collection("users").doc(uid).onSnapshot(cb);
+   
+  } catch (error) {
+    console.log("User dosnt exist");
   }
 };
 
@@ -103,12 +107,4 @@ export const updateUserDataDB = async (user, uid) => {
   }
 };
 
-export const getUserData = async (uid, cb) => {
- 
-  try {
-    return db.collection("users").doc(uid).onSnapshot(cb);
-   
-  } catch (error) {
-    console.log("User dosnt exist");
-  }
-};
+

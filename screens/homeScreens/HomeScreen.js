@@ -16,7 +16,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useSelector, useDispatch } from "react-redux";
 
 import appColors from "../../assets/appColor";
-import BuildingSvg from "../../assets/svg/BuildingSvg";
+import SocieltalFunctionsSvg from "../../assets/svg/SocieltalFunctionsSvg";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Loading from "../../components/Loading";
 import * as db from "../../firestore/FirebaseUtils";
@@ -38,8 +38,7 @@ export default function HomeScreen() {
   );
 
   const [homeScreenImage, setHomeScreenImage] = useState([]);
-  const _width = width;
-  const _height = height / 3;
+
   const [uid, setUid] = useState(currentUser.uid || currentUser.id);
   const [_email, setEmail] = useState(currentUser.email);
 
@@ -56,11 +55,10 @@ export default function HomeScreen() {
     }
     getpics();
   }, []);
-//Skicka blanka fält till db
   const saveInitialUserData = () => {
     let data = {
       email: _email,
-      uid: uid
+      uid: uid,
     };
     try {
       db.saveUserToDB(data, uid);
@@ -72,15 +70,13 @@ export default function HomeScreen() {
   const getUserData = () => {
     try {
       db.getUserData(uid, (doc) => {
-        const data=doc.data()
+        const data = doc.data();
         dispatch({ type: "IS_ADMIN", payload: data.admin || false });
         dispatch({ type: "ADD_NAME", payload: data.name || "" });
         dispatch({ type: "ADD_PHONE", payload: data.phone || "" });
         dispatch({ type: "ADD_CITY", payload: data.city || "" });
         dispatch({ type: "ADD_AVATAR", payload: data.profileAvatar || "" });
-
-      })
-      
+      });
     } catch (error) {
       console.log(error);
     }
@@ -89,7 +85,7 @@ export default function HomeScreen() {
   //TODO move to components
   const _renderItem = (item) => {
     return (
-      <View style={{ width: _width, height: _height }}>
+      <View style={{ width: width, height: height / 3 }}>
         <Image
           style={{
             flex: 1,
@@ -102,12 +98,20 @@ export default function HomeScreen() {
     );
   };
   return (
-    <ScrollView style={{ flex: 1 }}>
+    <ScrollView
+      style={{
+        flex: 1,
+      }}
+    >
       {isLoading ? (
         <Loading />
       ) : (
         <>
-          <View>
+          <View
+            style={{
+              flex: 1,
+            }}
+          >
             <FlatList
               horizontal
               pagingEnabled
@@ -120,13 +124,25 @@ export default function HomeScreen() {
             style={{
               flex: 1,
               flexDirection: "column",
-marginHorizontal:20            }}
+              alignItems: "center",
+              top: 12,
+            }}
           >
             <ButtonComponent
               onTouch={() => navigation.navigate("SocialLife")}
+              style={{
+                shadowColor: "#000",
+                shadowOffset: {
+                  width: 0,
+                  height: 4,
+                },
+                shadowOpacity: 0.15,
+                shadowRadius: 4,
+                elevation: 12,
+              }}
               buttonStyle={[
                 Styles.homeButtonTouchStyle,
-                { width: _width, height: height / 4 },
+                { width: width / 1.2 },
               ]}
             >
               <Text style={Styles.homeButtonText}>EVERYDAY LIFE</Text>
@@ -136,26 +152,29 @@ marginHorizontal:20            }}
                 color={appColors.placeHolderColor}
               />
             </ButtonComponent>
-          </View>
-          <View
-            style={{
-              flex: 1,
-              flexDirection: "column",
-            }}
-          >
+
             <ButtonComponent
-              style={{ flex: 1 }}
+              style={{
+                shadowColor: "#000",
+                shadowOffset: {
+                  width: 0,
+                  height: 4,
+                },
+                shadowOpacity: 0.15,
+                shadowRadius: 4,
+                elevation: 12,
+              }}
               onTouch={() => navigation.navigate("SocietalFunctions")}
               buttonStyle={[
                 Styles.homeButtonTouchStyle,
-                { width: _width, height: height / 4 },
+                { width: width / 1.2 },
               ]}
             >
               <Text style={Styles.homeButtonText}>SOCIETAL FUNCTIONS</Text>
-              <BuildingSvg
+              <SocieltalFunctionsSvg
                 style={{ color: appColors.placeHolderColor }}
-                width="50"
-                height="50"
+                width="40"
+                height="40"
               />
             </ButtonComponent>
           </View>
@@ -164,3 +183,4 @@ marginHorizontal:20            }}
     </ScrollView>
   );
 }
+
