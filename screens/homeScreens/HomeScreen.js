@@ -59,6 +59,7 @@ export default function HomeScreen() {
     let data = {
       email: _email,
       uid: uid,
+      created: new Date()
     };
     try {
       db.saveUserToDB(data, uid);
@@ -69,20 +70,21 @@ export default function HomeScreen() {
 
   const getUserData = () => {
     try {
-      db.getUserData(uid, (doc) => {
+      db.getUserData(uid, (doc) =>{
         const data = doc.data();
-        dispatch({ type: "IS_ADMIN", payload: data.admin || false });
-        dispatch({ type: "ADD_NAME", payload: data.name || "" });
-        dispatch({ type: "ADD_PHONE", payload: data.phone || "" });
-        dispatch({ type: "ADD_CITY", payload: data.city || "" });
-        dispatch({ type: "ADD_AVATAR", payload: data.profileAvatar || "" });
+
+        dispatch({ type: "IS_ADMIN", payload:data && data.admin || false });
+        dispatch({ type: "ADD_NAME", payload:data&& data.name || "" });
+        dispatch({ type: "ADD_PHONE", payload:data&& data.phone || "" });
+        dispatch({ type: "ADD_CITY", payload:data&& data.city || "" });
+        dispatch({ type: "ADD_AVATAR", payload:data&& data.profileAvatar || "" });
       });
     } catch (error) {
       console.log(error);
     }
   };
 
-  //TODO move to components
+  //TODO move to componentssf
   const _renderItem = (item) => {
     return (
       <View style={{ width: width, height: height / 3 }}>
@@ -131,6 +133,7 @@ export default function HomeScreen() {
             <ButtonComponent
               onTouch={() => navigation.navigate("SocialLife")}
               style={{
+                borderRadius:10,
                 shadowColor: "#000",
                 shadowOffset: {
                   width: 0,
@@ -155,6 +158,7 @@ export default function HomeScreen() {
 
             <ButtonComponent
               style={{
+                borderRadius:10,
                 shadowColor: "#000",
                 shadowOffset: {
                   width: 0,

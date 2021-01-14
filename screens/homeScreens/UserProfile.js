@@ -194,9 +194,7 @@ const UserProfile = () => {
                 }}
                 onTouch={discardChanges}
               >
-                <Text style={{ paddingBottom: 10 }}>
-                  <MaterialIcons name="cancel" size={24} color="grey" />
-                </Text>
+                <MaterialIcons name="cancel" size={24} color="grey" />
               </ButtonComponent>
               <ButtonComponent
                 style={{
@@ -207,14 +205,11 @@ const UserProfile = () => {
                 }}
                 onTouch={handleSaveUserData}
               >
-                <Text style={{ paddingBottom: 10 }}>
-                  <MaterialCommunityIcons
-                    name="check-all"
-                    size={24}
-                    color="grey"
-                  />
-                  <FontAwesome name="save" size={24} color="green" />
-                </Text>
+                <MaterialCommunityIcons
+                  name="check-all"
+                  size={24}
+                  color="grey"
+                />
               </ButtonComponent>
             </>
           )}
@@ -234,7 +229,7 @@ const UserProfile = () => {
           <ButtonComponent
             onTouch={() => addProfileImage()}
             style={{
-              borderRadius:70,
+              borderRadius: 70,
               marginTop: 5,
               shadowColor: "#000",
               shadowOffset: {
@@ -252,6 +247,7 @@ const UserProfile = () => {
               imageStyle={{ borderRadius: 70 }}
               source={{ uri: localAvatar }}
             />
+            
           </ButtonComponent>
         )}
       </View>
@@ -273,7 +269,7 @@ const UserProfile = () => {
               marginRight: "auto",
               marginBottom: -9,
               backgroundColor: "white",
-              color: appColors.labaleHeader,
+              color: appColors.lableHeader,
               zIndex: 1000,
             }}
           >
@@ -282,11 +278,20 @@ const UserProfile = () => {
           <AwesomeTextInput
             customStyles={{
               container: {
+                backgroundColor:appColors.bgColor,
                 borderWidth: 1,
                 borderColor: "grey",
                 borderRadius: 10,
                 height: 45,
                 width: width / 1.5,
+                shadowColor: "#474747",
+                shadowOffset: {
+                  width: 0,
+                  height: 3,
+                },
+                shadowOpacity: 0.25,
+                shadowRadius: 3,
+                elevation: 10,
               },
               inputContainer: {
                 borderBottomWidth: 0,
@@ -308,7 +313,7 @@ const UserProfile = () => {
               marginRight: "auto",
               marginBottom: -9,
               backgroundColor: "white",
-              color: appColors.labaleHeader,
+              color: appColors.lableHeader,
               zIndex: 1000,
             }}
           >
@@ -318,11 +323,20 @@ const UserProfile = () => {
           <AwesomeTextInput
             customStyles={{
               container: {
+                backgroundColor:appColors.bgColor,
                 borderWidth: 1,
                 borderColor: "grey",
                 borderRadius: 10,
                 height: 45,
                 width: width / 1.5,
+                shadowColor: "#474747",
+                shadowOffset: {
+                  width: 0,
+                  height: 3,
+                },
+                shadowOpacity: 0.25,
+                shadowRadius: 3,
+                elevation: 10,
               },
               inputContainer: {
                 borderBottomWidth: 0,
@@ -340,7 +354,7 @@ const UserProfile = () => {
               marginRight: "auto",
               marginBottom: -9,
               backgroundColor: "white",
-              color: appColors.labaleHeader,
+              color: appColors.lableHeader,
               zIndex: 1000,
             }}
           >
@@ -349,11 +363,20 @@ const UserProfile = () => {
           <AwesomeTextInput
             customStyles={{
               container: {
+                backgroundColor:appColors.bgColor,
                 borderWidth: 1,
                 borderColor: "grey",
                 borderRadius: 10,
                 height: 45,
                 width: width / 1.5,
+                shadowColor: "#474747",
+                shadowOffset: {
+                  width: 0,
+                  height: 3,
+                },
+                shadowOpacity: 0.25,
+                shadowRadius: 3,
+                elevation: 10,
               },
               inputContainer: {
                 borderBottomWidth: 0,
@@ -375,7 +398,7 @@ const UserProfile = () => {
               marginRight: "auto",
               marginBottom: -9,
               backgroundColor: "white",
-              color: appColors.labaleHeader,
+              color: appColors.lableHeader,
               zIndex: 1000,
             }}
           >
@@ -390,6 +413,15 @@ const UserProfile = () => {
                 borderRadius: 10,
                 height: 45,
                 width: width / 1.5,
+                shadowColor: "#474747",
+                backgroundColor:appColors.bgColor,
+                shadowOffset: {
+                  width: 0,
+                  height: 3,
+                },
+                shadowOpacity: 0.25,
+                shadowRadius: 3,
+                elevation: 10,
               },
               inputContainer: {
                 borderBottomWidth: 0,
@@ -408,16 +440,11 @@ const UserProfile = () => {
           justifyContent: "space-between",
           alignItems: "center",
           flexDirection: "row",
-          height: height /2.7,
+          height: height / 2.7,
           marginHorizontal: 10,
         }}
       >
-        <ButtonComponent
-          buttonStyle={{
-   
-          }}
-          onPress={() => navigate("Home")}
-        >
+        <ButtonComponent buttonStyle={{}} onPress={() => navigate("Home")}>
           <MaterialCommunityIcons
             name="home-outline"
             size={40}
@@ -428,7 +455,5 @@ const UserProfile = () => {
     </ScrollView>
   );
 };
-
-
 
 export default UserProfile;

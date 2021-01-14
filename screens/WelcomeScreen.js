@@ -29,11 +29,11 @@ const WelcomeScreen = () => {
         <TouchableOpacity
           style={{
             justifyContent: "center",
+            backgroundColor:appColors.bgColor,
             borderColor: appColors.borderColor,
             borderWidth: 5,
             borderRadius: 25,
-            paddingVertical:0.1,
-            paddingHorizontal:0.1,
+          padding:100,
             shadowColor: "#474747",
             shadowOffset: {
               width: 0,
@@ -55,9 +55,9 @@ const WelcomeScreen = () => {
               paddingVertical:5,
 
               color: appColors.textColor,
-              borderWidth: 5,
-              borderRadius: 25,
-              borderColor: appColors.borderColor,
+              // borderWidth: 5,
+              // borderRadius: 25,
+              // borderColor: appColors.borderColor,
             }}
           >
             Welcome to Sweden

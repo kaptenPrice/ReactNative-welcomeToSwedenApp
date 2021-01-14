@@ -29,6 +29,14 @@ const Fika = () => {
   const [fikaContentThree, setfikaContentThree] = useState("");
 
   useEffect(() => {
+    getFieldData()
+    return()=>{
+      getFieldData()
+    }
+ 
+
+  }, []);
+  const getFieldData=()=>{
     db.getContentData("social-life", "fika", "like-a-swede", (cb)=>{
       const data= cb.data()
       setFikaContentOne(JSON.stringify(data.content).slice(1,-1))
@@ -42,8 +50,7 @@ const Fika = () => {
       const data= cb.data()
       setfikaContentThree(JSON.stringify(data.content).slice(1,-1))
     })
-
-  }, []);
+  }
 
   const handleEdit = () => {
     if (isEditable === false) {
@@ -81,7 +88,7 @@ const Fika = () => {
 
   return (
     <ChildComponent
-      scrollViewStyle={{ flex: 1, backgroundColor: appColors.bgChildComp }}
+      scrollViewStyle={{ flex: 1, backgroundColor: appColors.bgColor }}
       iamgeViewStyle={{ flex: 1, width, height: height / 4 }}
       imageStyle={{ flex: 1, width: null, height: null }}
       imgSource={fika_pic}

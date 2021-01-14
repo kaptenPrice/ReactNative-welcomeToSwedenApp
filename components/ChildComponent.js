@@ -38,6 +38,7 @@ const ChildComponent = ({
             renderTruncatedFooter={null}
             renderRevealedFooter={null}
             numberOfLines={3}
+            
           >
             {children2}
           </ReadMore>

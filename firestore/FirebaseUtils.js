@@ -62,19 +62,22 @@ export const getContentData = async (
   doc1,
   collection2,
   doc2,
-  cb,err
+  cb,
+  error
+  
 ) => {
-  try {
+  // try {
    return  db
       .collection("welcome-to-sweden")
       .doc(doc1)
       .collection(collection2)
       .doc(doc2)
-      .onSnapshot(cb);
+      .onSnapshot(cb, error);
+     
    
-  } catch (error) {
-    console.error(error);
-  }
+  // } catch (error) {
+  //   console.error(error);
+  // }
 };
 export const getUserData = async (uid, cb) => {
  

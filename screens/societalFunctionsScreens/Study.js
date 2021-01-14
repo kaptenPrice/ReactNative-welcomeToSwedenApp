@@ -5,6 +5,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  StyleSheet,
 } from "react-native";
 import ChildComponent from "../../components/ChildComponent";
 import Styles from "../../css/Styles";
@@ -18,10 +19,10 @@ import * as db from "../../firestore/FirebaseUtils";
 import EditBox from "../../components/EditBox";
 
 const Study = () => {
-  const adminId = "KnlUK9tJpdRlvFV15ujBQogiR5k2";
   const { isLoading, currentUser } = useSelector(
     (state) => state.authentication
   );
+  const { isAdmin } = useSelector((state) => state.userAdditionalInfo);
 
   const { width, height } = Dimensions.get("screen");
   const [isEditable, setIsEditable] = useState(false);
@@ -32,26 +33,44 @@ const Study = () => {
   const [phoneNumber, setPhoneNumber] = useState("0705083605"); //Testing callup function
 
   useEffect(() => {
+    getFieldData()
+    return () => {
+      getFieldData()
+    };
+  }, []);
+
+  const getFieldData=()=>{
     const unsubscribe1 = db.getContentData(
       "societal-functions",
       "study",
       "like-a-swede",
       (cb) => {
         const data = cb.data();
+        // if (data.next)
         setstudyContentOne(JSON.stringify(data.content).slice(1, -1));
       }
     );
+
     const unsubscribe2 = db.getContentData(
       "societal-functions",
       "study",
       "lingo",
       (cb) => {
         const data = cb.data();
-        setstudyContentTwo(JSON.stringify(data.content).slice(1, -1));
-      }, 
-      (err)=>{
-        console.log(err)
-      }
+        // if (data.next) {
+          setstudyContentTwo(JSON.stringify(data.content).slice(1, -1));
+
+        // }
+        // else{
+        //   console.log("We got some probs here, lets give som feedback")
+        //   //TODO sen user to feedback
+        // }
+        },
+        // (err)=>{
+        //   const fail=err.data()
+        //   console.log(fail)
+        // }
+      
     );
     const unsubscribe3 = db.getContentData(
       "societal-functions",
@@ -59,15 +78,13 @@ const Study = () => {
       "assistence",
       (cb) => {
         const data = cb.data();
+        // if (data.next)
         setstudyContentThree(JSON.stringify(data.content).slice(1, -1));
-      }
+      },
+      // console.log(studyContentThree)
     );
-    return () => {
-      unsubscribe1();
-      unsubscribe2();
-      unsubscribe3();
-    };
-  }, []);
+  }
+
 
   const handleEdit = () => {
     if (isEditable === false) {
@@ -126,7 +143,7 @@ const Study = () => {
       imageStyle={{ flex: 1, width: null, height: null }}
       imgSource={study_unsplash}
       editButton1={
-        adminId && (
+        isAdmin && (
           <View>
             <ButtonComponent
               onTouch={handleEdit}
@@ -227,3 +244,11 @@ const Study = () => {
   );
 };
 export default Study;
+export const style = StyleSheet.create({
+  headers: {
+    fontSize: 24,
+    fontWeight: "bold",
+    // paddingBottom: 15,
+    marginLeft: 5,
+  },
+});

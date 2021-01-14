@@ -178,7 +178,7 @@ const Styles = StyleSheet.create({
     height: null,
   },
   childComponentHeaders: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: "bold",
     // paddingBottom: 15,
     marginLeft: 5,
@@ -187,13 +187,14 @@ const Styles = StyleSheet.create({
   childComponentTextContainers: {
     // borderColor:"blue",
     // borderWidth:0.5,
-    fontWeight: "bold",
-    fontSize: 18,
+    fontWeight:"500",
+    fontSize: 15,
     paddingBottom: 30,
     marginLeft: 5,
     marginRight: 5,
     marginTop: 10,
     color: appColors.textColor,
+    backgroundColor:appColors.bgColor
   },
 
   childComponentContentView: {
@@ -201,14 +202,16 @@ const Styles = StyleSheet.create({
     flex: 2,
     alignItems: "flex-start",
     justifyContent: "center",
-    backgroundColor: appColors.bgChildContainers,
+    backgroundColor: appColors.bgColor,
+    borderBottomWidth:1,
+    borderBottomColor:appColors.borderColor,
     // marginLeft: 7,
     // marginRight: 7,
     marginTop: 10,
   },
   profileScreen: {
     flex: 1,
-    backgroundColor: appColors.whiteColor,
+    backgroundColor: appColors.bgColor,
   },
   profileButtons: {
     justifyContent: "center",
