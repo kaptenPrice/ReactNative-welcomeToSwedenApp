@@ -33,7 +33,7 @@ export default function SocialLife() {
           >
             <Fontisto
               name="coffeescript"
-              size={24}
+              size={50}
               color={appColors.iconInActive}
             />
           </View>

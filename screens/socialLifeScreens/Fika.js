@@ -2,53 +2,49 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Dimensions, StyleSheet, Text, View } from "react-native";
 import ChildComponent from "../../components/ChildComponent";
-import Styles from "../../css/Styles";
 import fika_pic from "../../assets/images/fika_pic.jpg";
 import appColors from "../../assets/appColor";
 import ButtonComponent from "../../components/ButtonComponent";
 import { Ionicons, MaterialIcons, Feather } from "@expo/vector-icons";
 import { TextInput } from "react-native-gesture-handler";
 import ViewMoreText from "react-native-view-more-text";
-import firebase from "firebase/app";
 import AdminButtons from "../../components/EditBox";
 import * as db from "../../firestore/FirebaseUtils";
-import useSwr from "swr";
-import EditBox from "../../components/EditBox";
 import ContentComponent from "../../components/ContentComponent";
+import EditBox from "../../components/EditBox";
 
 const Fika = () => {
+  const dispatch =useDispatch()
   const { isAdmin } = useSelector((state) => state.userAdditionalInfo);
-  const { isLoading, currentUser } = useSelector(
+  const {  currentUser } = useSelector(
     (state) => state.authentication
   );
 
   const { width, height } = Dimensions.get("screen");
   const [isEditable, setIsEditable] = useState(false);
-  const [fikaContentOne, setFikaContentOne] = useState("");
-  const [fikaContentTwo, setFikaContentTwo] = useState("");
-  const [fikaContentThree, setfikaContentThree] = useState("");
+  const [contentOne, setContentOne] = useState("");
+  const [contentTwo, setContentTwo] = useState("");
+  const [contentThree, setContentThree] = useState("");
 
   useEffect(() => {
     getFieldData()
     return()=>{
       getFieldData()
     }
- 
-
   }, []);
   const getFieldData=()=>{
     db.getContentData("social-life", "fika", "like-a-swede", (cb)=>{
       const data= cb.data()
-      setFikaContentOne(JSON.stringify(data.content).slice(1,-1))
+      setContentOne(JSON.stringify(data.content).slice(1,-1))
     })
  
     db.getContentData("social-life", "fika", "lingo", (cb)=>{
       const data= cb.data()
-      setFikaContentTwo(JSON.stringify(data.content).slice(1,-1))
+      setContentTwo(JSON.stringify(data.content).slice(1,-1))
     })
     db.getContentData("social-life", "fika", "price-level", (cb)=>{
       const data= cb.data()
-      setfikaContentThree(JSON.stringify(data.content).slice(1,-1))
+      setContentThree(JSON.stringify(data.content).slice(1,-1))
     })
   }
 
@@ -59,27 +55,27 @@ const Fika = () => {
       setIsEditable(false);
     }
   };
-  const handleSaveFikaContentOne = () => {
+  const handleSaveContentOne = () => {
     try {
-      db.handleSaveToDB("social-life", "fika", "like-a-swede", fikaContentOne);
+      db.handleSaveToDB("social-life", "fika", "like-a-swede", contentOne);
     } catch (error) {
       console.log(error);
     } finally {
       setIsEditable(false);
     }
   };
-  const handleSaveFikaContentTwo = () => {
+  const handleSaveContentTwo = () => {
     try {
-      db.handleSaveToDB("social-life", "fika", "lingo", fikaContentTwo);
+      db.handleSaveToDB("social-life", "fika", "lingo", contentTwo);
     } catch (error) {
       console.log(error);
     } finally {
       setIsEditable(false);
     }
   };
-  const handleSaveFikaContentThree = () => {
+  const handleSaveContentThree = () => {
     try {
-      db.handleSaveToDB("social-life", "fika", "price-level", fikaContentThree);
+      db.handleSaveToDB("social-life", "fika", "pricvel", contentThree);
     } catch (error) {
       console.log(error);
     } finally {
@@ -108,47 +104,47 @@ const Fika = () => {
       }
       children1={<Text style={style.headers}>Like a Swede</Text>}
       children2={
-        <Text style={Styles.childComponentTextContainers}>
-          {fikaContentOne}
+        <Text style={style.childComponentTextContainers}>
+          {contentOne}
         </Text>
       }
       editBox1={
         isEditable && (
           <EditBox
             editable={isEditable}
-            onChangeText={(e) => setFikaContentOne(e)}
-            onTouch={handleSaveFikaContentOne}
+            onChangeText={(e) => setContentOne(e)}
+            onTouch={handleSaveContentOne}
           />
         )
       }
-      style={[Styles.childComponentTextContainers]}
+      style={[style.childComponentTextContainers]}
       children3={<Text style={style.headers}>Lingo</Text>}
       children4={
-        <Text style={Styles.childComponentTextContainers}>
-          {fikaContentTwo}
+        <Text style={style.childComponentTextContainers}>
+          {contentTwo}
         </Text>
       }
       editBox2={
         isEditable && (
           <EditBox
             editable={isEditable}
-            onChangeText={(e) => setFikaContentTwo(e)}
-            onTouch={handleSaveFikaContentTwo}
+            onChangeText={(e) => setContentTwo(e)}
+            onTouch={handleSaveContentTwo}
           />
         )
       }
       children5={<Text style={style.headers}>Price level</Text>}
       children6={
-        <Text style={Styles.childComponentTextContainers}>
-          {fikaContentThree}
+        <Text style={style.childComponentTextContainers} >
+           {contentThree}
         </Text>
       }
       editBox3={
         isEditable && (
           <EditBox
             editable={isEditable}
-            onChangeText={(e) => setfikaContentThree(e)}
-            onTouch={handleSaveFikaContentThree}
+            onChangeText={(e) => setContentThree(e)}
+            onTouch={handleSaveContentThree}
           />
         )
       }
@@ -160,16 +156,19 @@ export const style = StyleSheet.create({
   headers: {
     fontSize: 24,
     fontWeight: "bold",
-    // paddingBottom: 15,
     marginLeft: 5,
   },
+  childComponentTextContainers: {
+    // borderColor:"blue",
+    // borderWidth:0.5,
+    fontWeight:"500",
+    fontSize: 15,
+    paddingBottom: 30,
+    marginLeft: 5,
+    marginRight: 5,
+    marginTop: 10,
+    color: appColors.textColor,
+    backgroundColor:appColors.bgColor
+  },
 });
-       // db.getContentData("social-life", "fika", "like-a-swede").then((data) => {
-    //   setFikaContentOne(JSON.stringify(data.content).slice(1, -1));
-    // });
-    // db.getContentData("social-life", "fika", "lingo").then((data) => {
-    //   setFikaContentTwo(JSON.stringify(data.content).slice(1, -1));
-    // });
-    // db.getContentData("social-life", "fika", "price-level").then((data) => {
-    //   setfikaContentThree(JSON.stringify(data.content).slice(1, -1));
-    // });
+    

@@ -6,6 +6,7 @@ const initialState = {
   education: null,
   isAdmin: false,
   reduxProfileAvatar: null,
+  uid: null
 };
 const addPersonalInfo = (state = initialState, action) => {
   switch (action.type) {
@@ -42,8 +43,12 @@ const addPersonalInfo = (state = initialState, action) => {
     case "ADD_AVATAR":
       return {
         ...state,
-        
         reduxProfileAvatar: action.payload,
+      };
+    case "ADD_UID":
+      return {
+        ...state,
+        uid: action.payload,
       };
 
     default:

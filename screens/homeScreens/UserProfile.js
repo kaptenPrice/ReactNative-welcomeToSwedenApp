@@ -64,7 +64,6 @@ const UserProfile = () => {
       ? setLocalAvatar(reduxProfileAvatar)
       : setLocalAvatar(pic);
 
-    // localAvatar ? setLocalAvatar(reduxProfileAvatar):setLocalAvatar(pic)
   }, [name, phone, city, reduxProfileAvatar]);
 
   useEffect(() => {
@@ -304,6 +303,14 @@ const UserProfile = () => {
             value={localUserName}
           />
         </View>
+               {/* <InputComponent
+          children={"Name"}
+          onChangeText={(e) => console.log(e)}
+        />
+        <InputComponent
+          children={"E-mail"}
+          onChangeText={(e) => console.log(e)}
+        /> */}
 
         <View style={{ flex: 1, marginTop: 10 }}>
           <Text

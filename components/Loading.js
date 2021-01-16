@@ -11,4 +11,3 @@ const Loading = () => {
 }
 
 export default Loading
-//alignItems:"center", justifyContent:"center"

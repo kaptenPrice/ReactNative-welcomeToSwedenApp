@@ -46,6 +46,8 @@ export default function HomeScreen() {
     saveInitialUserData();
     getUserData();
     dispatch({ type: "ADD_EMAIL", payload: currentUser.email });
+    dispatch({ type: "ADD_UID", payload: uid });
+
     async function getpics() {
       const pics = await Axios.get(
         "https://api.unsplash.com/search/photos?query=Sweden&client_id=Sbpk7Dz6Xl862AgdaUuUAW8p2cnpd1QvS5S-kA8AE5g"
@@ -78,6 +80,7 @@ export default function HomeScreen() {
         dispatch({ type: "ADD_PHONE", payload:data&& data.phone || "" });
         dispatch({ type: "ADD_CITY", payload:data&& data.city || "" });
         dispatch({ type: "ADD_AVATAR", payload:data&& data.profileAvatar || "" });
+        
       });
     } catch (error) {
       console.log(error);

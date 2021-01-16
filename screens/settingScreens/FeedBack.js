@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -14,88 +14,70 @@ import {
   MaterialIcons,
 } from "@expo/vector-icons/";
 import { AwesomeTextInput } from "react-native-awesome-text-input";
-
 import ButtonComponent from "../../components/ButtonComponent";
 import { useNavigation } from "@react-navigation/native";
-import firebase from "firebase/app";
-import "firebase-auth";
 
+import { isSendingData } from "../../redux/store/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { TextInputComponent } from "react-native";
 import appColors from "../../assets/appColor";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { element } from "prop-types";
+import NpsComponent from "../../components/NpsComponent";
+import InputComponent from "../../components/InputComponent";
+import * as db from "../../firestore/FirebaseUtils";
+import AfterFeedback from "../../components/AfterFeedback";
 
 const FeedBack = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const { width, height } = Dimensions.get("window");
-  const { name, email, phone, city } = useSelector(
+  const textInputRef = useRef("");
+  const { width, height } = Dimensions.get("screen");
+
+  const { name, email, phone, city, uid } = useSelector(
     (state) => state.userAdditionalInfo
   );
 
   const { isLoading, currentUser } = useSelector(
     (state) => state.authentication
   );
-  const [isEditable, setIsEditable] = useState(false);
-  const [scale, setScale] = useState([
-    { value: 1 },
-    { value: 2 },
-    { value: 3 },
-    { value: 4 },
-    { value: 5 },
-    { value: 6 },
-    { value: 7 },
-    { value: 8 },
-    { value: 9 },
-    { value: 10 },
-  ]);
+  const [grade, setGrade] = useState(0);
+  const [incomingFeedback, setIncomingFeedback] = useState("");
+  const [thanks, setThanks] = useState(false);
+  const [isFeedbackDone, setIsFeedbackDone] = useState(false);
 
+  useEffect(() => {
+    // setIsFeedbackDone(false);
+    setGrade(0);
+    setThanks(false);
+  }, []);
 
-  const list = () => {
-    return scale.map((element) => {
-      return (
-        <TouchableOpacity
-          key={element.value}
-          style={{
-            padding: 0,
-            borderColor: appColors.borderColor,
-            borderBottomWidth: 1,
-            borderTopWidth: 1,
-            borderRightWidth: 1,
-            borderLeftWidth: 1,
+  const checkInputLength = () =>
+    incomingFeedback.length > 5 ? setThanks(true) : setThanks(false);
 
-            shadowColor: "#474747",
-            shadowOffset: {
-              width: 0,
-              height: 3,
-            },
-            shadowOpacity: 0.25,
-            shadowRadius: 5,
-            elevation: 10,
-          }}
-        >
-          <Text style={{ padding: 10, backgroundColor:appColors.bgColor }}>{element.value}</Text>
-        </TouchableOpacity>
-      );
-    });
+  const sendFeedbackToDB = () => {
+    setIncomingFeedback("");
+    textInputRef.current.setNativeProps({ text: "" });
+    dispatch(isSendingData(true));
+    const data = {
+      grade: grade,
+      feedback: incomingFeedback,
+      from: email,
+      uid: uid,
+      created: new Date(),
+    };
+    try {
+      db.handleSaveFeedback("feedback", data);
+      dispatch(isSendingData(false));
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsFeedbackDone(true);
+    }
   };
 
   return (
-    <View style={styles.cont}>
-      <View
-        style={{
-          flex: 0.1,
-          paddingBottom: 5,
-          alignItems: "flex-end",
-          justifyContent: "center",
-          // alignContent:"space-around",
-          flexDirection: "row",
-          height: height / 20,
-          borderBottomWidth: 1,
-          borderColor: appColors.borderColor,
-        }}
-      >
+    <View style={styles.container1}>
+      <View style={[styles.header]}>
         <View style={{ marginRight: width / 1.1 }}>
           <ButtonComponent onPress={() => navigation.navigate("Home")}>
             <MaterialCommunityIcons
@@ -106,31 +88,25 @@ const FeedBack = () => {
           </ButtonComponent>
         </View>
         <View style={{ position: "absolute" }}>
-          <Text style={{ fontSize: 28 }}>FeedBack</Text>
+          <Text
+            style={{
+              fontSize: 28,
+              fontWeight: "700",
+              color: appColors.bgFeedBack,
+            }}
+          >
+            FeedBack
+          </Text>
         </View>
       </View>
-      <View
-        style={{
-          flexDirection: "column",
-          justifyContent: "center",
-          marginVertical: 10,
-          borderBottomWidth: 1,
-          borderColor: appColors.borderColor,
-        }}
-      >
+      <View style={styles.gradeConatiner}>
         <View style={{ alignItems: "center" }}>
           <Text> How satisfied are you with this app? </Text>
         </View>
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "center",
-            marginTop: 20,
-            marginBottom: 10,
-          }}
-        >
-          {list()}
+        <View style={styles.npsBar}>
+          <NpsComponent value={grade} setValue={setGrade} />
         </View>
+        {/* <Text>{incomingFeedback}</Text>   */}
       </View>
 
       <View
@@ -140,250 +116,177 @@ const FeedBack = () => {
           flexDirection: "column",
         }}
       >
-        <View style={{ marginTop: 10, paddingTop: 10 }}>
-          <Text
-            style={{
-                            marginLeft: 15,
-              marginRight: "auto",
-              marginBottom: -7,
-              backgroundColor: appColors.bgColor,
-              color: appColors.lableHeader,
-              zIndex: 1000,
-              
-            }}
-          >
-            Name
-          </Text>
-
-          <AwesomeTextInput
-            customStyles={{
-              container: {
-                backgroundColor:appColors.bgColor,
-                borderWidth: 1,
-                borderColor: "grey",
-                borderRadius: 10,
-                height: 45,
-                width: width / 1.5,
-                shadowColor: "#474747",
-            shadowOffset: {
-              width: 0,
-              height: 3,
-            },
-            shadowOpacity: 0.25,
-            shadowRadius: 3,
-            elevation: 10,
-              },
-              inputContainer: {
-                borderBottomWidth: 0,
-              },
-            }}
-            onChangeText={(e) => console.log(e)}
-          />
-        </View>
         <View style={{ marginTop: 10 }}>
-          <Text
-            style={{
-              // flex: 1,
-              marginLeft: 15,
-              marginRight: "auto",
-              marginBottom: -9,
-              backgroundColor: appColors.bgColor,
-              color: appColors.lableHeader,
-              zIndex: 1000,
-            }}
-          >
-            Mail
-          </Text>
+          <Text style={styles.labelStyle}>Feedback</Text>
 
-          <AwesomeTextInput
-            customStyles={{
-              container: {
-                backgroundColor:appColors.bgColor,
-                borderWidth: 1,
-                borderColor: "grey",
-                borderRadius: 10,
-                height: 45,
-                width: width / 1.5,
-                shadowColor: "#474747",
-                shadowOffset: {
-                  width: 0,
-                  height: 3,
-                },
-                shadowOpacity: 0.25,
-                shadowRadius: 3,
-                elevation: 10,
-              },
-              inputContainer: {
-                borderBottomWidth: 0,
-              },
-            }}
-            onChangeText={(e) => console.log(e)}
-          />
-        </View>
-        <View style={{ marginTop: 10 }}>
-          <Text
+          <TextInput
             style={{
-              marginLeft: 15,
-              marginRight: "auto",
-              marginBottom: -9,
               backgroundColor: appColors.bgColor,
-              color: appColors.lableHeader,
-              zIndex: 1000,
-              paddingHorizontal:3
-            }}
-          >
-            Feedback
-          </Text>
-
-          <AwesomeTextInput
-            customStyles={{
-              container: {
-                backgroundColor:appColors.bgColor,
-                borderWidth: 1,
-                borderColor: "grey",
-                borderRadius: 10,
-                height: 250,
-                width: width / 1.5,
-                shadowColor: "#474747",
-                shadowOffset: {
-                  width: 0,
-                  height: 3,
-                },
-                shadowOpacity: 0.25,
-                shadowRadius: 3,
-                elevation: 10,
+              borderWidth: 1,
+              borderColor: "grey",
+              borderRadius: 10,
+              height: 250,
+              width: width / 1.2,
+              shadowColor: "#474747",
+              shadowOffset: {
+                width: 0,
+                height: 3,
               },
-              inputContainer: {
-                borderBottomWidth: 0,
-              },
+              shadowOpacity: 0.25,
+              shadowRadius: 3,
+              elevation: 10,
+              height: 250,
+              paddingTop: 20,
+              paddingLeft: 20,
             }}
-            onChangeText={(e) => console.log(e)}
+            numberOfLines={0}
+            multiline={true}
+            onChangeText={(e) => setIncomingFeedback(e)}
+            onEndEditing={checkInputLength}
+            ref={textInputRef}
           />
+          {thanks ? (
+            <Text style={styles.thanksText}>
+              Thank Push the button below to send your opinion when u r done
+            </Text>
+          ) : null}
         </View>
         <View
-          style={{ flex: 1, flexDirection: "column", justifyContent: "center" }}
+          style={{
+            flex: 1,
+            justifyContent: "flex-start",
+            alignItems: "flex-end",
+            // borderColor:"red",
+            // borderWidth:2,
+            width: width / 1.2,
+            height:height/1,
+            marginTop:15
+          }}
         >
           <ButtonComponent
-            style={[styles.feedbackButton, { width: width / 2 }]}
-            onTouch={(e) => console.log(e)}
+            style={styles.sendButtonStyle}
+            buttonStyle={[styles.feedbackButton, {}]}
+            onTouch={sendFeedbackToDB}
           >
-            <Text style={{ color: "white", paddingBottom: 15, fontSize: 18 }}>
-              Send feedback
-              <Ionicons style={{marginLeft:10}} name="ios-send" color="white" size={24} />
-            </Text>
-         
-
+            <Ionicons style={{}} name="ios-send" color="white" size={40} />
           </ButtonComponent>
-
-          {/* <Text
-            style={{
-              // flex: 1,
-              marginLeft: 15,
-              marginRight: "auto",
-              marginBottom: -9,
-              backgroundColor: appColors.bgColor,
-              color: appColors.lableHeader,
-              zIndex: 1000,
-            }}
-          >
-            Feedback
-          </Text> */}
-
-          {/* <AwesomeTextInput
-            customStyles={{
-              container: {
-                borderWidth: 1,
-                borderColor: "grey",
-                borderRadius: 10,
-                // height: 200,
-                width: width / 1.5,
-              },
-              inputContainer: {
-                borderBottomWidth: 0,
-              },
-            }}
-            editable={isEditable}
-            onChangeText={(e) => console.log(e)} */}
-
-          {/* /> */}
         </View>
-      </View>
-      {/* 
-      <View
-        style={{
-          flex: 1,
-          flexDirection: "row-reverse",
-          alignItems: "center",
-          justifyContent: "center",
-          alignContent: "space-around",
-          borderColor: "green",
-          borderWidth: 2,
-        }}
-      >
-        <ButtonComponent
-          // buttonStyle={{ marginLeft: width / 2.2 }}
-          onTouch={() => console.log("feedback send")}
-        >
-          <Ionicons name="ios-send" color={appColors.iconInActive} size={30} />
-        </ButtonComponent>
-        <ButtonComponent onPress={() => navigation.navigate("Home")}>
-          <MaterialCommunityIcons
-            name="home"
-            size={30}
-            color={appColors.iconInActive}
+        {isFeedbackDone && (
+          <AfterFeedback
+          // <MaterialCommunityIcons name="close-circle-outline" size={24} color="black" />
+          visible={isFeedbackDone}
+            icon={
+              <MaterialCommunityIcons 
+                onPress={()=>setIsFeedbackDone(false)}
+                name="close-circle-outline"
+                size={24}
+                color={appColors.iconActive}
+                
+              />
+            }
+            boldText={"Thanks for feedback!"}
           />
-        </ButtonComponent>
-      </View> */}
+        )}
+      </View>
     </View>
-    // <View
-    //   style={{ flex: 1, alignSelf: "flex-start", marginLeft: 250 }}
-    // ></View>
-    // </View>
   );
 };
 
 export default FeedBack;
+
 const styles = StyleSheet.create({
-  cont: {
+  container1: {
     flex: 1,
     backgroundColor: appColors.bgColor,
   },
+  header: {
+    flex: 0.1,
+    paddingBottom: 10,
+    alignItems: "flex-end",
+    justifyContent: "center",
+    flexDirection: "row",
+    // height: height / 20,
+    borderBottomWidth: 0.5,
+    borderColor: appColors.borderColor,
+    paddingVertical: 10,
+    borderRadius: 25,
+  },
+  gradeConatiner: {
+    flexDirection: "column",
+    justifyContent: "center",
+    marginVertical: 10,
+    borderBottomWidth: 0.5,
+    borderRadius: 25,
+    borderColor: appColors.borderColor,
+    paddingVertical: 10,
+  },
+  npsBar: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginTop: 15,
+    marginBottom: 10,
+  },
+  txtInputContainer: {
+    backgroundColor: appColors.bgColor,
+    borderWidth: 1,
+    borderColor: "grey",
+    borderRadius: 10,
+    height: 250,
+    // width: width / 1.5,
+    shadowColor: "#474747",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3,
+    elevation: 10,
+  },
+  sendButtonStyle: {
+    // flex: 1,
+    // justifyContent: "center",
+    // alignItems: "flex-end",
+    width: 100,
+    height: 100,
+  },
   feedbackButton: {
+    // flex:1,
     borderRadius: 5,
     backgroundColor: "grey",
-    flexDirection: "column",
+    height: 50,
+    width: 100,
+    // flexDirection: "column",
     alignItems: "center",
-    paddingTop:5
+    // paddingTop: 5,
+    // marginTop: 15,
+  },
+  labelStyle: {
+    marginLeft: 15,
+    marginRight: "auto",
+    marginBottom: -9,
+    backgroundColor: appColors.bgColor,
+    color: appColors.lableHeader,
+    zIndex: 1000,
+    paddingHorizontal: 3,
+  },
+  container: {
+    backgroundColor: appColors.bgColor,
+    borderWidth: 1,
+    borderColor: "grey",
+    borderRadius: 10,
+    height: 250,
+    // width: width / 1.5,
+    shadowColor: "#474747",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3,
+    elevation: 10,
+  },
+  thanksText: {
+    paddingTop: 25,
+    alignSelf: "center",
   },
 });
-
-// {
-/* <View
-        style={{
-          flex: 1,
-          alignItems: "center",
-        }}
-      >
-         <MaterialCommunityIcons
-          name="thought-bubble-outline"
-          size={30}
-          color={appColors.iconInActive}
-        />
-        <TextInput
-          // placeholder="feedback ",
-          style={{
-            flex: 1,
-            backgroundColor: appColors.bgFeedBack,
-            // height: height / 1.2,
-            width: width / 1.2,
-            borderRadius: 7,
-            // marginBottom: 40,
-            // textAlign: "left",
-            // textAlignVertical:"top"
-            textAlign:"justify"
-          }}
-        >
-        </TextInput>
-      </View> 
-    */
-// }

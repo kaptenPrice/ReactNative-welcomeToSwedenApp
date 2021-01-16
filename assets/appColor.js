@@ -11,6 +11,7 @@ const appColors = {
   bgChildContainers: "#e8e6e8",
   spinner: "grey",
   lableHeader:"#717474",
-  bgFeedBack:"#ff6c5a"
+  bgFeedBack:"#4690c7",
+  modal:"#dffcc3"
 };
 export default appColors;

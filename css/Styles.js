@@ -184,18 +184,7 @@ const Styles = StyleSheet.create({
     marginLeft: 5,
     // alignItems: "baseline"
   },
-  childComponentTextContainers: {
-    // borderColor:"blue",
-    // borderWidth:0.5,
-    fontWeight:"500",
-    fontSize: 15,
-    paddingBottom: 30,
-    marginLeft: 5,
-    marginRight: 5,
-    marginTop: 10,
-    color: appColors.textColor,
-    backgroundColor:appColors.bgColor
-  },
+
 
   childComponentContentView: {
     paddingTop: 10,

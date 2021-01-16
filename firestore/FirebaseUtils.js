@@ -41,16 +41,11 @@ export const signOut = async () => {
   try {
     await firebase.auth().signOut();
   } catch (error) {
-    alert("Something fishy occurred", error)
+    alert("Something fishy occurred", error);
   }
 };
 
-export const handleSaveToDB = async (
-  doc1,
-  collection2,
-  doc2,
-  content
-) => {
+export const handleSaveToDB = async (doc1, collection2, doc2, content) => {
   await db
     .collection("welcome-to-sweden")
     .doc(doc1)
@@ -58,32 +53,27 @@ export const handleSaveToDB = async (
     .doc(doc2)
     .set({ content });
 };
-export const getContentData = async (
-  doc1,
-  collection2,
-  doc2,
-  cb,
-  error
-  
-) => {
+
+export const handleSaveFeedback = async (doc, content) => {
+  await db.collection("user-feedback").add({ content });
+};
+
+export const getContentData = async (doc1, collection2, doc2, cb, error) => {
   // try {
-   return  db
-      .collection("welcome-to-sweden")
-      .doc(doc1)
-      .collection(collection2)
-      .doc(doc2)
-      .onSnapshot(cb, error);
-     
-   
+  return db
+    .collection("welcome-to-sweden")
+    .doc(doc1)
+    .collection(collection2)
+    .doc(doc2)
+    .onSnapshot(cb, error);
+
   // } catch (error) {
   //   console.error(error);
   // }
 };
 export const getUserData = async (uid, cb) => {
- 
   try {
-    return  db.collection("users").doc(uid).onSnapshot(cb);
-   
+    return db.collection("users").doc(uid).onSnapshot(cb);
   } catch (error) {
     console.log("User dosnt exist");
   }
@@ -92,7 +82,6 @@ export const getUserData = async (uid, cb) => {
 export const saveUserToDB = async (user, uid) => {
   try {
     const snapShot = await db.doc(`users/${uid}`).get();
-
 
     if (!snapShot.exists) {
       await db.collection("users").doc(uid).set(user);
@@ -104,10 +93,8 @@ export const saveUserToDB = async (user, uid) => {
 export const updateUserDataDB = async (user, uid) => {
   try {
     await db.collection("users").doc(uid).update(user);
-    alert('Succes')
+    // alert('Succes')
   } catch (error) {
     console.log("error från firebase", error);
   }
 };
-
-

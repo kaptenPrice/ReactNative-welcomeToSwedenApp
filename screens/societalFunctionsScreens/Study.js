@@ -8,10 +8,10 @@ import {
   StyleSheet,
 } from "react-native";
 import ChildComponent from "../../components/ChildComponent";
-import Styles from "../../css/Styles";
+// import Styles from "../../css/Styles";
 import study_unsplash from "../../assets/images/study_unsplash.jpg";
 import appColors from "../../assets/appColor";
-import { useSelector } from "react-redux";
+import { useSelector , useDispatch} from "react-redux";
 import ButtonComponent from "../../components/ButtonComponent";
 import { Ionicons, MaterialIcons, Feather } from "@expo/vector-icons";
 import { TextInput } from "react-native";
@@ -19,7 +19,8 @@ import * as db from "../../firestore/FirebaseUtils";
 import EditBox from "../../components/EditBox";
 
 const Study = () => {
-  const { isLoading, currentUser } = useSelector(
+  const dispatch =useDispatch()
+  const {  currentUser } = useSelector(
     (state) => state.authentication
   );
   const { isAdmin } = useSelector((state) => state.userAdditionalInfo);
@@ -27,9 +28,9 @@ const Study = () => {
   const { width, height } = Dimensions.get("screen");
   const [isEditable, setIsEditable] = useState(false);
 
-  const [studyContentOne, setstudyContentOne] = useState();
-  const [studyContentTwo, setstudyContentTwo] = useState();
-  const [studyContentThree, setstudyContentThree] = useState();
+  const [contentOne, setContentOne] = useState();
+  const [contentTwo, setContentTwo] = useState();
+  const [contentThree, setContentThree] = useState();
   const [phoneNumber, setPhoneNumber] = useState("0705083605"); //Testing callup function
 
   useEffect(() => {
@@ -40,25 +41,25 @@ const Study = () => {
   }, []);
 
   const getFieldData=()=>{
-    const unsubscribe1 = db.getContentData(
+  db.getContentData(
       "societal-functions",
       "study",
       "like-a-swede",
       (cb) => {
         const data = cb.data();
         // if (data.next)
-        setstudyContentOne(JSON.stringify(data.content).slice(1, -1));
+        setContentOne(JSON.stringify(data.content).slice(1, -1));
       }
     );
 
-    const unsubscribe2 = db.getContentData(
+   db.getContentData(
       "societal-functions",
       "study",
       "lingo",
       (cb) => {
         const data = cb.data();
         // if (data.next) {
-          setstudyContentTwo(JSON.stringify(data.content).slice(1, -1));
+          setContentTwo(JSON.stringify(data.content).slice(1, -1));
 
         // }
         // else{
@@ -72,16 +73,16 @@ const Study = () => {
         // }
       
     );
-    const unsubscribe3 = db.getContentData(
+ db.getContentData(
       "societal-functions",
       "study",
       "assistence",
       (cb) => {
         const data = cb.data();
         // if (data.next)
-        setstudyContentThree(JSON.stringify(data.content).slice(1, -1));
+        setContentThree(JSON.stringify(data.content).slice(1, -1));
       },
-      // console.log(studyContentThree)
+      // console.log(contentThree)
     );
   }
 
@@ -99,7 +100,7 @@ const Study = () => {
         "societal-functions",
         "study",
         "like-a-swede",
-        studyContentOne
+        contentOne
       );
     } catch (error) {
       console.log("getContent study: ", error);
@@ -113,7 +114,7 @@ const Study = () => {
         "societal-functions",
         "study",
         "lingo",
-        studyContentTwo
+        contentTwo
       );
     } catch (error) {
       console.log(error);
@@ -121,13 +122,13 @@ const Study = () => {
       setIsEditable(false);
     }
   };
-  const handleSaveStudyContentThree = () => {
+  const handleSavecontentThree = () => {
     try {
       db.handleSaveToDB(
         "societal-functions",
         "study",
         "assistence",
-        studyContentThree
+        contentThree
       );
     } catch (error) {
       console.log(error);
@@ -138,7 +139,7 @@ const Study = () => {
 
   return (
     <ChildComponent
-      scrollViewStyle={{ flex: 1, backgroundColor: appColors.bgChildComp }}
+      scrollViewStyle={{ flex: 1, backgroundColor: appColors.bgColor }}
       iamgeViewStyle={{ flex: 1, width, height: height / 4 }}
       imageStyle={{ flex: 1, width: null, height: null }}
       imgSource={study_unsplash}
@@ -157,11 +158,11 @@ const Study = () => {
         )
       }
       children1={
-        <Text style={Styles.childComponentHeaders}>Like a Swede:</Text>
+        <Text style={styles.headers}>Like a Swede:</Text>
       }
       children2={
-        <Text style={Styles.childComponentTextContainers}>
-          {studyContentOne}
+        <Text style={styles.childComponentTextContainers}>
+          {contentOne}
         </Text>
       }
       editBox1={
@@ -169,17 +170,19 @@ const Study = () => {
           <>
             <EditBox
               editable={isEditable}
-              onChangeText={(e) => setstudyContentOne(e)}
+              onChangeText={(e) => setContentOne(e)}
               onTouch={handleSaveStudyContentOne}
             />
           </>
         )
       }
-      style={Styles.childComponentTextContainers}
-      children3={<Text style={Styles.childComponentHeaders}>Lingo</Text>}
+      style={styles.childComponentTextContainers}
+
+      children3={<Text style={styles.headers}>Lingo</Text>}
+      
       children4={
-        <Text style={Styles.childComponentTextContainers}>
-          {studyContentTwo}
+        <Text style={styles.childComponentTextContainers}>
+          {contentTwo}
         </Text>
       }
       editBox2={
@@ -187,16 +190,16 @@ const Study = () => {
           <>
             <EditBox
               editable={isEditable}
-              onChangeText={(e) => setstudyContentTwo(e)}
+              onChangeText={(e) => setContentTwo(e)}
               onTouch={handleSaveStudyContentTwo}
             />
           </>
         )
       }
-      children5={<Text style={Styles.childComponentHeaders}>Assistance:</Text>}
+      children5={<Text style={styles.headers}>Assistance:</Text>}
       children6={
-        <Text style={Styles.childComponentTextContainers}>
-          {studyContentThree}
+        <Text style={styles.childComponentTextContainers}>
+          {contentThree}
         </Text>
       }
       editBox3={
@@ -204,21 +207,23 @@ const Study = () => {
           <>
             <EditBox
               editable={isEditable}
-              onChangeText={(e) => setstudyContentThree(e)}
-              onTouch={handleSaveStudyContentThree}
+              onChangeText={(e) => setContentThree(e)}
+              onTouch={handleSavecontentThree}
             />
           </>
         )
       }
       children7={
-        <TouchableOpacity style={{ margin: 7, flexDirection: "row" }}>
+        <TouchableOpacity style={{ margin: 7, flexDirection: "row",  }}>
           <Text
             style={{ color: "blue", marginRight: 10 }}
             onPress={() => Linking.openURL("https://www.google.com")}
           >
             google
           </Text>
-          <Text onPress={() => Linking.openURL(`Tel:${phoneNumber}`)}>
+          <Text 
+                   style={{ color: "blue", marginLeft: 10 }}
+          onPress={() => Linking.openURL(`Tel:${phoneNumber}`)}>
             Call up
           </Text>
         </TouchableOpacity>
@@ -244,11 +249,24 @@ const Study = () => {
   );
 };
 export default Study;
-export const style = StyleSheet.create({
+
+export const styles = StyleSheet.create({
   headers: {
     fontSize: 24,
     fontWeight: "bold",
     // paddingBottom: 15,
     marginLeft: 5,
+  },
+  childComponentTextContainers: {
+    // borderColor:"blue",
+    // borderWidth:0.5,
+    fontWeight:"500",
+    fontSize: 15,
+    paddingBottom: 30,
+    marginLeft: 5,
+    marginRight: 5,
+    marginTop: 10,
+    color: appColors.textColor,
+    backgroundColor:appColors.bgColor
   },
 });
