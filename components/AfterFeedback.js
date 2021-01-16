@@ -1,48 +1,33 @@
-import React, {useState} from "react";
+import React from "react";
 import { Dimensions } from "react-native";
 import { StyleSheet, Text, View, Modal } from "react-native";
 import appColors from "../assets/appColor";
 import { MaterialIcons } from "@expo/vector-icons/";
 import { TouchableHighlight } from "react-native-gesture-handler";
 
-const AfterFeedback = ({ boldText, lightText, icon, visible }) => {
-  const [modalVisible, setModalVisible] = useState(false);
+const AfterFeedback = ({ boldText, lightText, icon, visible, onPress, presseableText }) => {
 
   return (
     <View style={styles.centeredView}>
       <Modal
-        animationType="fade"
+        animationType="slide"
         transparent={true}
         visible={visible}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-        }}
+        
       >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-          <Text style={styles.textStyle}>{icon}</Text>
+            <View style={styles.iconView}>{icon}</View>
             <Text style={styles.modalText}>{boldText}</Text>
-
-            {/* <TouchableHighlight
-              style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
-              onPress={() => {
-                setModalVisible(!modalVisible);
-              }}
+            <TouchableHighlight
+              style={styles.openButton}
+              onPress={onPress}
             >
-        
-            </TouchableHighlight> */}
+              <Text style={styles.textStyle}>{presseableText}</Text>
+            </TouchableHighlight>
           </View>
         </View>
       </Modal>
-
-      {/* <TouchableHighlight
-        style={styles.openButton}
-        onPress={() => {
-          setModalVisible(true);
-        }}
-      >
-        <Text style={styles.textStyle}>Show Modal</Text>
-      </TouchableHighlight> */}
     </View>
   );
   // const { height, width } = Dimensions.get("screen");
@@ -74,7 +59,7 @@ const AfterFeedback = ({ boldText, lightText, icon, visible }) => {
   //         shadowOpacity: 0.25,
   //         shadowRadius: 3.84,
   //         elevation: 5,
-      
+
   //       }}
   //     >
   //       <View style={{ alignSelf: "flex-end", marginBottom: 10 }}>{icon}</View>
@@ -107,8 +92,9 @@ const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
     justifyContent: "center",
+    flexDirection:"column",
     alignItems: "center",
-    marginTop: 22
+    marginTop: 22,
   },
   modalView: {
     margin: 20,
@@ -119,25 +105,31 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5
+    elevation: 5,
+  },
+  iconView: {
+    // zIndex: 100000,
+    left: 90,
+    bottom:35
   },
   openButton: {
-    backgroundColor: "#F194FF",
-    borderRadius: 20,
+    backgroundColor: appColors.bgColor,
+    borderRadius: 10,
     padding: 10,
-    elevation: 2
+    elevation: 2,
   },
   textStyle: {
-    color: "white",
+    color: appColors.textColor,
     fontWeight: "bold",
-    textAlign: "center"
+    textAlign: "center",
   },
   modalText: {
     marginBottom: 15,
-    textAlign: "center"
-  }
+    textAlign: "center",
+  },
 });
+

@@ -30,6 +30,7 @@ import appColors from "../../assets/appColor";
 import * as db from "../../firestore/FirebaseUtils";
 import * as ImageHelpers from "../../helpers/ImageHelpers";
 import Loading from "../../components/Loading";
+import InputComponent from "../../components/InputComponent";
 
 const pic =
   "https://i3.wp.com/hypebeast.com/image/2020/07/apple-memoji-update-headwear-masks-hairstyles-1.png?w=1600";
@@ -63,7 +64,6 @@ const UserProfile = () => {
     reduxProfileAvatar
       ? setLocalAvatar(reduxProfileAvatar)
       : setLocalAvatar(pic);
-
   }, [name, phone, city, reduxProfileAvatar]);
 
   useEffect(() => {
@@ -163,20 +163,33 @@ const UserProfile = () => {
             justifyContent: "flex-end",
             flexDirection: "row",
             marginHorizontal: 2,
-            marginVertical: 5,
+            marginVertical: 0,
+            height:height/20,
+            
           }}
         >
+          <ButtonComponent
+            buttonStyle={{ flex: 1, width: 40, position:"absolute", right:width/1.3 }}
+            onPress={() => navigate("Home")}
+          >
+            <MaterialCommunityIcons
+              name="home"
+              size={30}
+              color={appColors.iconInActive}
+            />
+          </ButtonComponent>
           {!editMode && (
             <ButtonComponent
               style={{
                 flex: 1,
                 borderRadius: 5,
                 width: 40,
+                
               }}
               onTouch={handleEdit}
             >
               <Text style={{ paddingBottom: 10 }}>
-                <MaterialIcons name="edit" size={24} color="grey" />
+                <MaterialIcons name="edit" size={30} color="grey" />
               </Text>
             </ButtonComponent>
           )}
@@ -246,7 +259,6 @@ const UserProfile = () => {
               imageStyle={{ borderRadius: 70 }}
               source={{ uri: localAvatar }}
             />
-            
           </ButtonComponent>
         )}
       </View>
@@ -257,208 +269,46 @@ const UserProfile = () => {
           justifyContent: "flex-start",
           alignItems: "center",
           flexDirection: "column",
-          // marginHorizontal: 10,
         }}
       >
-        <View style={{ flex: 1, marginTop: 0 }}>
-          <Text
-            style={{
-              flex: 1,
-              marginLeft: 15,
-              marginRight: "auto",
-              marginBottom: -9,
-              backgroundColor: "white",
-              color: appColors.lableHeader,
-              zIndex: 1000,
-            }}
-          >
-            Name
-          </Text>
-          <AwesomeTextInput
-            customStyles={{
-              container: {
-                backgroundColor:appColors.bgColor,
-                borderWidth: 1,
-                borderColor: "grey",
-                borderRadius: 10,
-                height: 45,
-                width: width / 1.5,
-                shadowColor: "#474747",
-                shadowOffset: {
-                  width: 0,
-                  height: 3,
-                },
-                shadowOpacity: 0.25,
-                shadowRadius: 3,
-                elevation: 10,
-              },
-              inputContainer: {
-                borderBottomWidth: 0,
-              },
-            }}
-            editable={isEditable}
-            onChangeText={(e) => {
-              setLocalUserName(e);
-            }}
-            value={localUserName}
-          />
-        </View>
-               {/* <InputComponent
+        <InputComponent
+          editable={isEditable}
           children={"Name"}
-          onChangeText={(e) => console.log(e)}
+          value={localUserName}
+          onChangeText={(e) => {
+            setLocalUserName(e);
+          }}
         />
         <InputComponent
           children={"E-mail"}
-          onChangeText={(e) => console.log(e)}
-        /> */}
+          value={localEmail}
+          onChangeText={(e) => {
+            setLocalEmail(e);
+          }}
+        />
+        <InputComponent
+          editable={isEditable}
+          children={"Phone"}
+          keyboardType="phone-pad"
+          dataDetectorTypes="phoneNumber"
+          value={localPhone}
+          onChangeText={(e) => {
+            setLocalPhone(e);
+          }}
+        />
 
-        <View style={{ flex: 1, marginTop: 10 }}>
-          <Text
-            style={{
-              flex: 1,
-              marginLeft: 15,
-              marginRight: "auto",
-              marginBottom: -9,
-              backgroundColor: "white",
-              color: appColors.lableHeader,
-              zIndex: 1000,
-            }}
-          >
-            Email
-          </Text>
-
-          <AwesomeTextInput
-            customStyles={{
-              container: {
-                backgroundColor:appColors.bgColor,
-                borderWidth: 1,
-                borderColor: "grey",
-                borderRadius: 10,
-                height: 45,
-                width: width / 1.5,
-                shadowColor: "#474747",
-                shadowOffset: {
-                  width: 0,
-                  height: 3,
-                },
-                shadowOpacity: 0.25,
-                shadowRadius: 3,
-                elevation: 10,
-              },
-              inputContainer: {
-                borderBottomWidth: 0,
-              },
-            }}
-            editable={false}
-            value={email}
-          />
-        </View>
-        <View style={{ flex: 1, marginTop: 10 }}>
-          <Text
-            style={{
-              flex: 1,
-              marginLeft: 15,
-              marginRight: "auto",
-              marginBottom: -9,
-              backgroundColor: "white",
-              color: appColors.lableHeader,
-              zIndex: 1000,
-            }}
-          >
-            Phone
-          </Text>
-          <AwesomeTextInput
-            customStyles={{
-              container: {
-                backgroundColor:appColors.bgColor,
-                borderWidth: 1,
-                borderColor: "grey",
-                borderRadius: 10,
-                height: 45,
-                width: width / 1.5,
-                shadowColor: "#474747",
-                shadowOffset: {
-                  width: 0,
-                  height: 3,
-                },
-                shadowOpacity: 0.25,
-                shadowRadius: 3,
-                elevation: 10,
-              },
-              inputContainer: {
-                borderBottomWidth: 0,
-              },
-            }}
-            dataDetectorTypes="phoneNumber"
-            keyboardType="phone-pad"
-            editable={isEditable}
-            onChangeText={(e) => setLocalPhone(e)}
-            value={localPhone}
-            placeholder="Phone"
-          />
-        </View>
-        <View style={{ flex: 1, marginTop: 10 }}>
-          <Text
-            style={{
-              flex: 1,
-              marginLeft: 15,
-              marginRight: "auto",
-              marginBottom: -9,
-              backgroundColor: "white",
-              color: appColors.lableHeader,
-              zIndex: 1000,
-            }}
-          >
-            City
-          </Text>
-
-          <AwesomeTextInput
-            customStyles={{
-              container: {
-                borderWidth: 1,
-                borderColor: "grey",
-                borderRadius: 10,
-                height: 45,
-                width: width / 1.5,
-                shadowColor: "#474747",
-                backgroundColor:appColors.bgColor,
-                shadowOffset: {
-                  width: 0,
-                  height: 3,
-                },
-                shadowOpacity: 0.25,
-                shadowRadius: 3,
-                elevation: 10,
-              },
-              inputContainer: {
-                borderBottomWidth: 0,
-              },
-            }}
-            editable={isEditable}
-            onChangeText={(e) => setLocalCity(e)}
-            value={localCity}
-          />
-        </View>
+        <InputComponent
+          editable={isEditable}
+          children={"City"}
+          dataDetectorTypes="address"
+          value={localCity}
+          onChangeText={(e) => {
+            setLocalCity(e);
+          }}
+        />
       </View>
 
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "space-between",
-          alignItems: "center",
-          flexDirection: "row",
-          height: height / 2.7,
-          marginHorizontal: 10,
-        }}
-      >
-        <ButtonComponent buttonStyle={{}} onPress={() => navigate("Home")}>
-          <MaterialCommunityIcons
-            name="home-outline"
-            size={40}
-            color={appColors.iconInActive}
-          />
-        </ButtonComponent>
-      </View>
+     
     </ScrollView>
   );
 };

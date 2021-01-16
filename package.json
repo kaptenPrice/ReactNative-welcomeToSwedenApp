@@ -27,7 +27,7 @@
     "expo-permissions": "~9.3.0",
     "firebase": "^8.1.1",
     "firebase-auth": "^0.1.2",
-    "lottie-react-native": "^3.5.0",
+    "lottie-react-native": "~3.5.0",
     "permissions": "^0.1.0",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",

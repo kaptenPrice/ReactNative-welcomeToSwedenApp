@@ -1,26 +1,32 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { Dimensions } from "react-native";
 import { StyleSheet } from "react-native";
 import { View, Text } from "react-native";
 import { AwesomeTextInput } from "react-native-awesome-text-input";
 import appColors from "../assets/appColor";
 
-const InputComponent = ({ children, onChangeText }) => {
+const InputComponent = ({ children, onChangeText, editable, value, dataDetectorTypes,keyboardType }) => {
   const { width, height } = Dimensions.get("screen");
   return (
-    <View styles={{ marginTop: 10, paddingTop: 10 }}>
-      <Text
+    <View style={{ paddingTop: 20 }}>
+      <View
         style={{
           marginLeft: 15,
           marginRight: "auto",
-          marginBottom: -7,
-          backgroundColor: appColors.bgColor,
-          color: appColors.lableHeader,
+          marginBottom: -9,
+          paddingHorizontal: 3,
           zIndex: 1000,
+          backgroundColor: appColors.bgColor,
         }}
       >
-        {children}
-      </Text>
+        <Text
+          style={{
+            color: appColors.lableHeader,
+          }}
+        >
+          {children}
+        </Text>
+      </View>
       <AwesomeTextInput
         customStyles={{
           container: {
@@ -33,7 +39,7 @@ const InputComponent = ({ children, onChangeText }) => {
             shadowColor: "#474747",
             shadowOffset: {
               width: 0,
-              height: 3,
+              height: 10,
             },
             shadowOpacity: 0.25,
             shadowRadius: 3,
@@ -41,10 +47,14 @@ const InputComponent = ({ children, onChangeText }) => {
           },
           inputContainer: {
             borderBottomWidth: 0,
-            height:45
+            height: 45,
           },
         }}
+        value={value}
+        editable={editable}
         onChangeText={onChangeText}
+        dataDetectorTypes={dataDetectorTypes}
+        keyboardType={keyboardType}
       />
     </View>
   );

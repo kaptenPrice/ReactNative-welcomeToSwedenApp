@@ -41,26 +41,27 @@ const FeedBack = () => {
     (state) => state.authentication
   );
   const [grade, setGrade] = useState(0);
-  const [incomingFeedback, setIncomingFeedback] = useState("");
-  const [thanks, setThanks] = useState(false);
+  const [userFeedback, setUserFeedback] = useState("");
+  const [disable, setDisabled] = useState(true);
   const [isFeedbackDone, setIsFeedbackDone] = useState(false);
 
   useEffect(() => {
-    // setIsFeedbackDone(false);
     setGrade(0);
-    setThanks(false);
-  }, []);
+  }, [isFeedbackDone]);
 
-  const checkInputLength = () =>
-    incomingFeedback.length > 5 ? setThanks(true) : setThanks(false);
+  const checkInputLength = () =>( 
+     userFeedback.length == 0 || grade<0 ? setDisabled(true):setDisabled(false)
+  )
+ 
+
 
   const sendFeedbackToDB = () => {
-    setIncomingFeedback("");
+    setUserFeedback("");
     textInputRef.current.setNativeProps({ text: "" });
     dispatch(isSendingData(true));
     const data = {
       grade: grade,
-      feedback: incomingFeedback,
+      feedback: userFeedback,
       from: email,
       uid: uid,
       created: new Date(),
@@ -87,16 +88,8 @@ const FeedBack = () => {
             />
           </ButtonComponent>
         </View>
-        <View style={{ position: "absolute" }}>
-          <Text
-            style={{
-              fontSize: 28,
-              fontWeight: "700",
-              color: appColors.bgFeedBack,
-            }}
-          >
-            FeedBack
-          </Text>
+        <View style={styles.headerContainer}>
+          <Text style={styles.headerText}>FeedBack</Text>
         </View>
       </View>
       <View style={styles.gradeConatiner}>
@@ -106,84 +99,37 @@ const FeedBack = () => {
         <View style={styles.npsBar}>
           <NpsComponent value={grade} setValue={setGrade} />
         </View>
-        {/* <Text>{incomingFeedback}</Text>   */}
       </View>
 
-      <View
-        style={{
-          flex: 1,
-          alignItems: "center",
-          flexDirection: "column",
-        }}
-      >
+      <View style={styles.container}>
         <View style={{ marginTop: 10 }}>
           <Text style={styles.labelStyle}>Feedback</Text>
 
           <TextInput
-            style={{
-              backgroundColor: appColors.bgColor,
-              borderWidth: 1,
-              borderColor: "grey",
-              borderRadius: 10,
-              height: 250,
-              width: width / 1.2,
-              shadowColor: "#474747",
-              shadowOffset: {
-                width: 0,
-                height: 3,
-              },
-              shadowOpacity: 0.25,
-              shadowRadius: 3,
-              elevation: 10,
-              height: 250,
-              paddingTop: 20,
-              paddingLeft: 20,
-            }}
+            style={[styles.txtInputContainer, { width: width / 1.2 }]}
             numberOfLines={0}
             multiline={true}
-            onChangeText={(e) => setIncomingFeedback(e)}
+            onChangeText={(e) => setUserFeedback(e)}
             onEndEditing={checkInputLength}
             ref={textInputRef}
+            blurOnSubmit={true}
           />
-          {thanks ? (
-            <Text style={styles.thanksText}>
-              Thank Push the button below to send your opinion when u r done
-            </Text>
-          ) : null}
         </View>
-        <View
-          style={{
-            flex: 1,
-            justifyContent: "flex-start",
-            alignItems: "flex-end",
-            // borderColor:"red",
-            // borderWidth:2,
-            width: width / 1.2,
-            height:height/1,
-            marginTop:15
-          }}
-        >
+        <View style={[styles.footerView, { width: width / 1.2 }]}>
           <ButtonComponent
             style={styles.sendButtonStyle}
-            buttonStyle={[styles.feedbackButton, {}]}
+            buttonStyle={[styles.feedbackButton, { width: width / 10 }]}
             onTouch={sendFeedbackToDB}
+            disabled={disable}
           >
-            <Ionicons style={{}} name="ios-send" color="white" size={40} />
+            <Ionicons  name="ios-send" color="white" size={30} />
           </ButtonComponent>
         </View>
         {isFeedbackDone && (
           <AfterFeedback
-          // <MaterialCommunityIcons name="close-circle-outline" size={24} color="black" />
-          visible={isFeedbackDone}
-            icon={
-              <MaterialCommunityIcons 
-                onPress={()=>setIsFeedbackDone(false)}
-                name="close-circle-outline"
-                size={24}
-                color={appColors.iconActive}
-                
-              />
-            }
+            visible={isFeedbackDone}
+            onPress={() => setIsFeedbackDone(false)}
+            presseableText={"OK"}
             boldText={"Thanks for feedback!"}
           />
         )}
@@ -211,6 +157,10 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 25,
   },
+  headerContainer: {
+    position: "absolute",
+  },
+  headerText: { fontSize: 35, fontWeight: "700", color: appColors.bgFeedBack },
   gradeConatiner: {
     flexDirection: "column",
     justifyContent: "center",
@@ -232,7 +182,6 @@ const styles = StyleSheet.create({
     borderColor: "grey",
     borderRadius: 10,
     height: 250,
-    // width: width / 1.5,
     shadowColor: "#474747",
     shadowOffset: {
       width: 0,
@@ -241,23 +190,24 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3,
     elevation: 10,
+    height: 250,
+    paddingTop: 20,
+    paddingLeft: 20,
   },
   sendButtonStyle: {
     // flex: 1,
     // justifyContent: "center",
     // alignItems: "flex-end",
-    width: 100,
-    height: 100,
+    // width: 100,
+    // height: 100,
   },
   feedbackButton: {
     // flex:1,
     borderRadius: 5,
     backgroundColor: "grey",
-    height: 50,
-    width: 100,
-    // flexDirection: "column",
+    height: "auto",
     alignItems: "center",
-    // paddingTop: 5,
+    paddingTop: 5,
     // marginTop: 15,
   },
   labelStyle: {
@@ -270,21 +220,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 3,
   },
   container: {
-    backgroundColor: appColors.bgColor,
-    borderWidth: 1,
-    borderColor: "grey",
-    borderRadius: 10,
-    height: 250,
-    // width: width / 1.5,
-    shadowColor: "#474747",
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3,
-    elevation: 10,
+    flex: 1,
+    alignItems: "center",
+    flexDirection: "column",
   },
+  footerView: {
+    flex: 1,
+    alignItems: "flex-end",
+    marginTop: 15,
+  },
+
   thanksText: {
     paddingTop: 25,
     alignSelf: "center",
