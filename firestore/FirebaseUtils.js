@@ -44,6 +44,19 @@ export const signOut = async () => {
     alert("Something fishy occurred", error);
   }
 };
+export const deleteUserFromFireStore= async (uid)=>{
+  try {
+    await db.doc(`users/${uid}`).delete()
+    // await db.collection('users').doc(uid).delete()
+    // .then(()=>console.log("USER DELETED FROM USERS/DOCS"))
+    
+    
+    
+  } catch (error) {
+    console.log(error)
+
+  }
+}
 
 export const handleSaveToDB = async (doc1, collection2, doc2, content) => {
   await db

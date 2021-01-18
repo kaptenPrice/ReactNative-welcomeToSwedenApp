@@ -154,6 +154,43 @@ const UserProfile = () => {
     );
   };
 
+
+  const deleteFireStoreCred = async () => {
+    try {
+      console.log("UID: ",uid)
+     await db.deleteUserFromFireStore(uid);
+    } catch (error) {
+      console.log("D: ",error);
+    }
+  };
+ 
+
+  const deleteGoogleAuth = () => {
+    db.auth.currentUser
+      .delete()
+      .then(() => {
+        console.log("DELETE AUTH SUCCESSFULLY");
+
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+   //
+  //DELETE REST OF USER:
+  //TODO 1-REAUTHENTICATE USER-TODO
+  //2-USER documentet med UDI - done
+  //3-REDUX null VALUES to authenticated user-done
+  //4-
+  const deleteAllUserData=()=>{
+    //reAuthCurrentUser()
+    deleteGoogleAuth()
+    deleteFireStoreCred()
+    handleSignOut()
+    
+  }
+
+
   return (
     <ScrollView style={Styles.profileScreen}>
       <View>
@@ -164,12 +201,16 @@ const UserProfile = () => {
             flexDirection: "row",
             marginHorizontal: 2,
             marginVertical: 0,
-            height:height/20,
-            
+            height: height / 20,
           }}
         >
           <ButtonComponent
-            buttonStyle={{ flex: 1, width: 40, position:"absolute", right:width/1.3 }}
+            buttonStyle={{
+              flex: 1,
+              width: 40,
+              position: "absolute",
+              right: width / 1.3,
+            }}
             onPress={() => navigate("Home")}
           >
             <MaterialCommunityIcons
@@ -184,7 +225,6 @@ const UserProfile = () => {
                 flex: 1,
                 borderRadius: 5,
                 width: 40,
-                
               }}
               onTouch={handleEdit}
             >
@@ -307,8 +347,19 @@ const UserProfile = () => {
           }}
         />
       </View>
-
-     
+      <>
+        <ButtonComponent
+          style={{ flex: 1, alignItems: "center", paddingTop: 40 }}
+          onTouch={deleteAllUserData}
+          children={
+            <MaterialCommunityIcons
+              name="trash-can-outline"
+              size={24}
+              color="red"
+            />
+          }
+        />
+      </>
     </ScrollView>
   );
 };
