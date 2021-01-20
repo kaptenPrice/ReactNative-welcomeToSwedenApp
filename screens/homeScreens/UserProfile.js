@@ -1,5 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, Button, Image, Dimensions } from "react-native";
+import React, { useState, useEffect, useRef } from "react";
+import {
+  View,
+  Text,
+  Button,
+  Image,
+  Dimensions,
+  StyleSheet,
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useActionSheet } from "@expo/react-native-action-sheet";
 import {
@@ -31,13 +38,17 @@ import * as db from "../../firestore/FirebaseUtils";
 import * as ImageHelpers from "../../helpers/ImageHelpers";
 import Loading from "../../components/Loading";
 import InputComponent from "../../components/InputComponent";
+import AfterFeedback from "../../components/AfterFeedback";
+import ModalPasswordComponent from "../../components/ModalPasswordComponent";
 
 const pic =
   "https://i3.wp.com/hypebeast.com/image/2020/07/apple-memoji-update-headwear-masks-hairstyles-1.png?w=1600";
 
 const UserProfile = () => {
-  const { navigate } = useNavigation();
+  const navigation = useNavigation();
   const dispatch = useDispatch();
+  const passwordInputRef = useRef("");
+
   const { showActionSheetWithOptions } = useActionSheet();
 
   const { currentUser } = useSelector((state) => state.authentication);
@@ -51,24 +62,48 @@ const UserProfile = () => {
   const [localCity, setLocalCity] = useState("");
   const [localAvatar, setLocalAvatar] = useState(null);
   const [uid, setUid] = useState("");
+  const [currentPassword, setCurrentPassword] = useState("");
   const [profielImage, setProfileImage] = useState(currentUser.photoUrl);
   const [isLoading, setIsLoading] = useState(false);
-
   const [editMode, setEditMode] = useState(false);
   const [isEditable, setIsEditable] = useState(false);
+  const [rewritePass, setRewritePass] = useState(false);
+  const [isEmpty, setIsEmpty] = useState(true);
+  const [isModal, setIsModal] = useState(false);
+  const [isFilled, setIsFilled] = useState(false);
 
   useEffect(() => {
+    setTimeout(() => {
+      currentPassword >= 6
+        ? setCurrentPassword("")
+        : setCurrentPassword(currentPassword);
+    }, 50000);
+
+    setTimeout(() => {
+      setRewritePass(false);
+    }, 45000);
+
+    currentPassword.length < 6 ? setIsEmpty(true) : setIsEmpty(false);
+
     name && setLocalUserName(name);
     phone && setLocalPhone(phone);
     city && setLocalCity(city);
     reduxProfileAvatar
       ? setLocalAvatar(reduxProfileAvatar)
       : setLocalAvatar(pic);
-  }, [name, phone, city, reduxProfileAvatar]);
+  }, [name, phone, city, reduxProfileAvatar, currentPassword]);
 
   useEffect(() => {
     setUid(currentUser.uid || currentUser.id);
   }, [uid]);
+
+  //   onEnterText = (TextInputValue) =>{
+  //     if(TextInputValue.trim() != 0){
+  //      this.setState({TextInputValue : TextInputValue}) ;
+  //    }else{
+  //        this.setState({TextInputValue : TextInputValue, ErrorStatus : false}) ;
+  //    }
+  //  }
 
   const handleSaveUserData = () => {
     let data = {
@@ -154,43 +189,35 @@ const UserProfile = () => {
     );
   };
 
+  // const deleteFireStoreCred = async () => {
+  //   console.log("entered deleteFiresstoreCred");
+  //   try {
+  //     await db.deleteUserFromFireStore(uid);
+  //     console.log(`User with ${uid} is deleted from firestore`);
+  //   } catch (error) {
+  //     console.log("Error in deleting from firestore: ", error);
+  //   }
+  // };
 
-  const deleteFireStoreCred = async () => {
-    try {
-      console.log("UID: ",uid)
-     await db.deleteUserFromFireStore(uid);
-    } catch (error) {
-      console.log("D: ",error);
-    }
+  const reAuthenticated = () => {
+    const user = db.auth.currentUser;
+    var cred = firebase.auth.EmailAuthProvider.credential(
+      user.email,
+      currentPassword
+    );
+    return user.reauthenticateWithCredential(cred);
   };
- 
 
-  const deleteGoogleAuth = () => {
-    db.auth.currentUser
-      .delete()
-      .then(() => {
-        console.log("DELETE AUTH SUCCESSFULLY");
-
-      })
+  const deleteGoogleAuth = async () => {
+    await db.db.doc(`users/${uid}`).delete();
+    await reAuthenticated(currentPassword)
+      .then()
       .catch((error) => {
-        console.error(error);
+        alert(error);
       });
+    await db.auth.currentUser.delete();
+    handleSignOut();
   };
-   //
-  //DELETE REST OF USER:
-  //TODO 1-REAUTHENTICATE USER-TODO
-  //2-USER documentet med UDI - done
-  //3-REDUX null VALUES to authenticated user-done
-  //4-
-  const deleteAllUserData=()=>{
-    //reAuthCurrentUser()
-    deleteGoogleAuth()
-    deleteFireStoreCred()
-    handleSignOut()
-    
-  }
-
-
   return (
     <ScrollView style={Styles.profileScreen}>
       <View>
@@ -200,18 +227,16 @@ const UserProfile = () => {
             justifyContent: "flex-end",
             flexDirection: "row",
             marginHorizontal: 2,
-            marginVertical: 0,
-            height: height / 20,
+            paddingVertical: 5,
+            height: height / 13,
+            marginBottom: 0,
           }}
         >
           <ButtonComponent
-            buttonStyle={{
-              flex: 1,
-              width: 40,
-              position: "absolute",
-              right: width / 1.3,
+            style={{ marginRight: width / 1.5 }}
+            onTouch={() => {
+              navigation.navigate("Home");
             }}
-            onPress={() => navigate("Home")}
           >
             <MaterialCommunityIcons
               name="home"
@@ -219,42 +244,24 @@ const UserProfile = () => {
               color={appColors.iconInActive}
             />
           </ButtonComponent>
+
           {!editMode && (
-            <ButtonComponent
-              style={{
-                flex: 1,
-                borderRadius: 5,
-                width: 40,
-              }}
-              onTouch={handleEdit}
-            >
-              <Text style={{ paddingBottom: 10 }}>
+            <ButtonComponent style={{ marginRight: 20 }} onTouch={handleEdit}>
+              <View>
                 <MaterialIcons name="edit" size={30} color="grey" />
-              </Text>
+              </View>
             </ButtonComponent>
           )}
-
           {editMode && (
             <>
               <ButtonComponent
-                style={{
-                  flex: 1,
-                  borderRadius: 5,
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: 40,
-                }}
+                style={styles.discardButton}
                 onTouch={discardChanges}
               >
                 <MaterialIcons name="cancel" size={24} color="grey" />
               </ButtonComponent>
               <ButtonComponent
-                style={{
-                  flex: 1,
-                  borderRadius: 5,
-
-                  width: 40,
-                }}
+                style={styles.saveButton}
                 onTouch={handleSaveUserData}
               >
                 <MaterialCommunityIcons
@@ -271,8 +278,9 @@ const UserProfile = () => {
         style={{
           flex: 1,
           alignItems: "center",
-          justifyContent: "center",
-          height: height / 4,
+          justifyContent: "flex-start",
+          height: height / 5,
+       
         }}
       >
         {isLoading ? (
@@ -282,7 +290,7 @@ const UserProfile = () => {
             onTouch={() => addProfileImage()}
             style={{
               borderRadius: 70,
-              marginTop: 5,
+              marginTop: 0,
               shadowColor: "#000",
               shadowOffset: {
                 width: 0,
@@ -303,14 +311,7 @@ const UserProfile = () => {
         )}
       </View>
 
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "flex-start",
-          alignItems: "center",
-          flexDirection: "column",
-        }}
-      >
+      <View style={styles.inputContainer}>
         <InputComponent
           editable={isEditable}
           children={"Name"}
@@ -322,10 +323,13 @@ const UserProfile = () => {
         <InputComponent
           children={"E-mail"}
           value={localEmail}
-          onChangeText={(e) => {
-            setLocalEmail(e);
-          }}
+          editable={!isEditable}
+          onFocus={() => console.log("onFokus")}
+          // onChangeText={(e) => {
+          //   setLocalEmail(e);
+          // }}
         />
+
         <InputComponent
           editable={isEditable}
           children={"Phone"}
@@ -346,22 +350,150 @@ const UserProfile = () => {
             setLocalCity(e);
           }}
         />
-      </View>
-      <>
         <ButtonComponent
-          style={{ flex: 1, alignItems: "center", paddingTop: 40 }}
-          onTouch={deleteAllUserData}
+          style={{ flex: 1, paddingTop: 20 }}
+          onTouch={() => setIsModal(true)}
+          buttonStyle={{
+            padding: 10,
+            borderRadius: 15,
+            borderWidth: 1,
+            borderColor: appColors.changePass,
+            backgroundColor: appColors.changePass,
+          }}
+          children={
+            <Text
+              style={{
+                color: appColors.bgColor,
+                fontWeight: "500",
+              }}
+            >
+              Change password
+            </Text>
+          }
+        />
+        {isModal ? (
+          <ModalPasswordComponent onCancel={() => setIsModal(false)} />
+        ) : null}
+      </View>
+      <View style={{ flex: 1, flexDirection: "column-reverse" }}>
+        <ButtonComponent
+          style={{
+            flex: 1,
+            alignItems: "flex-end",
+            paddingTop: 15,
+            marginRight: 15,
+          }}
+          onTouch={() => setRewritePass(true)}
           children={
             <MaterialCommunityIcons
               name="trash-can-outline"
-              size={24}
-              color="red"
+              size={26}
+              color="darkred"
             />
           }
         />
-      </>
+        {rewritePass ? (
+          <View
+            style={{ flex: 1, alignItems: "center", flexDirection: "column" }}
+          >
+            <View style={{ flex: 1, marginTop: 20, marginBottom: -15 }}>
+              <Text style={{ color: "red", fontWeight: "bold" }}>
+                To delete account, type your current password
+              </Text>
+            </View>
+            <InputComponent
+              onChangeText={(text) => setCurrentPassword(text)}
+              autoCapitalize="none"
+              secureTextEntry={true}
+              children={"Password"}
+              // ref={passwordInputRef}
+            />
+            <View
+              style={{
+                flex: 1,
+                flexDirection: "row-reverse",
+                alignItems: "center",
+                marginTop: 15,
+              }}
+            >
+              <ButtonComponent
+                style={{
+                  flex: 1,
+                  borderColor: appColors.borderColor,
+                  borderWidth: 1,
+                  paddingHorizontal: 10,
+                  borderRadius: 10,
+                }}
+                disabled={isEmpty}
+                onTouch={() => {
+                  deleteGoogleAuth(currentPassword);
+                }}
+                children={
+                  isEmpty ? (
+                    <Text
+                      style={{
+                        color: appColors.iconInActive,
+                        fontWeight: "bold",
+                      }}
+                    >
+                      ok
+                    </Text>
+                  ) : (
+                    <Text style={{ color: "red", fontWeight: "bold" }}>OK</Text>
+                  )
+                }
+              />
+              <ButtonComponent
+                style={{
+                  flex: 1,
+                  paddingHorizontal: 10,
+                  borderColor: appColors.borderColor,
+                  borderWidth: 1,
+                  marginHorizontal: 5,
+                  borderRadius: 10,
+                }}
+                onTouch={() => {
+                  {
+                    setRewritePass(false);
+                    setCurrentPassword("");
+                  }
+                }}
+                children={<Text style={{ fontWeight: "bold" }}>Cancel</Text>}
+              />
+            </View>
+          </View>
+        ) : null}
+      </View>
     </ScrollView>
   );
 };
 
 export default UserProfile;
+
+const styles = StyleSheet.create({
+  homeButtonStyle: {
+    borderWidth: 1,
+    borderColor: "red",
+    flex: 1,
+    width: 40,
+    position: "absolute",
+  },
+  inputContainer: {
+    flex: 1,
+    justifyContent: "flex-start",
+    alignItems: "center",
+    flexDirection: "column",
+  },
+  discardButton: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    width: 40,
+  },
+  saveButton:{
+    flex: 1,
+    width: 40,
+    alignItems: "center",
+    justifyContent: "center",
+  }
+});

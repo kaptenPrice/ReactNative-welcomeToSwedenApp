@@ -12,6 +12,7 @@ const appColors = {
   spinner: "grey",
   lableHeader:"#717474",
   bgFeedBack:"#4690c7",
-  modal:"#dffcc3"
+  modal:"#dffcc3",
+  changePass:"#5e6c82"
 };
 export default appColors;

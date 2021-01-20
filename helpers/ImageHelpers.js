@@ -46,7 +46,7 @@ export const prepareBlob = async (imageUrl) => {
       resolve(xml.response);
     };
     xml.onerror = function (e) {
-      console.log(e);
+      console.log(`Error från prepareBlob${e}`);
       reject(new TypeError("IMAGE UPLOAD FAILED"));
     };
 

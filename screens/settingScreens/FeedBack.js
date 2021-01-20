@@ -194,21 +194,13 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     paddingLeft: 20,
   },
-  sendButtonStyle: {
-    // flex: 1,
-    // justifyContent: "center",
-    // alignItems: "flex-end",
-    // width: 100,
-    // height: 100,
-  },
+ 
   feedbackButton: {
-    // flex:1,
     borderRadius: 5,
     backgroundColor: "grey",
     height: "auto",
     alignItems: "center",
     paddingTop: 5,
-    // marginTop: 15,
   },
   labelStyle: {
     marginLeft: 15,

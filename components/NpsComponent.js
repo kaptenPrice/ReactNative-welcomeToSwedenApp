@@ -5,11 +5,7 @@ import appColors from "../assets/appColor";
 const scale = [...Array(10)].map((e, i) => i + 1);
 
 const NpsComponent = ({ value, setValue }) => {
-    useEffect(() => {
-        console.log(Boolean(value))
-
-     
-    }, [value])
+  
   return (
     <>
       {!value

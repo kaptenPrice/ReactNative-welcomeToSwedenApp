@@ -34,18 +34,12 @@ const WelcomeScreen = () => {
       >
         <TouchableOpacity
           style={{
-            // flex:1,
-            // alignItems: "center",
             backgroundColor: "transparent",
-            // borderColor: appColors.borderColor,
-            // borderWidth: 5,
             borderRadius: 25,
             padding: 100,
-
             paddingVertical: 5,
             width: width / 1,
 
-            // marginVertical: 100,
           }}
           onPress={() => navigation.navigate("LoginScreen")}
         >

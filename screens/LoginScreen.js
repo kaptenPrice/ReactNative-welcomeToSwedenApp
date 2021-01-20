@@ -63,7 +63,6 @@ const LoginScreen = () => {
         if (res) {
           dispatch({ type: "SIGN_IN", payload: res.user });
         }
-        console.log(email);
       } catch (error) {
         switch (error.code) {
           case "auth/user-not-found":
@@ -265,3 +264,6 @@ export default LoginScreen;
 //     .catch(error = > {
 //       // Handle error.
 //     });
+
+
+
