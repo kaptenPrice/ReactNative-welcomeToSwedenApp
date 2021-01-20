@@ -21,7 +21,7 @@ const ModalEditMailPassComponent = ({ onCancel }) => {
   const [uid, setUid] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const [currentEmail] = useState(db.auth.currentUser.email);
+  const [currentEmail, setCurrentEmail] = useState(currentUser.email);
   const [newEmail, setNewEmail] = useState("");
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [isPassFieldsEmpty, setIsPassFieldsEmpty] = useState(true);
@@ -42,6 +42,7 @@ const ModalEditMailPassComponent = ({ onCancel }) => {
   //  }
 
   useEffect(() => {
+    // setCurrentEmail(db.auth.currentUser.email)
     setTimeout(() => {
       currentPassword >= 6
         ? setCurrentPassword("")

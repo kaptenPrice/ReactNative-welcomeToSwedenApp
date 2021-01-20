@@ -110,6 +110,7 @@ const LoginScreen = () => {
       }
     }
   };
+  
 
   return (
     <SafeAreaView style={{ flex: 1 }}>

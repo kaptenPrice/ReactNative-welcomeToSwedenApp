@@ -56,7 +56,7 @@ const UserProfile = () => {
     (state) => state.userAdditionalInfo
   );
   const { width, height } = Dimensions.get("screen");
-  const [localEmail] = useState(db.auth.currentUser.email);
+  const [localEmail] = useState(currentUser.email);
   const [localUserName, setLocalUserName] = useState("");
   const [localPhone, setLocalPhone] = useState("");
   const [localCity, setLocalCity] = useState("");
@@ -71,10 +71,9 @@ const UserProfile = () => {
   const [isEmpty, setIsEmpty] = useState(true);
   const [isModal, setIsModal] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
+  const [isOAuth, setIsOAuth] = useState(true);
 
   useEffect(() => {
-   
-
     name && setLocalUserName(name);
     phone && setLocalPhone(phone);
     city && setLocalCity(city);
@@ -84,9 +83,9 @@ const UserProfile = () => {
   }, [name, phone, city, reduxProfileAvatar, currentPassword, localEmail]);
 
   useEffect(() => {
+    currentUser.id ? setIsOAuth(false) : setIsOAuth(true);
     setUid(currentUser.uid || currentUser.id);
   }, [uid]);
-
 
   const handleSaveUserData = () => {
     let data = {
@@ -112,10 +111,9 @@ const UserProfile = () => {
     setLocalUserName(name);
     setLocalPhone(phone);
     setLocalCity(city);
-    setIsEditable(true);
+    setIsEditable(false);
     setEditMode(false);
   };
-
 
   const handleEdit = () => {
     setIsEditable(true);
@@ -164,31 +162,11 @@ const UserProfile = () => {
     );
   };
 
-
-
-  const reAuthenticated = () => {
-    const user = db.auth.currentUser;
-    var cred = firebase.auth.EmailAuthProvider.credential(
-      user.email,
-      currentPassword
-    );
-    return user.reauthenticateWithCredential(cred);
-  };
-
   return (
+    <SafeAreaView style={{flex:1}}>
     <ScrollView style={Styles.profileScreen}>
       <View>
-        <View
-          style={{
-            flex: 1,
-            justifyContent: "flex-end",
-            flexDirection: "row",
-            marginHorizontal: 2,
-            paddingVertical: 5,
-            height: height / 13,
-            marginBottom: 0,
-          }}
-        >
+        <View style={[styles.headerButtons, { height: height / 13 }]}>
           <ButtonComponent
             style={{ marginRight: width / 1.5 }}
             onTouch={() => {
@@ -203,9 +181,16 @@ const UserProfile = () => {
           </ButtonComponent>
 
           {!editMode && (
-            <ButtonComponent style={{ marginRight: 20 }} onTouch={handleEdit}>
+            <ButtonComponent
+              style={{ marginRight: 20 }}
+              onTouch={() => handleEdit()}
+            >
               <View>
-                <MaterialIcons name="edit" size={30} color="grey" />
+                <MaterialIcons
+                  name="edit"
+                  size={30}
+                  color={appColors.iconInActive}
+                />
               </View>
             </ButtonComponent>
           )}
@@ -213,33 +198,29 @@ const UserProfile = () => {
             <>
               <ButtonComponent
                 style={styles.discardButton}
-                onTouch={discardChanges}
+                onTouch={() => discardChanges()}
               >
-                <MaterialIcons name="cancel" size={24} color="grey" />
+                <MaterialIcons
+                  name="cancel"
+                  size={24}
+                  color={appColors.iconInActive}
+                />
               </ButtonComponent>
               <ButtonComponent
                 style={styles.saveButton}
-                onTouch={handleSaveUserData}
+                onTouch={() => handleSaveUserData()}
               >
                 <MaterialCommunityIcons
                   name="check-all"
                   size={24}
-                  color="grey"
+                  color={appColors.iconInActive}
                 />
               </ButtonComponent>
             </>
           )}
         </View>
       </View>
-      <View
-        style={{
-          flex: 1,
-          alignItems: "center",
-          justifyContent: "flex-start",
-          height: height / 5,
-       
-        }}
-      >
+      <View style={[styles.imageMainContainer, { height: height / 5 }]}>
         {isLoading ? (
           <Loading />
         ) : (
@@ -270,10 +251,7 @@ const UserProfile = () => {
           children={"E-mail"}
           value={localEmail}
           editable={false}
-          onFocus={() => console.log("onFokus")}
           isLabel={true}
-
-       
         />
 
         <InputComponent
@@ -286,7 +264,6 @@ const UserProfile = () => {
             setLocalPhone(e);
           }}
           isLabel={true}
-
         />
 
         <InputComponent
@@ -298,37 +275,37 @@ const UserProfile = () => {
             setLocalCity(e);
           }}
           isLabel={true}
+        />
+        {isOAuth && (
+          <ButtonComponent
+            style={{ flex: 1, paddingTop: 20 }}
+            onTouch={() => setIsModal(true)}
+            buttonStyle={{
+              padding: 10,
+              borderRadius: 15,
+              borderWidth: 1,
+              borderColor: appColors.changePass,
+              backgroundColor: appColors.changePass,
+            }}
+            children={
+              <Text
+                style={{
+                  color: appColors.bgColor,
+                  fontWeight: "500",
+                }}
+              >
+                Edit e-mail / password
+              </Text>
+            }
+          />
+        )}
 
-        />
-        <ButtonComponent
-          style={{ flex: 1, paddingTop: 20 }}
-          onTouch={() => setIsModal(true)}
-          buttonStyle={{
-            padding: 10,
-            borderRadius: 15,
-            borderWidth: 1,
-            borderColor: appColors.changePass,
-            backgroundColor: appColors.changePass,
-          }}
-          children={
-            <Text
-              style={{
-                color: appColors.bgColor,
-                fontWeight: "500",
-              }}
-            >
-              Edit e-mail / password
-            </Text>
-          }
-        />
         {isModal ? (
           <ModalEditMailPassComponent onCancel={() => setIsModal(false)} />
         ) : null}
       </View>
-    
-          
-          
     </ScrollView>
+    </SafeAreaView>
   );
 };
 
@@ -342,6 +319,14 @@ const styles = StyleSheet.create({
     width: 40,
     position: "absolute",
   },
+  headerButtons: {
+    flex: 1,
+    justifyContent: "flex-end",
+    flexDirection: "row",
+    marginHorizontal: 2,
+    paddingVertical: 5,
+    marginBottom: 0,
+  },
   inputContainer: {
     flex: 1,
     justifyContent: "flex-start",
@@ -354,12 +339,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     width: 40,
   },
-  saveButton:{
+  saveButton: {
     flex: 1,
     width: 40,
     alignItems: "center",
     justifyContent: "center",
-  }, imageContainer:{
+  },
+  imageContainer: {
     borderRadius: 70,
     marginTop: 0,
     shadowColor: "#000",
@@ -371,5 +357,10 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
 
     elevation: 12,
-  }
+  },
+  imageMainContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "flex-start",
+  },
 });

@@ -22,7 +22,8 @@ const InputComponent = ({
   icon,
   isLabel,
   setIslabel,
-  clearTextOnFocus
+  clearTextOnFocus,
+  props
 }) => {
   const { width, height } = Dimensions.get("screen");
 
@@ -67,7 +68,7 @@ const InputComponent = ({
           elevation: 10,
           // paddingTop: 20,
           paddingLeft: 5,
-        }}
+        } }
         placeholder={placeholder}
         value={value}
         editable={editable}
@@ -80,6 +81,7 @@ const InputComponent = ({
         onFocus={onFocus}
         onEndEditing={onEndEditing}
         clearTextOnFocus={clearTextOnFocus}
+        {...props}
       />
     </View>
   );

@@ -27,6 +27,7 @@ const Fika = () => {
   const [contentThree, setContentThree] = useState("");
 
   useEffect(() => {
+    console.log(isAdmin)
     getFieldData()
     return()=>{
       getFieldData()

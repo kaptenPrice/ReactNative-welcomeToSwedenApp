@@ -60,13 +60,13 @@ const WelcomeToSweden = () => {
           <Stack.Screen
             name="WelcomScreen"
             component={WelcomeScreen}
-            options={{ headerShown: true }}
+            options={{ headerShown: false }}
           />
 
           <Stack.Screen
             name="LoginScreen"
             component={LoginScreen}
-            options={{ headerShown: true }}
+            options={{ headerShown: false }}
           />
         </Stack.Navigator>
       ) : (
@@ -122,22 +122,22 @@ const SocialLifeNavigator = () => (
     }}
   >
     <Stack.Screen
-      options={{ headerShown: true }}
+      options={{ headerShown: false }}
       name="SocialLife"
       component={SocialLife}
     />
     <Stack.Screen
-      options={{ headerShown: true }}
+      options={{ headerShown: false }}
       name="Fika"
       component={Fika}
     />
     <Stack.Screen
-      options={{ headerShown: true }}
+      options={{ headerShown: false }}
       name="Food"
       component={Food}
     />
     <Stack.Screen
-      options={{ headerShown: true }}
+      options={{ headerShown: false }}
       name="Traditions"
       component={Traditions}
     />
@@ -151,18 +151,18 @@ const SocietyFunctionsNavigator = () => (
     }}
   >
     <Stack.Screen
-      options={{ headerShown: true }}
+      options={{ headerShown: false, headerBackAccessibilityLabel: "true" }}
       name="SocietyFunctions"
       component={SocietyFunctions}
     />
     <Stack.Screen
-      options={{ headerShown: true }}
+      options={{ headerShown: false, headerBackAccessibilityLabel: "true" }}
       name="Study"
       component={Study}
     />
-    <Stack.Screen options={{ headerShown: true }} name="Job" component={Job} />
+    <Stack.Screen options={{ headerShown: false, headerBackAccessibilityLabel: "true" }} name="Job" component={Job} />
     <Stack.Screen
-      options={{ headerShown: true }}
+      options={{ headerShown: false }}
       name="Healthcare"
       component={HealthCare}
     />
@@ -171,13 +171,16 @@ const SocietyFunctionsNavigator = () => (
 
 const getHeaderTitle = (route) => {
   const { currentUser } = useSelector((state) => state.authentication);
+  const { isAdmin, name, email, phone, city } = useSelector(
+    (state) => state.userAdditionalInfo
+  );
 
   const routeName = getFocusedRouteNameFromRoute(route) ?? "Home";
   switch (routeName) {
     case "Home":
-      if (currentUser.name !== undefined) return `Welcome ${currentUser.name}`;
+      if (name) return `Welcome ${name}`;
       else {
-        currentUser === undefined;
+        // currentUser == undefined;
         return `Welcome ${currentUser.email}`;
       }
     case "SocialLife":
@@ -224,7 +227,7 @@ const MenuStackNavigator = () => (
     <Stack.Screen
       name="settings"
       component={UserProfile}
-      options={{ headerShown: true, headerBackAccessibilityLabel: "true" }}
+      options={{ headerShown: false, headerBackAccessibilityLabel: "true" }}
     />
   </Stack.Navigator>
 );

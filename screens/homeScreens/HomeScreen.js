@@ -87,7 +87,6 @@ export default function HomeScreen() {
     }
   };
 
-  //TODO move to componentssf
   const _renderItem = (item) => {
     return (
       <View style={{ width: width, height: height / 3 }}>

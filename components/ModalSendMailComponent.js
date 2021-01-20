@@ -19,7 +19,6 @@ const ModalSendMailComponent = ({
   const [isEmailValid, setIsEmailValid] = useState(false);
 
   useEffect(() => {
-    console.log(currentEmail);
     // check_email();
   }, [currentEmail]);
 
