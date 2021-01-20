@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Dimensions } from "react-native";
 import { TextInput } from "react-native";
 import { StyleSheet } from "react-native";
@@ -18,8 +18,14 @@ const InputComponent = ({
   secureTextEntry,
   ref,
   onFocus,
+  onEndEditing,
+  icon,
+  isLabel,
+  setIslabel,
+  clearTextOnFocus
 }) => {
   const { width, height } = Dimensions.get("screen");
+
   return (
     <View style={{ paddingTop: 20 }}>
       <View
@@ -32,14 +38,16 @@ const InputComponent = ({
           backgroundColor: appColors.bgColor,
         }}
       >
-        <Text
-          style={{
-            color: appColors.lableHeader,
-            // backgroundColor:appColors.bgColor
-          }}
-        >
-          {children}
-        </Text>
+        {isLabel ? (
+          <Text
+            style={{
+              color: appColors.lableHeader,
+              backgroundColor: appColors.bgColor,
+            }}
+          >
+            {children}
+          </Text>
+        ) : null}
       </View>
       <TextInput
         style={{
@@ -58,7 +66,7 @@ const InputComponent = ({
           shadowRadius: 3,
           elevation: 10,
           // paddingTop: 20,
-          paddingLeft: 10,
+          paddingLeft: 5,
         }}
         placeholder={placeholder}
         value={value}
@@ -70,7 +78,8 @@ const InputComponent = ({
         autoCapitalize={autoCapitalize}
         ref={ref}
         onFocus={onFocus}
-        
+        onEndEditing={onEndEditing}
+        clearTextOnFocus={clearTextOnFocus}
       />
     </View>
   );
