@@ -67,7 +67,6 @@ const UserProfile = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [isEditable, setIsEditable] = useState(false);
-  // const [isDeleteAccountBegin, setDeleteAccountBegin] = useState(false);
   const [isEmpty, setIsEmpty] = useState(true);
   const [isModal, setIsModal] = useState(false);
   const [isFilled, setIsFilled] = useState(false);

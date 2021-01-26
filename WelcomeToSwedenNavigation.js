@@ -20,6 +20,7 @@ import {
   Ionicons,
   FontAwesome,
   MaterialCommunityIcons,
+  MaterialIcons,
 } from "@expo/vector-icons";
 import Fika from "./screens/socialLifeScreens/Fika";
 import Food from "./screens/socialLifeScreens/Food";
@@ -160,7 +161,11 @@ const SocietyFunctionsNavigator = () => (
       name="Study"
       component={Study}
     />
-    <Stack.Screen options={{ headerShown: false, headerBackAccessibilityLabel: "true" }} name="Job" component={Job} />
+    <Stack.Screen
+      options={{ headerShown: false, headerBackAccessibilityLabel: "true" }}
+      name="Job"
+      component={Job}
+    />
     <Stack.Screen
       options={{ headerShown: false }}
       name="Healthcare"
@@ -264,7 +269,11 @@ const DrawerNavigator = () => (
     <Drawer.Screen
       options={{
         drawerIcon: () => (
-          <Ionicons name="ios-apps" size={24} color={appColors.iconInActive} />
+          <MaterialIcons
+            name="feedback"
+            size={24}
+            color={appColors.iconInActive}
+          />
         ),
       }}
       name="Feedback"

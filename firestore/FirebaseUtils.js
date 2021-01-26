@@ -59,15 +59,15 @@ export const handleSaveToDB = async (doc1, collection2, doc2, content) => {
     .doc(doc1)
     .collection(collection2)
     .doc(doc2)
-    .set({ content });
+    .set( content );
 };
 
 export const handleSaveFeedback = async (doc, content) => {
-  await db.collection("user-feedback").add({ content });
+ const docRef=db.collection("user-feedback").doc()
+  await docRef.set({...content,feedbackId: docRef.id});
 };
 
 export const getContentData = async (doc1, collection2, doc2, cb, error) => {
-  // try {
   return db
     .collection("welcome-to-sweden")
     .doc(doc1)
@@ -75,9 +75,7 @@ export const getContentData = async (doc1, collection2, doc2, cb, error) => {
     .doc(doc2)
     .onSnapshot(cb, error);
 
-  // } catch (error) {
-  //   console.error(error);
-  // }
+
 };
 export const getUserData = async (uid, cb) => {
   try {
@@ -86,6 +84,14 @@ export const getUserData = async (uid, cb) => {
     console.log("User dosnt exist");
   }
 };
+
+export const getFeedbackDataDB = async(cb)=>{
+  try {
+    return db.collection("user-feedback").onSnapshot(cb)
+  } catch (error) {
+    console.log("Error FB: ",error)
+  }
+}
 
 export const saveUserToDB = async (user, uid) => {
   try {
@@ -101,8 +107,9 @@ export const saveUserToDB = async (user, uid) => {
 export const updateUserDataDB = async (user, uid) => {
   try {
     await db.collection("users").doc(uid).update(user);
-    // alert('Succes')
   } catch (error) {
     console.log("error från firebase", error);
   }
 };
+
+
