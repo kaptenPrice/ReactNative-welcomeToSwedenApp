@@ -11,6 +11,8 @@ import { Image } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import Loading from "../../components/Loading";
 import SwedenMapSvg from "../../assets/svg/SwedenMapSvg";
+import { childStyles } from "./SocietyFunctions";
+const socialLife_pic = require("../../assets/images/socialLife_unsplash.jpg");
 
 export default function SocialLife() {
   const navigation = useNavigation();
@@ -26,15 +28,11 @@ export default function SocialLife() {
       ) : (
         <>
           <View
-            style={{
-              flex: 1,
-              alignItems: "center",
-            }}
+            style={[childStyle.imageContainer, { width, height: height / 3 }]}
           >
-            <Fontisto
-              name="coffeescript"
-              size={50}
-              color={appColors.iconInActive}
+            <Image
+              style={[childStyle.image, { width: null, height: null }]}
+              source={socialLife_pic}
             />
           </View>
           <View style={childStyle.buttonContainer}>
@@ -78,6 +76,11 @@ export default function SocialLife() {
 }
 
 export const childStyle = StyleSheet.create({
+  imageContainer: {
+    flex: 1,
+  },
+  image: { flex: 1 },
+
   buttonContainer: {
     flex: 1,
     flexDirection: "column",
@@ -97,8 +100,7 @@ export const childStyle = StyleSheet.create({
   },
   buttonStyle: {
     alignItems: "center",
-    // borderWidth: 2,
-    // borderColor: appColors.borderColor,
+
     backgroundColor: appColors.bgColor,
     borderRadius: 10,
     padding: 5,

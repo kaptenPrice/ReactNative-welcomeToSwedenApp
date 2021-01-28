@@ -13,7 +13,8 @@ const appColors = {
   lableHeader:"#717474",
   bgFeedBack:"#4690c7",
   modal:"#dffcc3",
-  changePass:"#5e6c82",
-  buttonActive:"#2e7c29"
+  changePass:"#717474",
+  buttonActive:"#2e7c29",
+  editableText:"#2e7c29"
 };
 export default appColors;

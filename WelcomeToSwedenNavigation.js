@@ -54,8 +54,9 @@ const WelcomeToSweden = () => {
       {!isSignedIn ? (
         <Stack.Navigator
           screenOptions={{
-            headerStyle: { backgroundColor: appColors.bgColor },
-            headerTintColor: appColors.whiteColor,
+            headerTransparent: true,
+            // headerStyle: { backgroundColor: appColors.bgColor },
+            // headerTintColor: appColors.whiteColor,
           }}
         >
           <Stack.Screen
@@ -67,7 +68,10 @@ const WelcomeToSweden = () => {
           <Stack.Screen
             name="LoginScreen"
             component={LoginScreen}
-            options={{ headerShown: false }}
+            options={{
+              headerShown: false,
+              headerBackAccessibilityLabel: false,
+            }}
           />
         </Stack.Navigator>
       ) : (
@@ -81,6 +85,7 @@ const WelcomeToSweden = () => {
 const HomeTabNavigator = () => {
   return (
     <Tab.Navigator
+    backBehavior="initialRoute"
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color }) => {
           let iconName;
@@ -102,8 +107,9 @@ const HomeTabNavigator = () => {
       })}
       tabBarOptions={{
         showLabel: false,
-        style: { backgroundColor: appColors.bgColor },
+        style: { backgroundColor: "transparent", borderTopWidth: 0 },
       }}
+      
     >
       <Tab.Screen name="Home" component={Homescreen} />
       <Tab.Screen name="SocialLife" component={SocialLifeNavigator} />
@@ -118,7 +124,10 @@ const HomeTabNavigator = () => {
 const SocialLifeNavigator = () => (
   <Stack.Navigator
     screenOptions={{
-      headerStyle: { backgroundColor: appColors.bgColor },
+      headerStyle: {
+        backgroundColor: appColors.bgColor,
+        shadowColor: "transparent",
+      },
       headerTintColor: appColors.textColor,
     }}
   >
@@ -128,17 +137,17 @@ const SocialLifeNavigator = () => (
       component={SocialLife}
     />
     <Stack.Screen
-      options={{ headerShown: false }}
+      options={{ headerShown: true, headerBackTitle: " " }}
       name="Fika"
       component={Fika}
     />
     <Stack.Screen
-      options={{ headerShown: false }}
+      options={{ headerShown: true, headerBackTitle: " " }}
       name="Food"
       component={Food}
     />
     <Stack.Screen
-      options={{ headerShown: false }}
+      options={{ headerShown: true, headerBackTitle: " " }}
       name="Traditions"
       component={Traditions}
     />
@@ -146,10 +155,13 @@ const SocialLifeNavigator = () => (
 );
 const SocietyFunctionsNavigator = () => (
   <Stack.Navigator
-    screenOptions={{
-      headerStyle: { backgroundColor: appColors.bgColor },
-      headerTintColor: appColors.textColor,
-    }}
+  screenOptions={{
+    headerStyle: {
+      backgroundColor: appColors.bgColor,
+      shadowColor: "transparent",
+    },
+    headerTintColor: appColors.textColor,
+  }}
   >
     <Stack.Screen
       options={{ headerShown: false, headerBackAccessibilityLabel: "true" }}
@@ -157,17 +169,17 @@ const SocietyFunctionsNavigator = () => (
       component={SocietyFunctions}
     />
     <Stack.Screen
-      options={{ headerShown: false, headerBackAccessibilityLabel: "true" }}
+      options={{ headerShown: true, headerBackTitle: " " }}
       name="Study"
       component={Study}
     />
     <Stack.Screen
-      options={{ headerShown: false, headerBackAccessibilityLabel: "true" }}
+      options={{ headerShown: true, headerBackTitle: " " }}
       name="Job"
       component={Job}
     />
     <Stack.Screen
-      options={{ headerShown: false }}
+      options={{ headerShown: true, headerBackTitle: " " }}
       name="Healthcare"
       component={HealthCare}
     />
@@ -176,11 +188,12 @@ const SocietyFunctionsNavigator = () => (
 
 const getHeaderTitle = (route) => {
   const { currentUser } = useSelector((state) => state.authentication);
-  const { isAdmin, name, email, phone, city } = useSelector(
+  const { isAdmin, name, email } = useSelector(
     (state) => state.userAdditionalInfo
   );
 
   const routeName = getFocusedRouteNameFromRoute(route) ?? "Home";
+
   switch (routeName) {
     case "Home":
       if (name) return `Welcome ${name}`;
@@ -194,11 +207,16 @@ const getHeaderTitle = (route) => {
       return "Society functions";
     case "Profile":
       return "Menu";
+    case "Fika":
+      return "Fika";
+    case "Food":
+      return "Food";
   }
 };
 const HomeStackNavigator = ({ navigation }) => (
   <Stack.Navigator
     screenOptions={{
+      // headerTransparent:true,
       headerStyle: { backgroundColor: appColors.bgColor },
       headerTintColor: appColors.textColor,
       headerRight: () => (
@@ -225,7 +243,7 @@ const HomeStackNavigator = ({ navigation }) => (
 const MenuStackNavigator = () => (
   <Stack.Navigator
     screenOptions={{
-      headerStyle: { backgroundColor: appColors.bgColor },
+      headerStyle: { backgroundColor: "transparent" },
       headerTintColor: appColors.textColor,
     }}
   >
@@ -254,6 +272,10 @@ const DrawerNavigator = () => (
 
     <Drawer.Screen
       options={{
+        headerShown: true,
+        headerBackAccessibilityLabel: "true",
+        headerTintColor:appColors.textColor,
+        
         swipeEnabled: true,
         drawerIcon: () => (
           <Ionicons
@@ -268,10 +290,15 @@ const DrawerNavigator = () => (
     />
     <Drawer.Screen
       options={{
+        headerShown: true,
+        headerBackAccessibilityLabel: "true",
+        headerTintColor:appColors.textColor,
+
         drawerIcon: () => (
           <MaterialIcons
+            style={{ marginRight: -5 }}
             name="feedback"
-            size={24}
+            size={23}
             color={appColors.iconInActive}
           />
         ),
@@ -283,8 +310,9 @@ const DrawerNavigator = () => (
       options={{
         drawerIcon: () => (
           <FontAwesome
+            style={{ marginRight: -4 }}
             name="sign-out"
-            size={30}
+            size={24}
             color={appColors.iconInActive}
           />
         ),

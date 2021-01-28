@@ -14,29 +14,8 @@ export const db = firebase.firestore();
 export const auth = firebase.auth();
 export const storage = firebase.storage();
 
-// export const actionCodeSettings = {
-//   url: "https://www.example.com/?email=" + auth.currentUser.email,
-//   iOS: {
-//     bundleId: "com.example.ios",
-//   },
-//   android: {
-//     packageName: "com.example.android",
-//     installApp: true,
-//     minimumVersion: "12",
-//   },
-//   handleCodeInApp: true,
-//   // When multiple custom dynamic link domains are defined, specify which
-//   // one to use.
-//   dynamicLinkDomain: "example.page.link",
-// };
-// auth.currentUser
-//   .sendEmailVerification(actionCodeSettings)
-//   .then(function () {
-//     // Verification email sent.
-//   })
-//   .catch(function (error) {
-//     // Error occurred. Inspect error.code.
-//   });
+
+
 export const signOut = async () => {
   try {
     await firebase.auth().signOut();

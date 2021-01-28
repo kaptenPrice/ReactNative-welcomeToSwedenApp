@@ -7,6 +7,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import appColors from "../assets/appColor";
 import { SafeAreaView } from "react-navigation";
 import { Dimensions } from "react-native";
+// import LinearGradient from 'react-native-linear-gradient'
 
 //Logo?
 const WelcomeScreen = () => {
@@ -18,6 +19,8 @@ const WelcomeScreen = () => {
     }, 1000);
   }, []);
   return (
+  
+
     <SafeAreaView
       style={{
         flex: 1,

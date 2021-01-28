@@ -14,11 +14,9 @@ import ContentComponent from "../../components/ContentComponent";
 import EditBox from "../../components/EditBox";
 
 const Fika = () => {
-  const dispatch =useDispatch()
+  const dispatch = useDispatch();
   const { isAdmin } = useSelector((state) => state.userAdditionalInfo);
-  const {  currentUser } = useSelector(
-    (state) => state.authentication
-  );
+  const { currentUser } = useSelector((state) => state.authentication);
 
   const { width, height } = Dimensions.get("screen");
   const [isEditable, setIsEditable] = useState(false);
@@ -27,27 +25,32 @@ const Fika = () => {
   const [contentThree, setContentThree] = useState("");
 
   useEffect(() => {
-    console.log(isAdmin)
-    getFieldData()
-    return()=>{
-      getFieldData()
-    }
+    getFieldData();
+    // return () => {
+    //   getFieldData();
+    // };
   }, []);
-  const getFieldData=()=>{
-    db.getContentData("social-life", "fika", "like-a-swede", (cb)=>{
-      const data= cb.data()
-      setContentOne(JSON.stringify(data.content).slice(1,-1))
-    })
- 
-    db.getContentData("social-life", "fika", "lingo", (cb)=>{
-      const data= cb.data()
-      setContentTwo(JSON.stringify(data.content).slice(1,-1))
-    })
-    db.getContentData("social-life", "fika", "price-level", (cb)=>{
-      const data= cb.data()
-      setContentThree(JSON.stringify(data.content).slice(1,-1))
-    })
-  }
+
+  const getFieldData = () => {
+    try {
+      db.getContentData("social-life", "fika", "like-a-swede", (cb) => {
+        const data = cb.data();
+        !data?.content ? setContentOne("tomt") : setContentOne(data?.content);
+      });
+      db.getContentData("social-life", "fika", "lingo", (cb) => {
+        const data = cb.data();
+        !data?.content ? setContentTwo("tomt") : setContentTwo(data?.content);
+      });
+      db.getContentData("social-life", "fika", "price-level", (cb) => {
+        const data = cb.data();
+        !data?.content
+          ? setContentThree("tomt")
+          : setContentThree(data?.content);
+      });
+    } catch (error) {
+      console.log(`contentOne ERROR: ${error}`);
+    }
+  };
 
   const handleEdit = () => {
     if (isEditable === false) {
@@ -76,7 +79,7 @@ const Fika = () => {
   };
   const handleSaveContentThree = () => {
     try {
-      db.handleSaveToDB("social-life", "fika", "pricvel", contentThree);
+      db.handleSaveToDB("social-life", "fika", "price-level", contentThree);
     } catch (error) {
       console.log(error);
     } finally {
@@ -105,40 +108,34 @@ const Fika = () => {
       }
       children1={<Text style={style.headers}>Like a Swede</Text>}
       children2={
-        <Text style={style.childComponentTextContainers}>
-          {contentOne}
-        </Text>
+        <Text style={style.childComponentTextContainers}>{contentOne}</Text>
       }
       editBox1={
         isEditable && (
           <EditBox
             editable={isEditable}
             onChangeText={(e) => setContentOne(e)}
-            onTouch={handleSaveContentOne}
+            onTouch={()=>handleSaveContentOne()}
           />
         )
       }
       style={[style.childComponentTextContainers]}
       children3={<Text style={style.headers}>Lingo</Text>}
       children4={
-        <Text style={style.childComponentTextContainers}>
-          {contentTwo}
-        </Text>
+        <Text style={style.childComponentTextContainers}>{contentTwo}</Text>
       }
       editBox2={
         isEditable && (
           <EditBox
             editable={isEditable}
             onChangeText={(e) => setContentTwo(e)}
-            onTouch={handleSaveContentTwo}
+            onTouch={()=>handleSaveContentTwo()}
           />
         )
       }
       children5={<Text style={style.headers}>Price level</Text>}
       children6={
-        <Text style={style.childComponentTextContainers} >
-           {contentThree}
-        </Text>
+        <Text style={style.childComponentTextContainers}>{contentThree}</Text>
       }
       editBox3={
         isEditable && (
@@ -153,23 +150,20 @@ const Fika = () => {
   );
 };
 export default Fika;
-export const style = StyleSheet.create({
+ const style = StyleSheet.create({
   headers: {
     fontSize: 24,
     fontWeight: "bold",
     marginLeft: 5,
   },
   childComponentTextContainers: {
-    // borderColor:"blue",
-    // borderWidth:0.5,
-    fontWeight:"500",
+    fontWeight: "500",
     fontSize: 15,
     paddingBottom: 30,
     marginLeft: 5,
     marginRight: 5,
     marginTop: 10,
     color: appColors.textColor,
-    backgroundColor:appColors.bgColor
+    backgroundColor: appColors.bgColor,
   },
 });
-    

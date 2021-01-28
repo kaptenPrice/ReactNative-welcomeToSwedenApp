@@ -5,7 +5,6 @@ import appColors from "../assets/appColor";
 const scale = [...Array(10)].map((e, i) => i + 1);
 
 const NpsComponent = ({ value, setValue }) => {
-  
   return (
     <>
       {!value
@@ -13,7 +12,7 @@ const NpsComponent = ({ value, setValue }) => {
             <TouchableOpacity
               key={element}
               style={styles.listItems}
-              disabled={Boolean(value)}
+              // disabled={Boolean(value)}
               onPress={() => {
                 setValue(element);
               }}
@@ -25,7 +24,7 @@ const NpsComponent = ({ value, setValue }) => {
           ))
         : scale.map((element) =>
             element === value ? (
-              <View key={element} style={[styles.listItems]}>
+              <TouchableOpacity key={element} style={[styles.listItems]}>
                 <Text
                   style={{
                     padding: 10,
@@ -36,9 +35,15 @@ const NpsComponent = ({ value, setValue }) => {
                 >
                   {element}
                 </Text>
-              </View>
+              </TouchableOpacity>
             ) : (
-              <View key={element} style={styles.listItems}>
+              <TouchableOpacity
+                onPress={() => {
+                  setValue(element);
+                }}
+                key={element}
+                style={styles.listItems}
+              >
                 <Text
                   style={{
                     padding: 10,
@@ -48,7 +53,7 @@ const NpsComponent = ({ value, setValue }) => {
                 >
                   {element}
                 </Text>
-              </View>
+              </TouchableOpacity>
             )
           )}
     </>

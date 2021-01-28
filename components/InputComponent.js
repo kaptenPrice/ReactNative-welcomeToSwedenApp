@@ -23,12 +23,14 @@ const InputComponent = ({
   isLabel,
   setIslabel,
   clearTextOnFocus,
-  props
+  valueColor,
+  props,
 }) => {
   const { width, height } = Dimensions.get("screen");
 
   return (
     <View style={{ paddingTop: 20 }}>
+      
       <View
         style={{
           marginLeft: 15,
@@ -52,6 +54,7 @@ const InputComponent = ({
       </View>
       <TextInput
         style={{
+          color: valueColor ,
           backgroundColor: appColors.bgColor,
           borderWidth: 1,
           borderColor: appColors.borderColor,
@@ -66,9 +69,8 @@ const InputComponent = ({
           shadowOpacity: 0.25,
           shadowRadius: 3,
           elevation: 10,
-          // paddingTop: 20,
           paddingLeft: 5,
-        } }
+        }}
         placeholder={placeholder}
         value={value}
         editable={editable}
@@ -81,6 +83,7 @@ const InputComponent = ({
         onFocus={onFocus}
         onEndEditing={onEndEditing}
         clearTextOnFocus={clearTextOnFocus}
+        
         {...props}
       />
     </View>

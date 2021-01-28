@@ -60,9 +60,10 @@ const FeedBack = () => {
 
   useEffect(() => {
     handleGetFeedback();
+    checkInputLength()
 
-    !isAdmin && setGrade(0);
-  }, [!isAdmin && isFeedbackDone]);
+    setGrade(0);
+  }, [isFeedbackDone]);
 
   const checkInputLength = () =>
     userFeedback.length == 0 || grade < 0
@@ -170,20 +171,6 @@ const FeedBack = () => {
 
   return (
     <View style={styles.container}>
-      <View style={[styles.header]}>
-        <View style={{ marginRight: width / 1.1 }}>
-          <ButtonComponent onPress={() => navigation.navigate("Home")}>
-            <MaterialCommunityIcons
-              name="home"
-              size={28}
-              color={appColors.iconInActive}
-            />
-          </ButtonComponent>
-        </View>
-        <View style={styles.headerContainer}>
-          <Text style={styles.headerText}>FeedBack</Text>
-        </View>
-      </View>
       {!isAdmin ? (
         <>
           <View style={styles.gradeConatiner}>
@@ -195,8 +182,8 @@ const FeedBack = () => {
             </View>
           </View>
 
-          <View style={styles.container}>
-            <View style={{ marginTop: 10 }}>
+          <View style={styles.container2}>
+            <View style={{ marginTop: 30 }}>
               <Text style={styles.labelStyle}>Feedback</Text>
 
               <TextInput
@@ -216,7 +203,7 @@ const FeedBack = () => {
                 onTouch={() => sendFeedbackToDB()}
                 disabled={disable}
               >
-                <Ionicons name="ios-send" color="white" size={30} />
+                <Ionicons name="ios-send" color="white" size={26} />
               </ButtonComponent>
             </View>
             {isFeedbackDone && (
@@ -281,7 +268,7 @@ const styles = StyleSheet.create({
   headerContainer: {
     position: "absolute",
   },
-  headerText: { fontSize: 35, fontWeight: "700", color: appColors.bgFeedBack },
+  headerText: { fontSize: 35, fontWeight: "700", color: appColors.textColor },
   gradeConatiner: {
     flexDirection: "column",
     justifyContent: "center",
@@ -317,7 +304,7 @@ const styles = StyleSheet.create({
   },
 
   feedbackButton: {
-    borderRadius: 5,
+    borderRadius: 12,
     backgroundColor: "grey",
     height: "auto",
     alignItems: "center",
@@ -337,10 +324,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "column",
   },
+  container2: {
+    flex: 1,
+    alignItems: "center",
+    flexDirection: "column",
+    marginTop:60
+  },
   footerView: {
     flex: 1,
     alignItems: "flex-end",
-    marginTop: 15,
+    marginTop: 25,
   },
 
   thanksText: {

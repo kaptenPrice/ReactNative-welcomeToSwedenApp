@@ -11,7 +11,7 @@ import ChildComponent from "../../components/ChildComponent";
 // import Styles from "../../css/Styles";
 import study_unsplash from "../../assets/images/study_unsplash.jpg";
 import appColors from "../../assets/appColor";
-import { useSelector , useDispatch} from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import ButtonComponent from "../../components/ButtonComponent";
 import { Ionicons, MaterialIcons, Feather } from "@expo/vector-icons";
 import { TextInput } from "react-native";
@@ -19,10 +19,8 @@ import * as db from "../../firestore/FirebaseUtils";
 import EditBox from "../../components/EditBox";
 
 const Study = () => {
-  const dispatch =useDispatch()
-  const {  currentUser } = useSelector(
-    (state) => state.authentication
-  );
+  const dispatch = useDispatch();
+  const { currentUser } = useSelector((state) => state.authentication);
   const { isAdmin } = useSelector((state) => state.userAdditionalInfo);
 
   const { width, height } = Dimensions.get("screen");
@@ -31,61 +29,33 @@ const Study = () => {
   const [contentOne, setContentOne] = useState();
   const [contentTwo, setContentTwo] = useState();
   const [contentThree, setContentThree] = useState();
-  const [phoneNumber, setPhoneNumber] = useState("0705083605"); //Testing callup function
+  const [phoneNumber, setPhoneNumber] = useState("0705083605"); //Testing call-function
 
   useEffect(() => {
-    getFieldData()
-    return () => {
-      getFieldData()
-    };
+    getFieldData();
+   
   }, []);
 
-  const getFieldData=()=>{
-  db.getContentData(
-      "societal-functions",
-      "study",
-      "like-a-swede",
-      (cb) => {
+  const getFieldData = () => {
+    try {
+      db.getContentData("social-life", "traditions", "like-a-swede", (cb) => {
         const data = cb.data();
-        // if (data.next)
-        setContentOne(JSON.stringify(data.content).slice(1, -1));
-      }
-    );
-
-   db.getContentData(
-      "societal-functions",
-      "study",
-      "lingo",
-      (cb) => {
+        !data?.content ? setContentOne("tomt") : setContentOne(data?.content);
+      });
+      db.getContentData("social-life", "traditions", "lingo", (cb) => {
         const data = cb.data();
-        // if (data.next) {
-          setContentTwo(JSON.stringify(data.content).slice(1, -1));
-
-        // }
-        // else{
-        //   console.log("We got some probs here, lets give som feedback")
-        //   //TODO sen user to feedback
-        // }
-        },
-        // (err)=>{
-        //   const fail=err.data()
-        //   console.log(fail)
-        // }
-      
-    );
- db.getContentData(
-      "societal-functions",
-      "study",
-      "assistence",
-      (cb) => {
+        !data?.content ? setContentTwo("tomt") : setContentTwo(data?.content);
+      });
+      db.getContentData("social-life", "traditions", "price-level", (cb) => {
         const data = cb.data();
-        // if (data.next)
-        setContentThree(JSON.stringify(data.content).slice(1, -1));
-      },
-      // console.log(contentThree)
-    );
-  }
-
+        !data?.content
+          ? setContentThree("tomt")
+          : setContentThree(data?.content);
+      });
+    } catch (error) {
+      console.log(`contentOne ERROR: ${error}`);
+    }
+  };
 
   const handleEdit = () => {
     if (isEditable === false) {
@@ -110,12 +80,7 @@ const Study = () => {
   };
   const handleSaveStudyContentTwo = () => {
     try {
-      db.handleSaveToDB(
-        "societal-functions",
-        "study",
-        "lingo",
-        contentTwo
-      );
+      db.handleSaveToDB("societal-functions", "study", "lingo", contentTwo);
     } catch (error) {
       console.log(error);
     } finally {
@@ -157,13 +122,9 @@ const Study = () => {
           </View>
         )
       }
-      children1={
-        <Text style={styles.headers}>Like a Swede:</Text>
-      }
+      children1={<Text style={styles.headers}>Like a Swede:</Text>}
       children2={
-        <Text style={styles.childComponentTextContainers}>
-          {contentOne}
-        </Text>
+        <Text style={styles.childComponentTextContainers}>{contentOne}</Text>
       }
       editBox1={
         isEditable && (
@@ -177,13 +138,9 @@ const Study = () => {
         )
       }
       style={styles.childComponentTextContainers}
-
       children3={<Text style={styles.headers}>Lingo</Text>}
-      
       children4={
-        <Text style={styles.childComponentTextContainers}>
-          {contentTwo}
-        </Text>
+        <Text style={styles.childComponentTextContainers}>{contentTwo}</Text>
       }
       editBox2={
         isEditable && (
@@ -198,9 +155,7 @@ const Study = () => {
       }
       children5={<Text style={styles.headers}>Assistance:</Text>}
       children6={
-        <Text style={styles.childComponentTextContainers}>
-          {contentThree}
-        </Text>
+        <Text style={styles.childComponentTextContainers}>{contentThree}</Text>
       }
       editBox3={
         isEditable && (
@@ -214,16 +169,17 @@ const Study = () => {
         )
       }
       children7={
-        <TouchableOpacity style={{ margin: 7, flexDirection: "row",  }}>
+        <TouchableOpacity style={{ margin: 7, flexDirection: "row" }}>
           <Text
             style={{ color: "blue", marginRight: 10 }}
             onPress={() => Linking.openURL("https://www.google.com")}
           >
             google
           </Text>
-          <Text 
-                   style={{ color: "blue", marginLeft: 10 }}
-          onPress={() => Linking.openURL(`Tel:${phoneNumber}`)}>
+          <Text
+            style={{ color: "blue", marginLeft: 10 }}
+            onPress={() => Linking.openURL(`Tel:${phoneNumber}`)}
+          >
             Call up
           </Text>
         </TouchableOpacity>
@@ -260,13 +216,13 @@ export const styles = StyleSheet.create({
   childComponentTextContainers: {
     // borderColor:"blue",
     // borderWidth:0.5,
-    fontWeight:"500",
+    fontWeight: "500",
     fontSize: 15,
     paddingBottom: 30,
     marginLeft: 5,
     marginRight: 5,
     marginTop: 10,
     color: appColors.textColor,
-    backgroundColor:appColors.bgColor
+    backgroundColor: appColors.bgColor,
   },
 });

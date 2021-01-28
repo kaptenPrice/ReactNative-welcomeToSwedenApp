@@ -1,15 +1,20 @@
 import React from "react";
-import { View, Text, Dimensions, Platform } from "react-native";
+import { View, Text, Dimensions, Platform, StyleSheet } from "react-native";
 import { useSelector } from "react-redux";
-
 import { useNavigation } from "@react-navigation/native";
-import { Ionicons } from "@expo/vector-icons";
+import {
+  Ionicons,
+  MaterialIcons,
+  Fontisto,
+  FontAwesome5,
+} from "@expo/vector-icons";
 import appColors from "../../assets/appColor";
 import ButtonComponent from "../../components/ButtonComponent";
 import Styles from "../../css/Styles";
 import { Image } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import Loading from "../../components/Loading";
+const pic = require("../../assets/images/sweden-flag.jpg");
 
 export default function SocietalFunctions() {
   const { isLoading, currentUser } = useSelector(
@@ -26,61 +31,48 @@ export default function SocietalFunctions() {
       ) : (
         <>
           <View
-            style={{
-              flex: 0.2,
-              alignItems: "center",
-            }}
+            style={[childStyles.imageContainer, { width, height: height / 3 }]}
           >
-            <Ionicons
-              name="ios-arrow-dropright"
-              size={200}
-              color={appColors.bgColor}
+            <Image
+              style={[childStyles.image, { width: null, height: null }]}
+              source={pic}
             />
           </View>
-          <View
-            style={{
-              flex: 1,
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              marginVertical: 55,
-            }}
-          >
+          <View style={childStyles.buttonContainer}>
             <ButtonComponent
-              style={{}}
+              style={childStyles.childButtons}
               onTouch={() => navigation.navigate("Study")}
-              buttonStyle={Styles.socialLifeButtonComp}
+              buttonStyle={childStyles.buttonStyle}
             >
-              <Text style={Styles.socialLifeButtonText}> STUDY</Text>
+              <Text style={childStyles.buttonTextStyle}> STUDY</Text>
               <Ionicons
-                name="ios-man"
+                name="ios-school"
                 size={30}
-                color={appColors.placeHolderColor} //TODO HOW TO RM the override from buttonStyle?
+                color={appColors.iconInActive}
               />
             </ButtonComponent>
             <ButtonComponent
-              style={{}}
+              style={childStyles.childButtons}
               onTouch={() => navigation.navigate("Job")}
-              buttonStyle={Styles.socialLifeButtonComp}
+              buttonStyle={childStyles.buttonStyle}
             >
-              <Text style={Styles.socialLifeButtonText}>JOB</Text>
-              <Ionicons
-                name="ios-man"
-                size={30}
-                color={appColors.placeHolderColor} //TODO HOW TO RM the override from buttonStyle?
+              <Text style={childStyles.buttonTextStyle}>JOB</Text>
+              <MaterialIcons
+                name="work"
+                size={24}
+                color={appColors.iconInActive}
               />
             </ButtonComponent>
             <ButtonComponent
-              style={{}}
+              style={childStyles.childButtons}
               onTouch={() => navigation.navigate("Healthcare")}
-              buttonStyle={Styles.socialLifeButtonComp}
+              buttonStyle={childStyles.buttonStyle}
             >
-              <Text style={Styles.socialLifeButtonText}>HEALTHCARE</Text>
-              <Ionicons
-                style={{ justifyContent: "flex-end" }} //TODO HOW TO RM the override from buttonStyle?
-                name="ios-man"
+              <Text style={childStyles.buttonTextStyle}>HEALTHCARE</Text>
+              <FontAwesome5
+                name="hospital"
                 size={30}
-                color={appColors.placeHolderColor}
+                color={appColors.iconInActive}
               />
             </ButtonComponent>
           </View>
@@ -89,3 +81,40 @@ export default function SocietalFunctions() {
     </ScrollView>
   );
 }
+export const childStyles = StyleSheet.create({
+  imageContainer: {
+    flex: 1,
+  },
+  image: { flex: 1 },
+  buttonContainer: {
+    flex: 1,
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: 55,
+  },
+  childButtons: {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 12,
+  },
+  buttonStyle: {
+    alignItems: "center",
+    backgroundColor: appColors.bgColor,
+    borderRadius: 10,
+    padding: 5,
+    width: 350,
+    marginBottom: 10,
+  },
+  buttonTextStyle: {
+    color: appColors.textColor,
+    fontWeight: "bold",
+    fontSize: 24,
+    textAlign: "left",
+  },
+});

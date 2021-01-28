@@ -1,57 +1,174 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Dimensions, StyleSheet, Text, View } from "react-native";
 import ChildComponent from "../../components/ChildComponent";
-import Styles from "../../css/Styles";
-import summer_pic from "../../assets/images/emma-unsplash.jpg";
+// import fika_pic from "../../assets/images/fika_pic.jpg";
 import appColors from "../../assets/appColor";
+import ButtonComponent from "../../components/ButtonComponent";
+import { Ionicons, MaterialIcons, Feather } from "@expo/vector-icons";
+import { TextInput } from "react-native-gesture-handler";
+import ViewMoreText from "react-native-view-more-text";
+import AdminButtons from "../../components/EditBox";
+import * as db from "../../firestore/FirebaseUtils";
+import ContentComponent from "../../components/ContentComponent";
+import EditBox from "../../components/EditBox";
+const traditions_pic=require("../../assets/images/dalahäst_unsplash.jpg")
 
 const Traditions = () => {
-  const { width, height } = Dimensions.get("window");
-  const [traditionsContentOne, settraditionsContentOne] = useState(
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-  );
-  const [traditionsContentTwo, settraditionsContentTwo] = useState(
-    "But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful"
-  );
-  const [traditionsContentThree, settraditionsContentThree] = useState(
-    "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo"
-  );
+  // const dispatch = useDispatch();
+  const { isAdmin } = useSelector((state) => state.userAdditionalInfo);
+  const { currentUser } = useSelector((state) => state.authentication);
+
+  const { width, height } = Dimensions.get("screen");
+  const [isEditable, setIsEditable] = useState(false);
+  const [contentOne, setContentOne] = useState("");
+  const [contentTwo, setContentTwo] = useState("");
+  const [contentThree, setContentThree] = useState("");
+
+  useEffect(() => {
+    getFieldData();
+    // return () => {
+    //   getFieldData();
+    // };
+  }, []);
+
+
+    const getFieldData = () => {
+    try {
+      db.getContentData("social-life", "traditions", "like-a-swede", (cb) => {
+        const data = cb.data();
+        !data?.content ? setContentOne("tomt") : setContentOne(data?.content);
+      });
+      db.getContentData("social-life", "traditions", "lingo", (cb) => {
+        const data = cb.data();
+        !data?.content ? setContentTwo("tomt") : setContentTwo(data?.content);
+      });
+      db.getContentData("social-life", "traditions", "price-level", (cb) => {
+        const data = cb.data();
+        !data?.content
+          ? setContentThree("tomt")
+          : setContentThree(data?.content);
+      });
+    } catch (error) {
+      console.log(`contentOne ERROR: ${error}`);
+    }
+  };
+
+  const handleEdit = () => {
+    if (isEditable === false) {
+      setIsEditable(true);
+    } else {
+      setIsEditable(false);
+    }
+  };
+  const handleSaveContentOne = () => {
+    try {
+      db.handleSaveToDB("social-life", "fika", "like-a-swede", contentOne);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsEditable(false);
+    }
+  };
+  const handleSaveContentTwo = () => {
+    try {
+      db.handleSaveToDB("social-life", "fika", "lingo", contentTwo);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsEditable(false);
+    }
+  };
+  const handleSaveContentThree = () => {
+    try {
+      db.handleSaveToDB("social-life", "fika", "price-level", contentThree);
+    } catch (error) {
+      console.log(error);
+    } finally {
+    }
+  };
 
   return (
     <ChildComponent
-      scrollViewStyle={{ flex: 1, backgroundColor: appColors.bgChildComp }}
-      iamgeViewStyle={{ flex: 1, width, height: height / 4 }}
-      imageStyle={{ flex: 1, width: null, height: null }}
-      imgSource={summer_pic}
-      firstContentStyle={Styles.childComponentContentView}
-      children1={
-        <Text style={Styles.childComponentHeaders}>Like a Swede:</Text>
-      }
-      children2={traditionsContentOne}
-      // seeMoreText="more"
-      seeMoreStyle={{ color: appColors.textColor }}
-      backgroundColor={appColors.bgChildContainers}
-      // seeLessText
-      // seeLessStyle
-      // wrapperStyle
-      // numberOfLines
-      // customTextComponent
-      style={Styles.childComponentTextContainers}
-      secondContentView={Styles.childComponentContentView}
-      children3={<Text style={Styles.childComponentHeaders}>Lingo:</Text>}
-      children4={
-        <Text style={Styles.childComponentTextContainers}>
-          {traditionsContentTwo}
-        </Text>
-      }
-      thirdConentViewStyle={Styles.childComponentContentView}
-      children5={<Text style={Styles.childComponentHeaders}>Price level:</Text>}
-      children6={
-        <Text style={Styles.childComponentTextContainers}>
-          {traditionsContentThree}
-        </Text>
-      }
-    />
+    scrollViewStyle={{ flex: 1, backgroundColor: appColors.bgColor }}
+    iamgeViewStyle={{ flex: 1, width, height: height / 4 }}
+    imageStyle={{ flex: 1, width: null, height: null }}
+    imgSource={traditions_pic}
+    editButton1={
+      isAdmin && (
+        <View>
+          <ButtonComponent
+            onTouch={handleEdit}
+            style={{
+              alignItems: "center",
+            }}
+          >
+            <MaterialIcons name="edit" size={30} color="black" />
+          </ButtonComponent>
+        </View>
+      )
+    }
+    children1={<Text style={style.headers}>Like a Swede</Text>}
+    children2={
+      <Text style={style.childComponentTextContainers}>{contentOne}</Text>
+    }
+    editBox1={
+      isEditable && (
+        <EditBox
+          editable={isEditable}
+          onChangeText={(e) => setContentOne(e)}
+          onTouch={()=>handleSaveContentOne()}
+        />
+      )
+    }
+    style={[style.childComponentTextContainers]}
+    children3={<Text style={style.headers}>Lingo</Text>}
+    children4={
+      <Text style={style.childComponentTextContainers}>{contentTwo}</Text>
+    }
+    editBox2={
+      isEditable && (
+        <EditBox
+          editable={isEditable}
+          onChangeText={(e) => setContentTwo(e)}
+          onTouch={()=>handleSaveContentTwo()}
+        />
+      )
+    }
+    children5={<Text style={style.headers}>Price level</Text>}
+    children6={
+      <Text style={style.childComponentTextContainers}>{contentThree}</Text>
+    }
+    editBox3={
+      isEditable && (
+        <EditBox
+          editable={isEditable}
+          onChangeText={(e) => setContentThree(e)}
+          onTouch={handleSaveContentThree}
+        />
+      )
+    }
+  />
+   
   );
 };
 export default Traditions;
+
+
+const style = StyleSheet.create({
+  headers: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginLeft: 5,
+  },
+  childComponentTextContainers: {
+    fontWeight: "500",
+    fontSize: 15,
+    paddingBottom: 30,
+    marginLeft: 5,
+    marginRight: 5,
+    marginTop: 10,
+    color: appColors.textColor,
+    backgroundColor: appColors.bgColor,
+  },
+});

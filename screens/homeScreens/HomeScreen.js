@@ -20,7 +20,7 @@ import SocieltalFunctionsSvg from "../../assets/svg/SocieltalFunctionsSvg";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Loading from "../../components/Loading";
 import * as db from "../../firestore/FirebaseUtils";
-
+import {LinearGradient} from 'expo-linear-gradient';
 //TODO MOVE TO .env
 //https://api.unsplash.com/
 // Key:Sbpk7Dz6Xl862AgdaUuUAW8p2cnpd1QvS5S-kA8AE5g
@@ -38,7 +38,6 @@ export default function HomeScreen() {
   );
 
   const [homeScreenImage, setHomeScreenImage] = useState([]);
-
   const [uid, setUid] = useState(currentUser.uid || currentUser.id);
   const [_email, setEmail] = useState(currentUser.email);
 
@@ -101,6 +100,7 @@ export default function HomeScreen() {
       </View>
     );
   };
+
   return (
     <ScrollView
       style={{
@@ -190,3 +190,6 @@ export default function HomeScreen() {
   );
 }
 
+const styles = StyleSheet.create({
+  gradient:{flex:1},
+});

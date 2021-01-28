@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Text, View } from "react-native";
+import { Text, View, StyleSheet, Dimensions, SafeAreaView } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import appColors from "../assets/appColor";
 import ButtonComponent from "../components/ButtonComponent";
@@ -9,7 +9,6 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import * as Google from "expo-google-app-auth";
 import * as db from "../firestore/FirebaseUtils";
-import { SafeAreaView } from "react-native";
 import {
   Ionicons,
   MaterialIcons,
@@ -18,9 +17,10 @@ import {
   FontAwesome,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
-import { Dimensions } from "react-native";
 import InputComponent from "../components/InputComponent";
 import ModalSendMailComponent from "../components/ModalSendMailComponent";
+import {LinearGradient} from 'expo-linear-gradient';
+
 
 const LoginScreen = () => {
   const dispatch = useDispatch();
@@ -34,13 +34,11 @@ const LoginScreen = () => {
   const [isSecure, setSecure] = useState(true);
   const [isModal, setIsModal] = useState(false);
 
-
   const signInWithGoogleAsync = async () => {
     try {
       const res = await Google.logInAsync({
         iosClientId:
           "383691417994-fc40nclpp83r5jln1ou434lkptsc6oq4.apps.googleusercontent.com",
-        // default: "383691417994-1i9ac782aafjs5bpqqucshuaa9i1fh54.apps.googleusercontent.com",
         scopes: ["profile", "email"],
       });
       if (res.type === "success") {
@@ -110,152 +108,142 @@ const LoginScreen = () => {
       }
     }
   };
-  
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      {/* <View > */}
-      <View style={Styles.welcomeViewLoginScreen}>
-        <Text style={Styles.loginScreenMain}>Welcome</Text>
-        <Text
-          style={{
-            color: appColors.textColor,
-            fontSize: 24,
-            fontWeight: "500",
-            marginTop: 5,
-          }}
-        >
-          Free for everyone to join
-        </Text>
-      </View>
+    // <LinearGradient colors={["#6c7578","#8E8887"]} style={styles.gradient}>
+      <SafeAreaView style={{ flex: 1 }}>
+        <View style={Styles.welcomeViewLoginScreen}>
+          <Text style={Styles.loginScreenMain}>Welcome</Text>
+          <Text
+            style={{
+              color: appColors.textColor,
+              fontSize: 24,
+              fontWeight: "500",
+              marginTop: 5,
+            }}
+          >
+            Free for everyone to join
+          </Text>
+        </View>
 
-      <View
-        style={{
-          flex: 0.8,
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
         <View
           style={{
-            flexDirection: "row",
-            alignItems: "flex-end",
+            flex: 0.8,
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
-          <InputComponent
-            style={{ width: _width / 1 }}
-            autoCapitalize="none"
-            placeholder="Email*"
-            placeholderTextColor={appColors.placeHolderColor}
-            keyboardType="email-address"
-            onChangeText={(e) => setEmail(e)}
-            clearTextOnFocus={true}
-          />
-          <MaterialIcons
+          <View
             style={{
-              right: 35,
-              bottom: 7,
+              flexDirection: "row",
+              alignItems: "flex-end",
             }}
-            name="email"
-            size={26}
-            color={appColors.iconInActive}
-          />
-        </View>
-        <View style={{ flexDirection: "row", alignItems: "flex-end" }}>
-          <InputComponent
-            autoCapitalize="none"
-            placeholder="Password*"
-            placeholderTextColor={appColors.placeHolderColor}
-            keyboardType="default"
-            secureTextEntry={isSecure}
-            onChangeText={(password) => setPassword(password)}
-            clearTextOnFocus={true}
-          />
-          {isSecure ? (
-            <Feather
-              onPress={() => setSecure(!isSecure)}
-              style={{
-                right: 35,
-                bottom: 7,
-              }}
-              name="eye-off"
-              size={24}
-              color={appColors.iconInActive}
+          >
+            <InputComponent
+              style={{ width: _width / 1 }}
+              autoCapitalize="none"
+              placeholder="Email*"
+              placeholderTextColor={appColors.placeHolderColor}
+              keyboardType="email-address"
+              onChangeText={(e) => setEmail(e)}
+              // clearTextOnFocus={true}
             />
-          ) : (
-            <Feather
-              onPress={() => setSecure(!isSecure)}
+            <MaterialIcons
               style={{
                 right: 35,
                 bottom: 7,
               }}
-              name="eye"
+              name="email"
               size={26}
               color={appColors.iconInActive}
             />
-          )}
+          </View>
+          <View style={{ flexDirection: "row", alignItems: "flex-end" }}>
+            <InputComponent
+              autoCapitalize="none"
+              placeholder="Password*"
+              placeholderTextColor={appColors.placeHolderColor}
+              keyboardType="default"
+              secureTextEntry={isSecure}
+              onChangeText={(password) => setPassword(password)}
+              clearTextOnFocus={true}
+            />
+            {isSecure ? (
+              <Feather
+                onPress={() => setSecure(!isSecure)}
+                style={{
+                  right: 35,
+                  bottom: 7,
+                }}
+                name="eye-off"
+                size={24}
+                color={appColors.iconInActive}
+              />
+            ) : (
+              <Feather
+                onPress={() => setSecure(!isSecure)}
+                style={{
+                  right: 35,
+                  bottom: 7,
+                }}
+                name="eye"
+                size={26}
+                color={appColors.iconInActive}
+              />
+            )}
+          </View>
         </View>
-      </View>
 
-      <View
-        style={{
-          flex: 1.1,
-          flexDirection: "column",
-          justifyContent: "space-around",
-          alignItems: "center",
-          marginBottom: 10,
-          // borderWidth:1,
-          // borderColor:"red"
-        }}
-      >
-        <ButtonComponent buttonStyle={Styles.loginButton} onTouch={signIn}>
-          <Text style={Styles.signinRegisterButtonText}>Sign in by email</Text>
-        </ButtonComponent>
-        <ButtonComponent
-          buttonStyle={Styles.loginButton}
-          onTouch={() => signInWithGoogleAsync()}
+        <View
+          style={{
+            flex: 1.1,
+            flexDirection: "column",
+            justifyContent: "space-around",
+            alignItems: "center",
+            marginBottom: 10,
+           
+          }}
         >
-          <Text style={Styles.signinRegisterButtonText}>Sign with Google</Text>
-        </ButtonComponent>
-        <ButtonComponent
-          buttonStyle={Styles.loginButton}
-          onTouch={() => register()}
-        >
-          <Text style={Styles.signinRegisterButtonText}>New account</Text>
-        </ButtonComponent>
-        <ButtonComponent
-          buttonStyle={Styles.loginButton}
-          onTouch={() => setIsModal(true)}
-        >
-          <Text style={Styles.signinRegisterButtonText}>Forgot password</Text>
-        </ButtonComponent>
-       
-      </View>
-      <View style={{flex:0}}>
-      <ModalSendMailComponent
-          visible={isModal}
-          onCancel={() => setIsModal(false)}
-        />
-    </View>
-    </SafeAreaView>
- 
+          <ButtonComponent buttonStyle={Styles.loginButton} onTouch={signIn}>
+            <Text style={Styles.signinRegisterButtonText}>
+              Sign in by email
+            </Text>
+          </ButtonComponent>
+          <ButtonComponent
+            buttonStyle={Styles.loginButton}
+            onTouch={() => signInWithGoogleAsync()}
+          >
+            <Text style={Styles.signinRegisterButtonText}>
+              Sign with Google
+            </Text>
+          </ButtonComponent>
+          <ButtonComponent
+            buttonStyle={Styles.loginButton}
+            onTouch={() => register()}
+          >
+            <Text style={Styles.signinRegisterButtonText}>New account</Text>
+          </ButtonComponent>
+          <ButtonComponent
+            buttonStyle={Styles.loginButton}
+            onTouch={() => setIsModal(true)}
+          >
+            <Text style={Styles.signinRegisterButtonText}>Forgot password</Text>
+          </ButtonComponent>
+        </View>
+        <View style={{ flex: 0 }}>
+          <ModalSendMailComponent
+            visible={isModal}
+            onCancel={() => setIsModal(false)}
+          />
+        </View>
+      </SafeAreaView>
+      // </LinearGradient>
   );
 };
 
 export default LoginScreen;
 
-//TODO PASSWORD CHNANGE
-
-// const currentPass = window.prompt('Please enter current password');
-// const emailCred  = firebase.auth.EmailAuthProvider.credential(
-//     firebase.auth().currentUser, currentPass);
-// firebase.auth().currentUser.reauthenticateWithCredential(emailCred)
-//     .then(() => {
-//       // User successfully reauthenticated.
-//       const newPass = window.prompt('Please enter new password');
-//       return firebase.auth().currentUser.updatePassword(newPass);
-//     })
-//     .catch(error = > {
-//       // Handle error.
-//     });
+const styles = StyleSheet.create({
+  gradient:{flex:1},
+});

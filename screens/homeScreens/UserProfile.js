@@ -162,39 +162,121 @@ const UserProfile = () => {
   };
 
   return (
-    <SafeAreaView style={{flex:1}}>
-    <ScrollView style={Styles.profileScreen}>
-      <View>
-        <View style={[styles.headerButtons, { height: height / 13 }]}>
-          <ButtonComponent
-            style={{ marginRight: width / 1.5 }}
-            onTouch={() => {
-              navigation.navigate("Home");
-            }}
-          >
-            <MaterialCommunityIcons
-              name="home"
-              size={30}
-              color={appColors.iconInActive}
-            />
-          </ButtonComponent>
+    <SafeAreaView style={{ flex: 1 }}>
+      <ScrollView style={Styles.profileScreen}>
+        <View>
+          {/* <View style={[styles.headerButtons, { height: height / 13 }]}>
+         
 
-          {!editMode && (
+         
+         
+        </View> */}
+        </View>
+        <View style={[styles.imageMainContainer, { height: height / 5 }]}>
+          {isLoading ? (
+            <Loading />
+          ) : (
             <ButtonComponent
-              style={{ marginRight: 20 }}
-              onTouch={() => handleEdit()}
+              onTouch={() => addProfileImage()}
+              style={styles.imageContainer}
             >
-              <View>
-                <MaterialIcons
-                  name="edit"
-                  size={30}
-                  color={appColors.iconInActive}
-                />
-              </View>
+              <Image
+                style={[Styles.userProfileImage]}
+                imageStyle={{ borderRadius: 70 }}
+                source={{ uri: localAvatar }}
+              />
             </ButtonComponent>
           )}
+        </View>
+
+        <View style={styles.inputContainer}>
+          
+          <InputComponent
+            editable={isEditable}
+            children={"Name"}
+            value={localUserName}
+            onChangeText={(e) => {
+              setLocalUserName(e);
+            }}
+            isLabel={true}
+            valueColor={!editMode? appColors.textColor: appColors.editableText} 
+
+          />
+          <InputComponent
+            children={"E-mail"}
+            value={localEmail}
+            editable={false}
+            isLabel={true}
+            valueColor={appColors.textColor}
+            // icon={<MaterialIcons
+            // style={{zIndex:50}}
+            // name="cancel"
+            // size={24}
+            // color={appColors.iconInActive}
+          // />
+          //   }
+          />
+
+          <InputComponent
+            editable={isEditable}
+            children={"Phone"}
+            keyboardType="phone-pad"
+            dataDetectorTypes="phoneNumber"
+            value={localPhone}
+            onChangeText={(e) => {
+              setLocalPhone(e);
+            }}
+            isLabel={true}
+            valueColor={!editMode? appColors.textColor: appColors.editableText} 
+       
+
+          />
+
+          <InputComponent
+            editable={isEditable}
+            children={"City"}
+            dataDetectorTypes="address"
+            value={localCity}
+            onChangeText={(e) => {
+              setLocalCity(e);
+            }}
+            isLabel={true}
+            valueColor={!editMode? appColors.textColor: appColors.editableText} 
+
+          />
+          {!editMode && (
+            <ButtonComponent
+              style={{ marginTop: 25, height: height / 15 }}
+              onTouch={() => handleEdit()}
+              buttonStyle={{
+                padding: 10,
+                borderRadius: 15,
+                borderWidth: 1,
+                borderColor: appColors.changePass,
+                backgroundColor: appColors.changePass,
+              }}
+              children={
+                <Text
+                  style={{
+                    color: appColors.bgColor,
+                    fontWeight: "500",
+                    paddingHorizontal:45
+                  }}
+                >
+                  Edit info
+                </Text>
+              }
+            />
+          )}
           {editMode && (
-            <>
+            <View
+              style={{
+                flex: 1,
+                flexDirection: "row",
+                marginTop: 25,
+                height: height / 15,
+              }}
+            >
               <ButtonComponent
                 style={styles.discardButton}
                 onTouch={() => discardChanges()}
@@ -215,95 +297,42 @@ const UserProfile = () => {
                   color={appColors.iconInActive}
                 />
               </ButtonComponent>
-            </>
+            </View>
           )}
-        </View>
-      </View>
-      <View style={[styles.imageMainContainer, { height: height / 5 }]}>
-        {isLoading ? (
-          <Loading />
-        ) : (
-          <ButtonComponent
-            onTouch={() => addProfileImage()}
-            style={styles.imageContainer}
-          >
-            <Image
-              style={[Styles.userProfileImage]}
-              imageStyle={{ borderRadius: 70 }}
-              source={{ uri: localAvatar }}
+          {isOAuth && (
+            <ButtonComponent
+              style={{
+                flex: 1,
+                paddingTop: 20,
+                position: "relative",
+                height: height / 20,
+              }}
+              onTouch={() => setIsModal(true)}
+              buttonStyle={{
+                padding: 10,
+                borderRadius: 15,
+                borderWidth: 1,
+                borderColor: appColors.changePass,
+                backgroundColor: appColors.changePass,
+              }}
+              children={
+                <Text
+                  style={{
+                    color: appColors.bgColor,
+                    fontWeight: "500",
+                  }}
+                >
+                  Edit e-mail / password
+                </Text>
+              }
             />
-          </ButtonComponent>
-        )}
-      </View>
+          )}
 
-      <View style={styles.inputContainer}>
-        <InputComponent
-          editable={isEditable}
-          children={"Name"}
-          value={localUserName}
-          onChangeText={(e) => {
-            setLocalUserName(e);
-          }}
-          isLabel={true}
-        />
-        <InputComponent
-          children={"E-mail"}
-          value={localEmail}
-          editable={false}
-          isLabel={true}
-        />
-
-        <InputComponent
-          editable={isEditable}
-          children={"Phone"}
-          keyboardType="phone-pad"
-          dataDetectorTypes="phoneNumber"
-          value={localPhone}
-          onChangeText={(e) => {
-            setLocalPhone(e);
-          }}
-          isLabel={true}
-        />
-
-        <InputComponent
-          editable={isEditable}
-          children={"City"}
-          dataDetectorTypes="address"
-          value={localCity}
-          onChangeText={(e) => {
-            setLocalCity(e);
-          }}
-          isLabel={true}
-        />
-        {isOAuth && (
-          <ButtonComponent
-            style={{ flex: 1, paddingTop: 20 }}
-            onTouch={() => setIsModal(true)}
-            buttonStyle={{
-              padding: 10,
-              borderRadius: 15,
-              borderWidth: 1,
-              borderColor: appColors.changePass,
-              backgroundColor: appColors.changePass,
-            }}
-            children={
-              <Text
-                style={{
-                  color: appColors.bgColor,
-                  fontWeight: "500",
-                }}
-              >
-                Edit e-mail / password
-              </Text>
-            }
-          />
-        )}
-
-        {isModal ? (
-          <ModalEditMailPassComponent onCancel={() => setIsModal(false)} />
-        ) : null}
-      </View>
-    </ScrollView>
+          {isModal ? (
+            <ModalEditMailPassComponent onCancel={() => setIsModal(false)} />
+          ) : null}
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -320,7 +349,7 @@ const styles = StyleSheet.create({
   },
   headerButtons: {
     flex: 1,
-    justifyContent: "flex-end",
+    justifyContent: "center",
     flexDirection: "row",
     marginHorizontal: 2,
     paddingVertical: 5,

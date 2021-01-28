@@ -25,6 +25,7 @@ const ChildComponent = ({
   editBox4,
   ...props
 }) => {
+  
   return (
     <ScrollView style={scrollViewStyle}>
       <View style={iamgeViewStyle}>
