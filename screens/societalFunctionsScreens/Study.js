@@ -8,8 +8,7 @@ import {
   StyleSheet,
 } from "react-native";
 import ChildComponent from "../../components/ChildComponent";
-// import Styles from "../../css/Styles";
-import study_unsplash from "../../assets/images/study_unsplash.jpg";
+const  study_unsplash = require("../../assets/images/study_unsplash.jpg");
 import appColors from "../../assets/appColor";
 import { useSelector, useDispatch } from "react-redux";
 import ButtonComponent from "../../components/ButtonComponent";

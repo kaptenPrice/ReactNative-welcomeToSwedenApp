@@ -24,13 +24,13 @@ const InputComponent = ({
   setIslabel,
   clearTextOnFocus,
   valueColor,
+  selectionColor,
   props,
 }) => {
   const { width, height } = Dimensions.get("screen");
 
   return (
     <View style={{ paddingTop: 20 }}>
-      
       <View
         style={{
           marginLeft: 15,
@@ -54,7 +54,7 @@ const InputComponent = ({
       </View>
       <TextInput
         style={{
-          color: valueColor ,
+          color: valueColor,
           backgroundColor: appColors.bgColor,
           borderWidth: 1,
           borderColor: appColors.borderColor,
@@ -83,7 +83,7 @@ const InputComponent = ({
         onFocus={onFocus}
         onEndEditing={onEndEditing}
         clearTextOnFocus={clearTextOnFocus}
-        
+        selectionColor={selectionColor}
         {...props}
       />
     </View>

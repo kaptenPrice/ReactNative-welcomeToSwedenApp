@@ -105,7 +105,7 @@ const Styles = StyleSheet.create({
     // marginTop: 20,
   },
   signinRegisterButtonText: {
-    color: appColors.borderColor,
+    color: appColors.textColor,
     fontWeight: "600",
     fontSize: 18,
   },

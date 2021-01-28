@@ -19,8 +19,7 @@ import {
 } from "@expo/vector-icons";
 import InputComponent from "../components/InputComponent";
 import ModalSendMailComponent from "../components/ModalSendMailComponent";
-import {LinearGradient} from 'expo-linear-gradient';
-
+import { LinearGradient } from "expo-linear-gradient";
 
 const LoginScreen = () => {
   const dispatch = useDispatch();
@@ -71,6 +70,9 @@ const LoginScreen = () => {
           case "auth/invalid-email":
             alert(`${email} is misspelled? Try again`);
             break;
+          case "auth/wrong-password":
+            alert(`Wrong password, misspelled?`);
+            break;
           default:
             alert(error.code);
         }
@@ -111,139 +113,158 @@ const LoginScreen = () => {
 
   return (
     // <LinearGradient colors={["#6c7578","#8E8887"]} style={styles.gradient}>
-      <SafeAreaView style={{ flex: 1 }}>
-        <View style={Styles.welcomeViewLoginScreen}>
-          <Text style={Styles.loginScreenMain}>Welcome</Text>
-          <Text
-            style={{
-              color: appColors.textColor,
-              fontSize: 24,
-              fontWeight: "500",
-              marginTop: 5,
-            }}
-          >
-            Free for everyone to join
-          </Text>
-        </View>
-
-        <View
-          style={{
-            flex: 0.8,
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={styles.welcomeViewLoginScreen}>
+        <Text style={styles.loginScreenMain}>Welcome</Text>
+        <Text
+          style={styles.header}
         >
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "flex-end",
-            }}
-          >
-            <InputComponent
-              style={{ width: _width / 1 }}
-              autoCapitalize="none"
-              placeholder="Email*"
-              placeholderTextColor={appColors.placeHolderColor}
-              keyboardType="email-address"
-              onChangeText={(e) => setEmail(e)}
-              // clearTextOnFocus={true}
+          Free for everyone to join
+        </Text>
+      </View>
+
+      <View
+        style={styles.container}
+      >
+        <View
+          style={styles.inputContainer}
+        >
+          <InputComponent
+            style={{ width: _width / 1 }}
+            autoCapitalize="none"
+            placeholder="Email*"
+            placeholderTextColor={appColors.placeHolderColor}
+            keyboardType="email-address"
+            onChangeText={(e) => setEmail(e)}
+            // clearTextOnFocus={true}
+          />
+          <MaterialIcons
+            style={styles.icon}
+            name="email"
+            size={26}
+            color={appColors.iconInActive}
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <InputComponent
+            autoCapitalize="none"
+            placeholder="Password*"
+            placeholderTextColor={appColors.placeHolderColor}
+            keyboardType="default"
+            secureTextEntry={isSecure}
+            onChangeText={(password) => setPassword(password)}
+            clearTextOnFocus={true}
+          />
+          {isSecure ? (
+            <Feather
+              onPress={() => setSecure(!isSecure)}
+              style={styles.icon}
+              name="eye-off"
+              size={24}
+              color={appColors.iconInActive}
             />
-            <MaterialIcons
-              style={{
-                right: 35,
-                bottom: 7,
-              }}
-              name="email"
+          ) : (
+            <Feather
+              onPress={() => setSecure(!isSecure)}
+              style={styles.icon}
+              name="eye"
               size={26}
               color={appColors.iconInActive}
             />
-          </View>
-          <View style={{ flexDirection: "row", alignItems: "flex-end" }}>
-            <InputComponent
-              autoCapitalize="none"
-              placeholder="Password*"
-              placeholderTextColor={appColors.placeHolderColor}
-              keyboardType="default"
-              secureTextEntry={isSecure}
-              onChangeText={(password) => setPassword(password)}
-              clearTextOnFocus={true}
-            />
-            {isSecure ? (
-              <Feather
-                onPress={() => setSecure(!isSecure)}
-                style={{
-                  right: 35,
-                  bottom: 7,
-                }}
-                name="eye-off"
-                size={24}
-                color={appColors.iconInActive}
-              />
-            ) : (
-              <Feather
-                onPress={() => setSecure(!isSecure)}
-                style={{
-                  right: 35,
-                  bottom: 7,
-                }}
-                name="eye"
-                size={26}
-                color={appColors.iconInActive}
-              />
-            )}
-          </View>
+          )}
         </View>
+      </View>
 
-        <View
-          style={{
-            flex: 1.1,
-            flexDirection: "column",
-            justifyContent: "space-around",
-            alignItems: "center",
-            marginBottom: 10,
-           
-          }}
+      <View
+        style={styles.buttonContainer}
+      >
+        <ButtonComponent buttonStyle={styles.loginButton} onTouch={signIn}>
+         <Text style={styles.signinRegisterButtonText}>Sign in by email</Text>
+        </ButtonComponent>
+        <ButtonComponent
+          buttonStyle={styles.loginButton}
+          onTouch={() => signInWithGoogleAsync()}
         >
-          <ButtonComponent buttonStyle={Styles.loginButton} onTouch={signIn}>
-            <Text style={Styles.signinRegisterButtonText}>
-              Sign in by email
-            </Text>
-          </ButtonComponent>
-          <ButtonComponent
-            buttonStyle={Styles.loginButton}
-            onTouch={() => signInWithGoogleAsync()}
-          >
-            <Text style={Styles.signinRegisterButtonText}>
-              Sign with Google
-            </Text>
-          </ButtonComponent>
-          <ButtonComponent
-            buttonStyle={Styles.loginButton}
-            onTouch={() => register()}
-          >
-            <Text style={Styles.signinRegisterButtonText}>New account</Text>
-          </ButtonComponent>
-          <ButtonComponent
-            buttonStyle={Styles.loginButton}
-            onTouch={() => setIsModal(true)}
-          >
-            <Text style={Styles.signinRegisterButtonText}>Forgot password</Text>
-          </ButtonComponent>
-        </View>
-        <View style={{ flex: 0 }}>
-          <ModalSendMailComponent
-            visible={isModal}
-            onCancel={() => setIsModal(false)}
-          />
-        </View>
-      </SafeAreaView>
-      // </LinearGradient>
+          <Text style={styles.signinRegisterButtonText}>Sign with Google</Text>
+        </ButtonComponent>
+        <ButtonComponent
+          buttonStyle={styles.loginButton}
+          onTouch={() => register()}
+        >
+          <Text style={styles.signinRegisterButtonText}>New account</Text>
+        </ButtonComponent>
+        <ButtonComponent
+          buttonStyle={styles.loginButton}
+          onTouch={() => setIsModal(true)}
+        >
+          <Text style={styles.signinRegisterButtonText}>Forgot password</Text>
+        </ButtonComponent>
+      </View>
+      <View style={{ flex: 0 }}>
+        <ModalSendMailComponent
+          visible={isModal}
+          onCancel={() => setIsModal(false)}
+        />
+      </View>
+    </SafeAreaView>
+    // </LinearGradient>
   );
 };
 
 export default LoginScreen;
 
 const styles = StyleSheet.create({
-  gradient:{flex:1},
+  gradient: { flex: 1 },
+  header:{
+    color: appColors.textColor,
+    fontSize: 24,
+    fontWeight: "500",
+    marginTop: 5,
+  },
+  welcomeViewLoginScreen: {
+    flex: 0.5,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  loginScreenMain: {
+    color: appColors.textColor,
+    fontWeight: "600",
+    fontSize: 40,
+  },
+  container:{
+    flex: 0.8,
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  inputContainer:{
+    flexDirection: "row",
+    alignItems: "flex-end",
+  },
+  icon:{
+    right: 35,
+    bottom: 7,
+  },
+  buttonContainer:{
+    flex: 1.1,
+    flexDirection: "column",
+    justifyContent: "space-around",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  loginButton: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: 200,
+    height: 40,
+    borderRadius: 15,
+    backgroundColor: "transparent",
+    borderWidth: 1,
+    borderColor: appColors.borderColor,
+  },
+  signinRegisterButtonText: {
+    color: appColors.textColor,
+    fontWeight: "600",
+    fontSize: 18,
+  },
 });

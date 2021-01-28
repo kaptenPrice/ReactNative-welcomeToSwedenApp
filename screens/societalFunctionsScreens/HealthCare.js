@@ -1,90 +1,227 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Dimensions,
   Linking,
   Text,
   TouchableOpacity,
   View,
+  StyleSheet,
 } from "react-native";
 import ChildComponent from "../../components/ChildComponent";
-import Styles from "../../css/Styles";
-import treatment_pic from "../../assets/images/treatment.jpg";
+const  study_unsplash = require("../../assets/images/study_unsplash.jpg");
 import appColors from "../../assets/appColor";
+import { useSelector, useDispatch } from "react-redux";
+import ButtonComponent from "../../components/ButtonComponent";
+import { Ionicons, MaterialIcons, Feather } from "@expo/vector-icons";
+import { TextInput } from "react-native";
+import * as db from "../../firestore/FirebaseUtils";
+import EditBox from "../../components/EditBox";
 
 const HealthCare = () => {
-  const { width, height } = Dimensions.get("window");
-  const [jobContentOne, setjobContentOne] = useState(
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-  );
-  const [jobContentTwo, setjobContentTwo] = useState(
-    "But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful"
-  );
-  const [jobContentThree, setjobContentThree] = useState(
-    "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo"
-  );
-  let phoneNumber = "0705083605";
+  const dispatch = useDispatch();
+  const { currentUser } = useSelector((state) => state.authentication);
+  const { isAdmin } = useSelector((state) => state.userAdditionalInfo);
+
+  const { width, height } = Dimensions.get("screen");
+  const [isEditable, setIsEditable] = useState(false);
+
+  const [contentOne, setContentOne] = useState();
+  const [contentTwo, setContentTwo] = useState();
+  const [contentThree, setContentThree] = useState();
+  const [phoneNumber, setPhoneNumber] = useState("0705083605"); //Testing call-function
+
+  useEffect(() => {
+    getFieldData();
+   
+  }, []);
+
+  const getFieldData = () => {
+    try {
+      db.getContentData("social-life", "traditions", "like-a-swede", (cb) => {
+        const data = cb.data();
+        !data?.content ? setContentOne("tomt") : setContentOne(data?.content);
+      });
+      db.getContentData("social-life", "traditions", "lingo", (cb) => {
+        const data = cb.data();
+        !data?.content ? setContentTwo("tomt") : setContentTwo(data?.content);
+      });
+      db.getContentData("social-life", "traditions", "price-level", (cb) => {
+        const data = cb.data();
+        !data?.content
+          ? setContentThree("tomt")
+          : setContentThree(data?.content);
+      });
+    } catch (error) {
+      console.log(`contentOne ERROR: ${error}`);
+    }
+  };
+
+  const handleEdit = () => {
+    if (isEditable === false) {
+      setIsEditable(true);
+    } else {
+      setIsEditable(false);
+    }
+  };
+  const handleSaveStudyContentOne = () => {
+    try {
+      db.handleSaveToDB(
+        "societal-functions",
+        "study",
+        "like-a-swede",
+        contentOne
+      );
+    } catch (error) {
+      console.log("getContent study: ", error);
+    } finally {
+      setIsEditable(false);
+    }
+  };
+  const handleSaveStudyContentTwo = () => {
+    try {
+      db.handleSaveToDB("societal-functions", "study", "lingo", contentTwo);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsEditable(false);
+    }
+  };
+  const handleSavecontentThree = () => {
+    try {
+      db.handleSaveToDB(
+        "societal-functions",
+        "study",
+        "assistence",
+        contentThree
+      );
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsEditable(false);
+    }
+  };
 
   return (
     <ChildComponent
-      scrollViewStyle={{ flex: 1, backgroundColor: appColors.bgChildComp }}
+      scrollViewStyle={{ flex: 1, backgroundColor: appColors.bgColor }}
       iamgeViewStyle={{ flex: 1, width, height: height / 4 }}
       imageStyle={{ flex: 1, width: null, height: null }}
-      imgSource={treatment_pic}
-      firstContentStyle={Styles.childComponentContentView}
-      children1={
-        <Text style={Styles.childComponentHeaders}>Like a Swede:</Text>
+      imgSource={study_unsplash}
+      editButton1={
+        isAdmin && (
+          <View>
+            <ButtonComponent
+              onTouch={handleEdit}
+              style={{
+                alignItems: "center",
+              }}
+            >
+              <MaterialIcons name="edit" size={30} color="black" />
+            </ButtonComponent>
+          </View>
+        )
       }
-      children2={jobContentOne}
-      // seeMoreText="more"
-      seeMoreStyle={{ color: appColors.textColor }}
-      backgroundColor={appColors.bgChildContainers}
-      // seeLessText
-      // seeLessStyle
-      //wrapperStyle={{ paddingBottom: 35 }}
-      // numberOfLines
-      // customTextComponent
-      style={Styles.childComponentTextContainers}
-      secondContentView={Styles.childComponentContentView}
-      children3={<Text style={Styles.childComponentHeaders}>Lingo</Text>}
+      children1={<Text style={styles.headers}>Like a Swede:</Text>}
+      children2={
+        <Text style={styles.childComponentTextContainers}>{contentOne}</Text>
+      }
+      editBox1={
+        isEditable && (
+          <>
+            <EditBox
+              editable={isEditable}
+              onChangeText={(e) => setContentOne(e)}
+              onTouch={handleSaveStudyContentOne}
+            />
+          </>
+        )
+      }
+      style={styles.childComponentTextContainers}
+      children3={<Text style={styles.headers}>Lingo</Text>}
       children4={
-        <Text style={Styles.childComponentTextContainers}>{jobContentTwo}</Text>
+        <Text style={styles.childComponentTextContainers}>{contentTwo}</Text>
       }
-      thirdConentViewStyle={Styles.childComponentContentView}
-      children5={
-        <Text style={Styles.childComponentHeaders}>Assistance:</Text>
+      editBox2={
+        isEditable && (
+          <>
+            <EditBox
+              editable={isEditable}
+              onChangeText={(e) => setContentTwo(e)}
+              onTouch={handleSaveStudyContentTwo}
+            />
+          </>
+        )
       }
+      children5={<Text style={styles.headers}>Assistance:</Text>}
       children6={
-        <Text style={Styles.childComponentTextContainers}>
-          {jobContentThree}
-        </Text>
+        <Text style={styles.childComponentTextContainers}>{contentThree}</Text>
       }
-      // children7={
-      //   <View
-      //     style={{
-      //       display: "flex",
-      //       flexDirection: "row",
-      //       flex: 1,
-      //       flexWrap: "wrap",
-      //       margin: 10,
-      //     }}
-      //   >
-      //     <Text>ADD </Text>
-      //     <TouchableOpacity>
-      //       <Text
-      //         style={{ color: "darkblue" }}
-      //         onPress={() => Linking.openURL("https://www.google.com")}
-      //       >
-      //         LINKS
-      //       </Text>
-      //     </TouchableOpacity>
-      //     <Text> HERE.</Text>
-      //     <Text onPress={() => Linking.openURL(`Tel:${phoneNumber}`)}>
-      //       CALL UP
-      //     </Text>
-      //   </View>
-      // }
+      editBox3={
+        isEditable && (
+          <>
+            <EditBox
+              editable={isEditable}
+              onChangeText={(e) => setContentThree(e)}
+              onTouch={handleSavecontentThree}
+            />
+          </>
+        )
+      }
+      children7={
+        <TouchableOpacity style={{ margin: 7, flexDirection: "row" }}>
+          <Text
+            style={{ color: "blue", marginRight: 10 }}
+            onPress={() => Linking.openURL("https://www.google.com")}
+          >
+            google
+          </Text>
+          <Text
+            style={{ color: "blue", marginLeft: 10 }}
+            onPress={() => Linking.openURL(`Tel:${phoneNumber}`)}
+          >
+            Call up
+          </Text>
+        </TouchableOpacity>
+      }
+      editBox4={
+        isEditable && (
+          <>
+            <TextInput
+              style={{
+                borderWidth: 0.5,
+                borderColor: "red",
+                width: width,
+                height: height / 10,
+              }}
+              editable={isEditable}
+              name="price-level"
+              onChangeText={(e) => console.log(e)}
+            ></TextInput>
+          </>
+        )
+      }
     />
   );
-  
 };
 export default HealthCare;
+
+export const styles = StyleSheet.create({
+  headers: {
+    fontSize: 24,
+    fontWeight: "bold",
+    // paddingBottom: 15,
+    marginLeft: 5,
+  },
+  childComponentTextContainers: {
+    // borderColor:"blue",
+    // borderWidth:0.5,
+    fontWeight: "500",
+    fontSize: 15,
+    paddingBottom: 30,
+    marginLeft: 5,
+    marginRight: 5,
+    marginTop: 10,
+    color: appColors.textColor,
+    backgroundColor: appColors.bgColor,
+  },
+});

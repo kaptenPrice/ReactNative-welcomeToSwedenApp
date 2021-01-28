@@ -14,7 +14,8 @@ const appColors = {
   bgFeedBack:"#4690c7",
   modal:"#dffcc3",
   changePass:"#717474",
-  buttonActive:"#2e7c29",
-  editableText:"#2e7c29"
+  buttonActive:"#20661c",
+  editableText:"#206b21", 
+  
 };
 export default appColors;

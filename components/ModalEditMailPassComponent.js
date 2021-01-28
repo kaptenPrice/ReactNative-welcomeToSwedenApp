@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 // import { signOut } from "../../redux/store/actions";
 import { signOut } from "../redux/store/actions";
+import { Feather } from "@expo/vector-icons";
 
 import { Dimensions } from "react-native";
 import { StyleSheet, Text, View, Modal } from "react-native";
@@ -9,6 +10,8 @@ import appColors from "../assets/appColor";
 import { MaterialCommunityIcons } from "@expo/vector-icons/";
 import InputComponent from "./InputComponent";
 import ButtonComponent from "./ButtonComponent";
+import ModalConfirmDeleteAccount from "./ModalConfirmDeleteAccount";
+
 import * as db from "../firestore/FirebaseUtils";
 import firebase from "firebase/app";
 
@@ -16,7 +19,7 @@ const ModalEditMailPassComponent = ({ onCancel }) => {
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.authentication);
   const { email } = useSelector((state) => state.userAdditionalInfo);
-  const {height, width}=Dimensions.get("screen")
+  const { height, width } = Dimensions.get("screen");
 
   const [uid, setUid] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
@@ -31,18 +34,11 @@ const ModalEditMailPassComponent = ({ onCancel }) => {
   const [isChangingPass, setIsChangingPass] = useState(false);
   const [isChangingEmail, setIsChangingEmail] = useState(false);
   const [isDeleteAccountBegin, setDeleteAccountBegin] = useState(false);
+  const [buttonIsVisible, setButtonIsVisible] = useState(false);
 
-  
-  //   onEnterText = (TextInputValue) =>{
-  //     if(TextInputValue.trim() != 0){
-  //      this.setState({TextInputValue : TextInputValue}) ;
-  //    }else{
-  //        this.setState({TextInputValue : TextInputValue, ErrorStatus : false}) ;
-  //    }
-  //  }
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   useEffect(() => {
-    // setCurrentEmail(db.auth.currentUser.email)
     setTimeout(() => {
       currentPassword >= 6
         ? setCurrentPassword("")
@@ -55,9 +51,6 @@ const ModalEditMailPassComponent = ({ onCancel }) => {
   }, []);
 
   useEffect(() => {
-    // currentPassword.length < 6
-    //   ? setIsPassFieldsEmpty(true)
-    //   : setIsPassFieldsEmpty(false);
     newPassword.length < 6
       ? setIsPassFieldsEmpty(true)
       : setIsPassFieldsEmpty(false);
@@ -70,6 +63,9 @@ const ModalEditMailPassComponent = ({ onCancel }) => {
   useEffect(() => {
     setUid(currentUser.uid || currentUser.id);
   }, [uid]);
+  useEffect(() => {
+    console.log("Pushed the trash can, isModal: ", isModalVisible);
+  }, [isModalVisible]);
 
   const handleSignOut = async () => {
     try {
@@ -91,7 +87,7 @@ const ModalEditMailPassComponent = ({ onCancel }) => {
     handleSignOut();
   };
 
-   function check_email() {
+  function check_email() {
     if (!newEmail.match(/\S+@\S+\.\S+/)) {
       // Jaymon's / Squirtle's solution
       setIsEmailFieldsEmpty(true);
@@ -106,13 +102,17 @@ const ModalEditMailPassComponent = ({ onCancel }) => {
   }
 
   const reAuthenticated = () => {
-    const user = db.auth.currentUser;
-    console.log(user.email);
-    var cred = firebase.auth.EmailAuthProvider.credential(
-      user.email,
-      currentPassword
-    );
-    return user.reauthenticateWithCredential(cred);
+    try {
+      const user = db.auth.currentUser;
+      console.log(user.email);
+      var cred = firebase.auth.EmailAuthProvider.credential(
+        user.email,
+        currentPassword
+      );
+      return user.reauthenticateWithCredential(cred);
+    } catch (error) {
+      alert(error);
+    }
   };
 
   const handleChangePassword = async () => {
@@ -128,9 +128,21 @@ const ModalEditMailPassComponent = ({ onCancel }) => {
           .catch((error) => alert(`change password: ${error}`));
       })
       .catch((error) => {
-        console.log(`Old password: ${error}`);
+        switch (error.code) {
+          case "auth/too-many-requests":
+            alert(
+              `Too many requests, I have to rest! Try to hit me again in a while `
+            );
+            break;
+          case "auth/wrong-password":
+            alert(`? Try again`);
+            break;
+          default:
+            alert(error.code);
+        }
       });
   };
+
   const handleChangeEmail = async () => {
     await reAuthenticated(currentPassword)
       .then(() => {
@@ -152,7 +164,20 @@ const ModalEditMailPassComponent = ({ onCancel }) => {
   const authorizeUser = async (currentPass) => {
     await reAuthenticated(currentPass)
       .then(() => setIsAuthorized(true))
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        switch (error.code) {
+          case "auth/too-many-requests":
+            alert(
+              `Too many requests, I have to rest! Try to hit me again in a while `
+            );
+            break;
+          case "auth/wrong-password":
+            alert(`password is misspelled? Try again`);
+            break;
+          default:
+            alert(error.code);
+        }
+      });
   };
   return (
     <View style={styles.centeredView}>
@@ -162,31 +187,55 @@ const ModalEditMailPassComponent = ({ onCancel }) => {
             <Text style={styles.modalText}>{"Edit credentials"}</Text>
             {!isAuthorized && (
               <>
-                <Text style={[styles.modalText, {fontWeight:"400"}]}>
+                <Text style={[styles.modalText, { fontWeight: "400" }]}>
                   {"Enter password to make changes"}
                 </Text>
-                <InputComponent
-                  children={"Current password"}
-                  editable={true}
-                  onChangeText={(currentPass) =>
-                    setCurrentPassword(currentPass)
-                  }
-                  clearTextOnFocus={true}
-
-                  onEndEditing={() => authorizeUser(currentPassword)}
-                  secureTextEntry={true}
-                  autoCapitalize="none"
-                />
+                <View style={styles.inputContainer}>
+                  <InputComponent
+                    children={"Current password"}
+                    editable={true}
+                    onChangeText={(currentPass) =>
+                      setCurrentPassword(currentPass)
+                    }
+                    clearTextOnFocus={true}
+                    onEndEditing={() =>
+                      currentPassword.length >= 6 && setButtonIsVisible(true)
+                    }
+                    secureTextEntry={true}
+                    autoCapitalize="none"
+                  />
+                  {buttonIsVisible && (
+                    <Feather
+                      onPress={() => authorizeUser(currentPassword)}
+                      style={styles.icon}
+                      name="arrow-right"
+                      size={30}
+                      color={appColors.buttonActive}
+                    />
+                  )}
+                </View>
                 <ButtonComponent
-                  style={[styles.confirmButtons, {marginTop:50, paddingVertical:5, paddingHorizontal:20}]}
+                  style={[
+                    styles.confirmButtons,
+                    {
+                      marginTop: 50,
+                      paddingVertical: 5,
+                      paddingHorizontal: 20,
+                    },
+                  ]}
                   onTouch={onCancel}
-                  children={<Text style={{fontSize:16, fontWeight: "bold" }}>Cancel</Text>}
+                  children={
+                    <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+                      Cancel
+                    </Text>
+                  }
                 />
               </>
             )}
 
             {isAuthorized && (
               <>
+              
                 <InputComponent
                   children={"New password"}
                   editable={true}
@@ -196,7 +245,6 @@ const ModalEditMailPassComponent = ({ onCancel }) => {
                   onEndEditing={() => setIsChangingPass(true)}
                   isLabel={true}
                   clearTextOnFocus={true}
-                  
                 />
                 <InputComponent
                   children={"Current E-mail"}
@@ -204,7 +252,6 @@ const ModalEditMailPassComponent = ({ onCancel }) => {
                   value={currentEmail}
                   onFocus={() => setIsChangingPass(true)}
                   isLabel={true}
-
                 />
                 <InputComponent
                   children={"New E-mail"}
@@ -215,9 +262,7 @@ const ModalEditMailPassComponent = ({ onCancel }) => {
                   autoCapitalize="none"
                   onFocus={() => setIsChangingEmail(true)}
                   isLabel={true}
-
                 />
-
 
                 <View style={styles.buttonContainer}>
                   {isChangingPass ? (
@@ -229,14 +274,13 @@ const ModalEditMailPassComponent = ({ onCancel }) => {
                         isPassFieldsEmpty ? (
                           <Text style={styles.buttonInActive}>"-1337-"</Text>
                         ) : (
-                          // <Text style={styles.okButtonInActive}>ok</Text>
                           <Text style={styles.buttonActive}>
                             Change password
                           </Text>
                         )
                       }
                     />
-                  ) :(null) }
+                  ) : null}
                   {isChangingEmail ? (
                     <ButtonComponent
                       style={styles.confirmButtons}
@@ -251,33 +295,45 @@ const ModalEditMailPassComponent = ({ onCancel }) => {
                         )
                       }
                     />
-                  ) : (null)}
+                  ) : null}
 
                   <ButtonComponent
                     style={[
                       styles.confirmButtons,
                       { borderColor: "transparent" },
                     ]}
-                    onTouch={() => deleteUserData()}
+                    onTouch={() => {
+                      setIsModalVisible(true);
+                    }}
+                    // onTouch={() => setIsModalVisible(true)}
                     children={
                       <MaterialCommunityIcons
                         name="trash-can-outline"
-                        size={26}
+                        size={30}
                         color="red"
                       />
                     }
                   />
                   <ButtonComponent
-                    style={[styles.confirmButtons]}
+                    style={[styles.confirmButtons, {borderRadius:15}]}
                     onTouch={onCancel}
                     children={
-                      <Text style={{ fontWeight: "bold" }}>Cancel</Text>
+                      <Text style={{ fontWeight: "bold", paddingHorizontal:25, paddingVertical:10 }}>Cancel</Text>
                     }
                   />
                 </View>
               </>
             )}
           </View>
+          {isModalVisible ? (
+            <ModalConfirmDeleteAccount
+              onTouch={deleteUserData}
+              setValue={()=>setIsModalVisible(false)}
+              value={isModalVisible}
+            />
+          ) : (
+            <Text>{"Ska försvinna"}</Text>
+          )}
         </View>
       </Modal>
     </View>
@@ -324,7 +380,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   modalText: {
-    fontWeight:"bold",
+    fontWeight: "bold",
     marginBottom: 15,
     textAlign: "center",
   },
@@ -333,20 +389,17 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
     alignContent: "space-between",
-    // height:45,
 
     marginTop: 15,
   },
   confirmButtons: {
-    // flex: 1,
-        backgroundColor: "white",
+    backgroundColor: "white",
 
     marginTop: 20,
     borderColor: appColors.borderColor,
     borderWidth: 1,
     paddingHorizontal: 10,
     borderRadius: 10,
-    // height:45
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -362,4 +415,13 @@ const styles = StyleSheet.create({
     fontWeight: "100",
   },
   buttonActive: { color: appColors.buttonActive, fontWeight: "bold" },
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "flex-end",
+  },
+  icon: {
+    right: 35,
+    bottom: 7,
+    backgroundColor: "#e2e2e2",
+  },
 });
