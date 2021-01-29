@@ -17,10 +17,7 @@ import {
 import firebase from "firebase/app";
 import "firebase-auth";
 import {
-  
   MaterialIcons,
-  
-  
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
 
@@ -160,29 +157,29 @@ const UserProfile = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView style={{flex:1}}>
+      <ScrollView style={{ flex: 1 }}>
         <View>
-     
+
         </View>
         <View style={[styles.imageMainContainer, { height: height / 5 }]}>
           {isLoading ? (
             <Loading />
           ) : (
-            <ButtonComponent
-              onTouch={() => addProfileImage()}
-              style={styles.imageContainer}
-            >
-              <Image
-                style={[styles.userProfileImage]}
-                imageStyle={{ borderRadius: 70 }}
-                source={{ uri: localAvatar }}
-              />
-            </ButtonComponent>
-          )}
+              <ButtonComponent
+                onTouch={() => addProfileImage()}
+                style={styles.imageContainer}
+              >
+                <Image
+                  style={[styles.userProfileImage]}
+                  imageStyle={{ borderRadius: 70 }}
+                  source={{ uri: localAvatar }}
+                />
+              </ButtonComponent>
+            )}
         </View>
 
         <View style={styles.inputContainer}>
-          
+
           <InputComponent
             editable={isEditable}
             children={"Name"}
@@ -191,7 +188,7 @@ const UserProfile = () => {
               setLocalUserName(e);
             }}
             isLabel={true}
-            valueColor={!editMode? appColors.textColor: appColors.editableText} 
+            valueColor={!editMode ? appColors.textColor : appColors.editableText}
 
           />
           <InputComponent
@@ -200,7 +197,7 @@ const UserProfile = () => {
             editable={false}
             isLabel={true}
             valueColor={appColors.textColor}
-       
+
           />
 
           <InputComponent
@@ -213,8 +210,8 @@ const UserProfile = () => {
               setLocalPhone(e);
             }}
             isLabel={true}
-            valueColor={!editMode? appColors.textColor: appColors.editableText} 
-       
+            valueColor={!editMode ? appColors.textColor : appColors.editableText}
+
 
           />
 
@@ -227,7 +224,7 @@ const UserProfile = () => {
               setLocalCity(e);
             }}
             isLabel={true}
-            valueColor={!editMode? appColors.textColor: appColors.editableText} 
+            valueColor={!editMode ? appColors.textColor : appColors.editableText}
 
           />
           {!editMode && (
@@ -246,7 +243,7 @@ const UserProfile = () => {
                   style={{
                     color: appColors.bgColor,
                     fontWeight: "500",
-                    paddingHorizontal:45
+                    paddingHorizontal: 45
                   }}
                 >
                   Edit info
