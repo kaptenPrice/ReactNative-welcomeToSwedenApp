@@ -114,23 +114,11 @@ const Styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 20,
   },
-  drawerComponentView: {
-    height: 150,
-    backgroundColor: appColors.bgColor,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingTop: Platform.OS == "android" ? 20 : 0,
-  },
-  drawerComponentText: {
-    fontSize: 24,
-    color: appColors.textColor,
-    fontWeight: "100",
-  },
+ 
+
   homeButtonTouchStyle: {
     justifyContent: "center",
     alignItems: "center",
-    // borderWidth: 0.5,
-    // borderColor: appColors.iconInActive,
     backgroundColor:appColors.bgColor,
     borderRadius: 10,
     paddingTop: 12,
@@ -198,10 +186,7 @@ const Styles = StyleSheet.create({
     // marginRight: 7,
     marginTop: 10,
   },
-  profileScreen: {
-    flex: 1,
-    backgroundColor: appColors.bgColor,
-  },
+
   profileButtons: {
     justifyContent: "center",
     alignItems: "center",
@@ -212,13 +197,7 @@ const Styles = StyleSheet.create({
     borderRadius: 10,
     height: 30,
   },
-  userProfileImage: {
-    // flex:1,
-    height: 140,
-    width: 140,
-    borderRadius: 70,
-    // marginBottom: 20,
-  },
+
 });
 
 export default Styles;

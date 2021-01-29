@@ -6,8 +6,10 @@ import {
   FlatList,
   Dimensions,
   StyleSheet,
+  LogBox
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
+import { UNSPLASHKEY, SEARCHWORD } from '@env'
 
 import Styles from "../../css/Styles";
 import Axios from "axios";
@@ -20,10 +22,8 @@ import SocieltalFunctionsSvg from "../../assets/svg/SocieltalFunctionsSvg";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Loading from "../../components/Loading";
 import * as db from "../../firestore/FirebaseUtils";
-import {LinearGradient} from 'expo-linear-gradient';
-//TODO MOVE TO .env
-//https://api.unsplash.com/
-// Key:Sbpk7Dz6Xl862AgdaUuUAW8p2cnpd1QvS5S-kA8AE5g
+import { LinearGradient } from 'expo-linear-gradient';
+
 
 export default function HomeScreen() {
   const dispatch = useDispatch();
@@ -42,6 +42,8 @@ export default function HomeScreen() {
   const [_email, setEmail] = useState(currentUser.email);
 
   useEffect(() => {
+    LogBox.ignoreLogs(['Setting a timer for a long period of time'])
+
     saveInitialUserData();
     getUserData();
     dispatch({ type: "ADD_EMAIL", payload: currentUser.email });
@@ -49,7 +51,7 @@ export default function HomeScreen() {
 
     async function getpics() {
       const pics = await Axios.get(
-        "https://api.unsplash.com/search/photos?query=Sweden&client_id=Sbpk7Dz6Xl862AgdaUuUAW8p2cnpd1QvS5S-kA8AE5g"
+        `https://api.unsplash.com/search/photos?query=${SEARCHWORD}&client_id=${UNSPLASHKEY}`
       ).then((res) => {
         setHomeScreenImage(res.data.results);
       });
@@ -71,15 +73,15 @@ export default function HomeScreen() {
 
   const getUserData = () => {
     try {
-      db.getUserData(uid, (doc) =>{
+      db.getUserData(uid, (doc) => {
         const data = doc.data();
 
-        dispatch({ type: "IS_ADMIN", payload:data && data.admin || false });
-        dispatch({ type: "ADD_NAME", payload:data&& data.name || "" });
-        dispatch({ type: "ADD_PHONE", payload:data&& data.phone || "" });
-        dispatch({ type: "ADD_CITY", payload:data&& data.city || "" });
-        dispatch({ type: "ADD_AVATAR", payload:data&& data.profileAvatar || "" });
-        
+        dispatch({ type: "IS_ADMIN", payload: data && data.admin || false });
+        dispatch({ type: "ADD_NAME", payload: data && data.name || "" });
+        dispatch({ type: "ADD_PHONE", payload: data && data.phone || "" });
+        dispatch({ type: "ADD_CITY", payload: data && data.city || "" });
+        dispatch({ type: "ADD_AVATAR", payload: data && data.profileAvatar || "" });
+
       });
     } catch (error) {
       console.log(error);
@@ -110,86 +112,93 @@ export default function HomeScreen() {
       {isLoading ? (
         <Loading />
       ) : (
-        <>
-          <View
-            style={{
-              flex: 1,
-            }}
-          >
-            <FlatList
-              horizontal
-              pagingEnabled
-              data={homeScreenImage}
-              renderItem={({ item }) => _renderItem(item)}
-              keyExtractor={(item) => item.id}
-            />
-          </View>
-          <View
-            style={{
-              flex: 1,
-              flexDirection: "column",
-              alignItems: "center",
-              top: 12,
-            }}
-          >
-            <ButtonComponent
-              onTouch={() => navigation.navigate("SocialLife")}
+          <>
+            <View
               style={{
-                borderRadius:10,
-                shadowColor: "#000",
-                shadowOffset: {
-                  width: 0,
-                  height: 4,
-                },
-                shadowOpacity: 0.15,
-                shadowRadius: 4,
-                elevation: 12,
+                flex: 1,
               }}
-              buttonStyle={[
-                Styles.homeButtonTouchStyle,
-                { width: width / 1.2 },
-              ]}
             >
-              <Text style={Styles.homeButtonText}>EVERYDAY LIFE</Text>
-              <Ionicons
-                name="ios-people"
-                size={50}
-                color={appColors.placeHolderColor}
+              <FlatList
+                horizontal
+                pagingEnabled
+                data={homeScreenImage}
+                renderItem={({ item }) => _renderItem(item)}
+                keyExtractor={(item) => item.id}
               />
-            </ButtonComponent>
+            </View>
+            <View
+              style={styles.buttonContainer}
+            >
+              <ButtonComponent
+                onTouch={() => navigation.navigate("SocialLife")}
+                style={styles.outerButtonStyle}
+                buttonStyle={[
+                  styles.homeButtonTouchStyle,
+                  { width: width / 1.2 },
+                ]}
+              >
+                <Text style={styles.homeButtonText}>EVERYDAY LIFE</Text>
+                <Ionicons
+                  name="ios-people"
+                  size={50}
+                  color={appColors.placeHolderColor}
+                />
+              </ButtonComponent>
 
-            <ButtonComponent
-              style={{
-                borderRadius:10,
-                shadowColor: "#000",
-                shadowOffset: {
-                  width: 0,
-                  height: 4,
-                },
-                shadowOpacity: 0.15,
-                shadowRadius: 4,
-                elevation: 12,
-              }}
-              onTouch={() => navigation.navigate("SocietalFunctions")}
-              buttonStyle={[
-                Styles.homeButtonTouchStyle,
-                { width: width / 1.2 },
-              ]}
-            >
-              <Text style={Styles.homeButtonText}>SOCIETAL FUNCTIONS</Text>
-              <SocieltalFunctionsSvg
-                style={{ color: appColors.placeHolderColor }}
-                width="40"
-                height="40"
-              />
-            </ButtonComponent>
-          </View>
-        </>
-      )}
+              <ButtonComponent
+                style={styles.outerButtonStyle}
+
+                onTouch={() => navigation.navigate("SocietalFunctions")}
+                buttonStyle={[
+                  styles.homeButtonTouchStyle,
+                  { width: width / 1.2 },
+                ]}
+              >
+                <Text style={styles.homeButtonText}>SOCIETAL FUNCTIONS</Text>
+                <SocieltalFunctionsSvg
+                  style={{ color: appColors.placeHolderColor }}
+                  width="40"
+                  height="40"
+                />
+              </ButtonComponent>
+            </View>
+          </>
+        )}
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  gradient:{flex:1},
+  gradient: { flex: 1 },
+  homeButtonTouchStyle: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: appColors.bgColor,
+    borderRadius: 10,
+    paddingTop: 12,
+    paddingBottom: 10,
+    margin: 10
+  },
+  buttonContainer: {
+    flex: 1,
+    flexDirection: "column",
+    alignItems: "center",
+    top: 12,
+  },
+  homeButtonText: {
+    color: appColors.textColor,
+    fontWeight: "bold",
+    fontSize: 40,
+  },
+  outerButtonStyle: {
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 12,
+  }
 });

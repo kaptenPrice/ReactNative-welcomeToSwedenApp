@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react'
-import { StyleSheet } from 'react-native'
+import {  LogBox } from 'react-native'
 import { useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 
@@ -13,10 +13,11 @@ export default function SignOutScreen() {
 const dispatch= useDispatch()
     const navigation = useNavigation()
     useEffect(() => {
+      LogBox.ignoreLogs(['Setting a timer for a long period of time'])
+
         handleSignOut()
      
     }, [])
-
 
     const handleSignOut = async () => {
         try {
@@ -28,13 +29,9 @@ const dispatch= useDispatch()
         }
       };
 
-
-
     return (
         <></>
-        // <View>
-        //     <Text></Text>
-        // </View>
+  
     )
 }
 

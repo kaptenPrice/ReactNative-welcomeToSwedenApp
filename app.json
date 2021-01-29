@@ -1,12 +1,14 @@
 {
-  "name": "Fullstack-projekt-welcomeToSweden",
-  "displayName": "Fullstack-projekt-welcomeToSweden",
+  "name": "KaptenPrize",
+  "displayName": "welcomeToSweden",
   "expo": {
-    "name": "Fullstack-projekt-welcomeToSweden",
-    "slug": "Fullstack-projekt-welcomeToSweden",
+    "name": "wts",
+    "slug": "welcomtetosweden",
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
-    ]
+    ],
+    "description": "",
+    "githubUrl": "https://github.com/kaptenPrice/ReactNative-welcomeToSwedenApp"
   }
 }

@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Text, View, StyleSheet, Dimensions, SafeAreaView } from "react-native";
+import { Text, View, StyleSheet, Dimensions, SafeAreaView,TouchableWithoutFeedback, Keyboard, LogBox } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import appColors from "../assets/appColor";
 import ButtonComponent from "../components/ButtonComponent";
@@ -19,9 +19,13 @@ import {
 } from "@expo/vector-icons";
 import InputComponent from "../components/InputComponent";
 import ModalSendMailComponent from "../components/ModalSendMailComponent";
-import { LinearGradient } from "expo-linear-gradient";
 
 const LoginScreen = () => {
+  useEffect(() => {
+    LogBox.ignoreLogs(['Setting a timer for a long period of time'])
+
+   
+  }, [])
   const dispatch = useDispatch();
   const { currentUser, isLoading } = useSelector(
     (state) => state.authentication
@@ -32,7 +36,7 @@ const LoginScreen = () => {
   const [isAuthorized, setIsAuthorized] = useState(true);
   const [isSecure, setSecure] = useState(true);
   const [isModal, setIsModal] = useState(false);
-
+  
   const signInWithGoogleAsync = async () => {
     try {
       const res = await Google.logInAsync({
@@ -122,10 +126,12 @@ const LoginScreen = () => {
           Free for everyone to join
         </Text>
       </View>
+      <TouchableWithoutFeedback onPress={ () => {Keyboard.dismiss()} }>
 
       <View
         style={styles.container}
       >
+
         <View
           style={styles.inputContainer}
         >
@@ -136,7 +142,6 @@ const LoginScreen = () => {
             placeholderTextColor={appColors.placeHolderColor}
             keyboardType="email-address"
             onChangeText={(e) => setEmail(e)}
-            // clearTextOnFocus={true}
           />
           <MaterialIcons
             style={styles.icon}
@@ -173,7 +178,10 @@ const LoginScreen = () => {
             />
           )}
         </View>
+
       </View>
+      </TouchableWithoutFeedback>
+
 
       <View
         style={styles.buttonContainer}
@@ -216,13 +224,14 @@ export default LoginScreen;
 const styles = StyleSheet.create({
   gradient: { flex: 1 },
   header:{
+    
     color: appColors.textColor,
     fontSize: 24,
     fontWeight: "500",
     marginTop: 5,
   },
   welcomeViewLoginScreen: {
-    flex: 0.5,
+    flex: 1,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -232,17 +241,17 @@ const styles = StyleSheet.create({
     fontSize: 40,
   },
   container:{
-    flex: 0.8,
-    flexDirection: "column",
+    flex: 0.6,
+    // flexDirection: "column",
     alignItems: "center",
-    justifyContent: "center",
+    // justifyContent: "center",
   },
   inputContainer:{
     flexDirection: "row",
     alignItems: "flex-end",
   },
   icon:{
-    right: 35,
+    right: 30,
     bottom: 7,
   },
   buttonContainer:{
@@ -250,17 +259,28 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "space-around",
     alignItems: "center",
-    marginBottom: 10,
+    marginBottom: 15,
   },
   loginButton: {
+    marginTop:15,
     justifyContent: "center",
     alignItems: "center",
     width: 200,
     height: 40,
     borderRadius: 15,
-    backgroundColor: "transparent",
-    borderWidth: 1,
+    backgroundColor: "white",
+    borderWidth: 0.5,
     borderColor: appColors.borderColor,
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 12,
+
   },
   signinRegisterButtonText: {
     color: appColors.textColor,

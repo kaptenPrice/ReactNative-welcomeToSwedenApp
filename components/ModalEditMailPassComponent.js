@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-// import { signOut } from "../../redux/store/actions";
 import { signOut } from "../redux/store/actions";
 import { Feather } from "@expo/vector-icons";
 
@@ -235,7 +234,6 @@ const ModalEditMailPassComponent = ({ onCancel }) => {
 
             {isAuthorized && (
               <>
-              
                 <InputComponent
                   children={"New password"}
                   editable={true}
@@ -290,7 +288,6 @@ const ModalEditMailPassComponent = ({ onCancel }) => {
                         isEmailFieldsEmpty ? (
                           <Text style={styles.buttonInActive}>"-1337-"</Text>
                         ) : (
-                          // <Text style={styles.okButtonInActive}>ok</Text>
                           <Text style={styles.buttonActive}>Change Email</Text>
                         )
                       }
@@ -305,7 +302,6 @@ const ModalEditMailPassComponent = ({ onCancel }) => {
                     onTouch={() => {
                       setIsModalVisible(true);
                     }}
-                    // onTouch={() => setIsModalVisible(true)}
                     children={
                       <MaterialCommunityIcons
                         name="trash-can-outline"
@@ -315,10 +311,18 @@ const ModalEditMailPassComponent = ({ onCancel }) => {
                     }
                   />
                   <ButtonComponent
-                    style={[styles.confirmButtons, {borderRadius:15}]}
+                    style={[styles.confirmButtons, { borderRadius: 15 }]}
                     onTouch={onCancel}
                     children={
-                      <Text style={{ fontWeight: "bold", paddingHorizontal:25, paddingVertical:10 }}>Cancel</Text>
+                      <Text
+                        style={{
+                          fontWeight: "bold",
+                          paddingHorizontal: 25,
+                          paddingVertical: 10,
+                        }}
+                      >
+                        Cancel
+                      </Text>
                     }
                   />
                 </View>
@@ -328,12 +332,10 @@ const ModalEditMailPassComponent = ({ onCancel }) => {
           {isModalVisible ? (
             <ModalConfirmDeleteAccount
               onTouch={deleteUserData}
-              setValue={()=>setIsModalVisible(false)}
+              setValue={() => setIsModalVisible(false)}
               value={isModalVisible}
             />
-          ) : (
-            <Text>{"Ska försvinna"}</Text>
-          )}
+          ) : null}
         </View>
       </Modal>
     </View>

@@ -1,5 +1,5 @@
-import React from "react";
-import { View, Text, Dimensions, Platform, StyleSheet } from "react-native";
+import React, { useEffect } from "react";
+import { View, Text, Dimensions, Platform, StyleSheet, LogBox , ScrollView} from "react-native";
 import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import {
@@ -12,7 +12,7 @@ import appColors from "../../assets/appColor";
 import ButtonComponent from "../../components/ButtonComponent";
 import Styles from "../../css/Styles";
 import { Image } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import {  } from "react-native-gesture-handler";
 import Loading from "../../components/Loading";
 const pic = require("../../assets/images/sweden-flag.jpg");
 
@@ -20,10 +20,12 @@ export default function SocietalFunctions() {
   const { isLoading, currentUser } = useSelector(
     (state) => state.authentication
   );
-
   const navigation = useNavigation();
   const { width, height } = Dimensions.get("screen");
+useEffect(()=>{
+  LogBox.ignoreLogs(['Setting a timer for a long period of time'])
 
+}, [])
   return (
     <ScrollView style={{ flex: 1 }}>
       {isLoading ? (

@@ -7,6 +7,7 @@ import {
   TextInput,
   StyleSheet,
   RefreshControl,
+  LogBox
 } from "react-native";
 import Styles from "../../css/Styles";
 import {
@@ -14,6 +15,7 @@ import {
   MaterialCommunityIcons,
   MaterialIcons,
 } from "@expo/vector-icons/";
+
 import { AwesomeTextInput } from "react-native-awesome-text-input";
 import ButtonComponent from "../../components/ButtonComponent";
 import { useNavigation } from "@react-navigation/native";
@@ -61,6 +63,8 @@ const FeedBack = () => {
   useEffect(() => {
     handleGetFeedback();
     checkInputLength()
+    LogBox.ignoreLogs(['Setting a timer for a long period of time'])
+
 
     setGrade(0);
   }, [isFeedbackDone]);
@@ -209,7 +213,7 @@ const FeedBack = () => {
             {isFeedbackDone && (
               <AfterFeedback
                 visible={isFeedbackDone}
-                onPress={() => setIsFeedbackDone(false)}
+                onPress={() => {setIsFeedbackDone(false), navigation.navigate("Home")}}
                 presseableText={"OK"}
                 boldText={"Thanks for feedback!"}
               />

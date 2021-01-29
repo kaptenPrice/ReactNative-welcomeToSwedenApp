@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Dimensions } from "react-native";
 import { TextInput } from "react-native";
 import { StyleSheet } from "react-native";
 import { View, Text } from "react-native";
-import { AwesomeTextInput } from "react-native-awesome-text-input";
 import appColors from "../assets/appColor";
 
 const InputComponent = ({
