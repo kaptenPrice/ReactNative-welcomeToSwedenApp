@@ -15,10 +15,25 @@ export const auth = firebase.auth();
 export const storage = firebase.storage();
 
 
+const signInWithGoogleAsync = async (iosClIdKey) => {
+  try {
+    const res = await Google.logInAsync({
+      iosClientId:iosClIdKey,
+      scopes: ["profile", "email"],
+    });
+    if (res.type === "success") {
+      return res.accessToken;
+    } else {
+      return { cancelled: true };
+    }
+  } catch (error) {
+    return { error: true };
+  }
+};
 
 export const signOut = async () => {
   try {
-    await firebase.auth().signOut();
+    await auth.signOut();
   } catch (error) {
     alert("Something fishy occurred", error);
   }

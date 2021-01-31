@@ -9,6 +9,7 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import * as Google from "expo-google-app-auth";
 import * as db from "../firestore/FirebaseUtils";
+import {CLIENTKEY} from '@env'
 import {
   Ionicons,
   MaterialIcons,
@@ -23,8 +24,6 @@ import ModalSendMailComponent from "../components/ModalSendMailComponent";
 const LoginScreen = () => {
   useEffect(() => {
     LogBox.ignoreLogs(['Setting a timer for a long period of time'])
-
-   
   }, [])
   const dispatch = useDispatch();
   const { currentUser, isLoading } = useSelector(
@@ -40,8 +39,7 @@ const LoginScreen = () => {
   const signInWithGoogleAsync = async () => {
     try {
       const res = await Google.logInAsync({
-        iosClientId:
-          "383691417994-fc40nclpp83r5jln1ou434lkptsc6oq4.apps.googleusercontent.com",
+        iosClientId:`${CLIENTKEY}`,
         scopes: ["profile", "email"],
       });
       if (res.type === "success") {
@@ -50,7 +48,7 @@ const LoginScreen = () => {
       } else {
         return { cancelled: true };
       }
-    } catch (e) {
+    } catch (error) {
       return { error: true };
     }
   };
