@@ -90,13 +90,9 @@ export default function HomeScreen() {
 
   const _renderItem = (item) => {
     return (
-      <View style={{ width: width, height: height / 3 }}>
+      <View style={{ width: width, height: height / 3,  }}>
         <Image
-          style={{
-            flex: 1,
-            height: undefined,
-            width: undefined,
-          }}
+          style={styles.image}
           source={{ uri: item.urls.regular }}
         />
       </View>
@@ -170,6 +166,11 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   gradient: { flex: 1 },
+  image:{
+    flex: 1,
+    height: undefined,
+    width: undefined,
+  },
   homeButtonTouchStyle: {
     justifyContent: "center",
     alignItems: "center",

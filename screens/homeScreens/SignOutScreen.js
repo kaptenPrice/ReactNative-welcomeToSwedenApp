@@ -14,9 +14,7 @@ const dispatch= useDispatch()
     const navigation = useNavigation()
     useEffect(() => {
       LogBox.ignoreLogs(['Setting a timer for a long period of time'])
-
         handleSignOut()
-     
     }, [])
 
     const handleSignOut = async () => {
