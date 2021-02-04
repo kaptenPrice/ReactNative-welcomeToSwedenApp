@@ -9,7 +9,7 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import * as Google from "expo-google-app-auth";
 import * as db from "../firestore/FirebaseUtils";
-import {CLIENTKEY} from '@env'
+// import {CLIENTKEY} from '@env'
 import {
   Ionicons,
   MaterialIcons,
@@ -23,13 +23,13 @@ import ModalSendMailComponent from "../components/ModalSendMailComponent";
 
 const LoginScreen = () => {
   useEffect(() => {
-    LogBox.ignoreLogs(['Setting a timer for a long period of time'])
+    // LogBox.ignoreLogs(['Setting a timer for a long period of time'])
   }, [])
   const dispatch = useDispatch();
   const { currentUser, isLoading } = useSelector(
     (state) => state.authentication
   );
-  const _width = Dimensions.get("screen").width;
+  const _width = Dimensions.get("window").width;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isAuthorized, setIsAuthorized] = useState(true);
@@ -39,7 +39,8 @@ const LoginScreen = () => {
   const signInWithGoogleAsync = async () => {
     try {
       const res = await Google.logInAsync({
-        iosClientId:`${CLIENTKEY}`,
+        // iosClientId:`${CLIENTKEY}`,
+        iosClientId:process.env.CLIENTKEY,
         scopes: ["profile", "email"],
       });
       if (res.type === "success") {
@@ -127,14 +128,13 @@ const LoginScreen = () => {
       <TouchableWithoutFeedback onPress={ () => {Keyboard.dismiss()} }>
 
       <View
-        style={styles.container}
+        style={[styles.container ]}
       >
 
         <View
-          style={styles.inputContainer}
+          style={[styles.inputContainer]}
         >
           <InputComponent
-            style={{ width: _width / 1 }}
             autoCapitalize="none"
             placeholder="Email*"
             placeholderTextColor={appColors.placeHolderColor}
@@ -180,7 +180,6 @@ const LoginScreen = () => {
       </View>
       </TouchableWithoutFeedback>
 
-
       <View
         style={styles.buttonContainer}
       >
@@ -222,7 +221,6 @@ export default LoginScreen;
 const styles = StyleSheet.create({
   gradient: { flex: 1 },
   header:{
-    
     color: appColors.textColor,
     fontSize: 24,
     fontWeight: "500",
@@ -240,13 +238,16 @@ const styles = StyleSheet.create({
   },
   container:{
     flex: 0.6,
-    // flexDirection: "column",
+    flexDirection: "column",
     alignItems: "center",
-    // justifyContent: "center",
+    alignSelf:"center",
+    justifyContent: "center",
+    marginLeft:20
   },
   inputContainer:{
     flexDirection: "row",
     alignItems: "flex-end",
+
   },
   icon:{
     right: 30,

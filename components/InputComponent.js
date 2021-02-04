@@ -26,10 +26,10 @@ const InputComponent = ({
   selectionColor,
   props,
 }) => {
-  const { width, height } = Dimensions.get("screen");
+  const { width, height } = Dimensions.get("window");
 
   return (
-    <View style={{ paddingTop: 20 }}>
+    <View style={{ paddingTop:25 }}>
       <View
         style={{
           marginLeft: 15,
@@ -59,7 +59,7 @@ const InputComponent = ({
           borderColor: appColors.borderColor,
           borderRadius: 10,
           height: 45,
-          width: width / 1.5,
+          width: width / 1.3,
           shadowColor: "#474747",
           shadowOffset: {
             width: 0,
@@ -68,7 +68,7 @@ const InputComponent = ({
           shadowOpacity: 0.25,
           shadowRadius: 3,
           elevation: 10,
-          paddingLeft: 5,
+          paddingLeft: 10,
         }}
         placeholder={placeholder}
         value={value}

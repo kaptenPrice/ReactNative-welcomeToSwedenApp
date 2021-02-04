@@ -12,7 +12,7 @@ import { Dimensions } from "react-native";
 //Logo?
 const WelcomeScreen = () => {
   const navigation = useNavigation();
-  const { width, height } = Dimensions.get("screen");
+  const { width, height } = Dimensions.get("window");
   useEffect(() => {
     setTimeout(() => {
       navigation.navigate("LoginScreen");

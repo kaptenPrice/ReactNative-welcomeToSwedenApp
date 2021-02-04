@@ -21,7 +21,7 @@ export default function SocietalFunctions() {
     (state) => state.authentication
   );
   const navigation = useNavigation();
-  const { width, height } = Dimensions.get("screen");
+  const { width, height } = Dimensions.get("window");
 useEffect(()=>{
   LogBox.ignoreLogs(['Setting a timer for a long period of time'])
 

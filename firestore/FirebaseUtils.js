@@ -53,7 +53,7 @@ export const handleSaveToDB = async (doc1, collection2, doc2, content) => {
     .doc(doc1)
     .collection(collection2)
     .doc(doc2)
-    .set( content );
+    .set( {content} );
 };
 
 export const handleSaveFeedback = async (doc, content) => {

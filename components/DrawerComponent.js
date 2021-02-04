@@ -1,12 +1,12 @@
 import React from "react";
-import { View, Text } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { View, Text, StyleSheet, ScrollView , SafeAreaView, Platform} from "react-native";
+import {  } from "react-native-gesture-handler";
+import {  } from "react-native-safe-area-context";
 import Styles from "../css/Styles";
 import { Ionicons } from "@expo/vector-icons";
 import appColors from "../assets/appColor";
 import { DrawerItemList } from "@react-navigation/drawer";
-import { StyleSheet } from "react-native";
+import {  } from "react-native";
 
 export default function DrawerComponent(props) {
   return (

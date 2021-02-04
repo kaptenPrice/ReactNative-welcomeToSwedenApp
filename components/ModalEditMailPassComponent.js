@@ -13,12 +13,13 @@ import ModalConfirmDeleteAccount from "./ModalConfirmDeleteAccount";
 
 import * as db from "../firestore/FirebaseUtils";
 import firebase from "firebase/app";
+import ModalSuccessComponent from "./ModalSuccessComponent";
 
-const ModalEditMailPassComponent = ({ onCancel }) => {
+const ModalEditMailPassComponent = ({ onCancel, visible }) => {
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.authentication);
   const { email } = useSelector((state) => state.userAdditionalInfo);
-  const { height, width } = Dimensions.get("screen");
+  const { height, width } = Dimensions.get("window");
 
   const [uid, setUid] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
@@ -29,20 +30,20 @@ const ModalEditMailPassComponent = ({ onCancel }) => {
   const [isPassFieldsEmpty, setIsPassFieldsEmpty] = useState(true);
   const [isEmailFieldsEmpty, setIsEmailFieldsEmpty] = useState(true);
   const [isDisabled, setIsDisabled] = useState(true);
-  const [isVisible, setIsVisible] = useState(true);
+  // const [isVisible, setIsVisible] = useState(true);
   const [isChangingPass, setIsChangingPass] = useState(false);
   const [isChangingEmail, setIsChangingEmail] = useState(false);
   const [isDeleteAccountBegin, setDeleteAccountBegin] = useState(false);
   const [buttonIsVisible, setButtonIsVisible] = useState(false);
-
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isSucces, setIsSuccess] = useState(false);
 
   useEffect(() => {
-    setTimeout(() => {
-      currentPassword >= 6
-        ? setCurrentPassword("")
-        : setCurrentPassword(currentPassword);
-    }, 50000);
+    // setTimeout(() => {
+    //   currentPassword >= 6
+    //     ? setCurrentPassword("")
+    //     : setCurrentPassword(currentPassword);
+    // }, 50000);
 
     setTimeout(() => {
       setDeleteAccountBegin(false);
@@ -62,9 +63,7 @@ const ModalEditMailPassComponent = ({ onCancel }) => {
   useEffect(() => {
     setUid(currentUser.uid || currentUser.id);
   }, [uid]);
-  useEffect(() => {
-    console.log("Pushed the trash can, isModal: ", isModalVisible);
-  }, [isModalVisible]);
+
 
   const handleSignOut = async () => {
     try {
@@ -121,8 +120,12 @@ const ModalEditMailPassComponent = ({ onCancel }) => {
         user
           .updatePassword(newPassword)
           .then(() => {
-            alert("Password updated");
-            setIsVisible(false);
+            setIsSuccess(true)
+
+            // alert("Password updated");
+            console.log("Password updated");
+
+            // setIsVisible(false);
           })
           .catch((error) => alert(`change password: ${error}`));
       })
@@ -134,7 +137,7 @@ const ModalEditMailPassComponent = ({ onCancel }) => {
             );
             break;
           case "auth/wrong-password":
-            alert(`? Try again`);
+            alert(`Try again with another password`);
             break;
           default:
             alert(error.code);
@@ -151,7 +154,9 @@ const ModalEditMailPassComponent = ({ onCancel }) => {
           .then(() => {
             alert(`E-mail updated, use ${newEmail} at next login`);
             dispatch({ type: "ADD_EMAIL", payload: newEmail });
-            setIsVisible(false);
+            onCancel()
+            const [isSucces, setIsSuccess] = useState(false);
+
           })
           .catch((error) => alert(`change E-mail: ${error}`));
       })
@@ -180,7 +185,7 @@ const ModalEditMailPassComponent = ({ onCancel }) => {
   };
   return (
     <View style={styles.centeredView}>
-      <Modal animationType="slide" transparent={true} visible={isVisible}>
+      <Modal animationType="slide" transparent={true} visible={visible}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <Text style={styles.modalText}>{"Edit credentials"}</Text>
@@ -266,20 +271,22 @@ const ModalEditMailPassComponent = ({ onCancel }) => {
                   {isChangingPass ? (
                     <ButtonComponent
                       style={styles.confirmButtons}
+                      buttonStyle={{ padding: 7 }}
                       disabled={isPassFieldsEmpty}
                       onTouch={() => handleChangePassword()}
                       children={
                         isPassFieldsEmpty ? (
                           <Text style={styles.buttonInActive}>"-1337-"</Text>
                         ) : (
-                          <Text style={styles.buttonActive}>
-                            Change password
-                          </Text>
-                        )
+                            <Text style={styles.buttonText}>
+                              Change password
+                            </Text>
+                          )
                       }
                     />
                   ) : null}
                   {isChangingEmail ? (
+
                     <ButtonComponent
                       style={styles.confirmButtons}
                       disabled={isEmailFieldsEmpty}
@@ -288,8 +295,8 @@ const ModalEditMailPassComponent = ({ onCancel }) => {
                         isEmailFieldsEmpty ? (
                           <Text style={styles.buttonInActive}>"-1337-"</Text>
                         ) : (
-                          <Text style={styles.buttonActive}>Change Email</Text>
-                        )
+                            <Text style={styles.buttonActive}>Change Email</Text>
+                          )
                       }
                     />
                   ) : null}
@@ -311,7 +318,7 @@ const ModalEditMailPassComponent = ({ onCancel }) => {
                     }
                   />
                   <ButtonComponent
-                    style={[styles.confirmButtons, { borderRadius: 15 }]}
+                    style={[styles.confirmButtons]}
                     onTouch={onCancel}
                     children={
                       <Text
@@ -325,6 +332,7 @@ const ModalEditMailPassComponent = ({ onCancel }) => {
                       </Text>
                     }
                   />
+
                 </View>
               </>
             )}
@@ -334,8 +342,19 @@ const ModalEditMailPassComponent = ({ onCancel }) => {
               onTouch={deleteUserData}
               setValue={() => setIsModalVisible(false)}
               value={isModalVisible}
+              actionType={"Delete account"}
             />
           ) : null}
+          {isSucces && <ModalSuccessComponent
+            value={isSucces}
+            iconType={<MaterialCommunityIcons name="checkbox-multiple-marked-circle-outline" size={50} color={appColors.successColor} />}
+            textFat={"Success"}
+            textSmall={"Please log in with your new credential"}
+            onTouch={() => { setIsSuccess(false); handleSignOut() }}
+            buttonText={"OK"}
+
+
+          />}
         </View>
       </Modal>
     </View>
@@ -392,7 +411,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignContent: "space-between",
 
-    marginTop: 15,
+    marginTop: 100,
   },
   confirmButtons: {
     backgroundColor: "white",
@@ -401,7 +420,7 @@ const styles = StyleSheet.create({
     borderColor: appColors.borderColor,
     borderWidth: 1,
     paddingHorizontal: 10,
-    borderRadius: 10,
+    borderRadius: 15,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -426,4 +445,9 @@ const styles = StyleSheet.create({
     bottom: 7,
     backgroundColor: "#e2e2e2",
   },
+  buttonText: {
+    color: appColors.changePass,
+    fontSize: 14,
+    fontWeight: "bold"
+  }
 });

@@ -6,23 +6,21 @@ import { MaterialIcons } from "@expo/vector-icons/";
 import { TouchableHighlight } from "react-native-gesture-handler";
 import ButtonComponent from "./ButtonComponent";
 
-const ModalConfirmDeleteAccount = ({ value, setValue, onTouch, actionType }) => {
+
+const ModalSuccessComponent = ({ visible, onTouch, buttonText, iconType, textFat, textSmall }) => {
   return (
     <View style={styles.centeredView}>
-      <Modal animationType="slide" transparent={true} visible={value}>
+      <Modal animationType="slide" transparent={true} visible={visible} hasBackdrop={true}
+        backdropOpacity={10} >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.signinRegisterButtonText}>Are you sure? </Text>
-            <ButtonComponent buttonStyle={styles.loginButton} onTouch={onTouch}>
-              <Text style={styles.signinRegisterButtonText}>
-                {actionType}
+            <View style={styles.iconView}>{iconType}</View>
+            <Text style={styles.signinRegisterButtonText}>{textFat}</Text>
+            <Text style={styles.textSmall}>{textSmall}</Text>
+            <ButtonComponent buttonStyle={styles.loginButton} onTouch={onTouch} >
+              <Text style={styles.buttonText}>
+                {buttonText}
               </Text>
-            </ButtonComponent>
-            <ButtonComponent
-              buttonStyle={styles.loginButton}
-              onTouch={setValue}
-            >
-              <Text style={styles.signinRegisterButtonText}>Cancel</Text>
             </ButtonComponent>
           </View>
         </View>
@@ -31,7 +29,7 @@ const ModalConfirmDeleteAccount = ({ value, setValue, onTouch, actionType }) => 
   );
 };
 
-export default ModalConfirmDeleteAccount;
+export default ModalSuccessComponent;
 
 const styles = StyleSheet.create({
   centeredView: {
@@ -39,10 +37,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flexDirection: "column",
     alignItems: "center",
-    marginTop: 22,
+    marginBottom: 50,
+
   },
   modalView: {
-    margin: 20,
+    margin: 0,
+    height: 150,
     backgroundColor: "white",
     borderRadius: 20,
     padding: 35,
@@ -63,10 +63,10 @@ const styles = StyleSheet.create({
     width: 200,
     height: 40,
     borderRadius: 15,
-    marginTop: 30,
-    backgroundColor: "white",
+    marginTop: 20,
+    backgroundColor: appColors.successColor,
     borderWidth: 1,
-    borderColor: appColors.borderColor,
+    borderColor: appColors.successColor,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -76,10 +76,31 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
   },
+  iconView: {
+    alignContent: 'center',
+    justifyContent: 'flex-start',
+    position: 'absolute',
+    left: 110,
+    bottom: 95,
+    width: '100%',
+    height: '100%',
 
+  },
   signinRegisterButtonText: {
     color: appColors.textColor,
     fontWeight: "600",
-    fontSize: 18,
+    fontSize: 20,
+    marginTop: -5,
   },
+  textSmall: {
+    color: appColors.textColor,
+    fontWeight: "400",
+    fontSize: 16,
+    marginTop: 10
+  },
+  buttonText: {
+    color: appColors.bgColor,
+    fontWeight: "bold",
+    fontSize: 18
+  }
 });

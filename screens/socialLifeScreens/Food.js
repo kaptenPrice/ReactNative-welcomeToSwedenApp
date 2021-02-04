@@ -2,15 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Dimensions, StyleSheet, Text, View } from "react-native";
 import ChildComponent from "../../components/ChildComponent";
-// import fika_pic from "../../assets/images/fika_pic.jpg";
 import appColors from "../../assets/appColor";
 import ButtonComponent from "../../components/ButtonComponent";
-import { Ionicons, MaterialIcons, Feather } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 import { TextInput } from "react-native-gesture-handler";
-import ViewMoreText from "react-native-view-more-text";
 import AdminButtons from "../../components/EditBox";
 import * as db from "../../firestore/FirebaseUtils";
-import ContentComponent from "../../components/ContentComponent";
 import EditBox from "../../components/EditBox";
 const food_pic = require("../../assets/images/food-unsplash.jpg");
 
@@ -18,7 +15,7 @@ const Food = () => {
   const { isAdmin } = useSelector((state) => state.userAdditionalInfo);
   const { currentUser } = useSelector((state) => state.authentication);
 
-  const { width, height } = Dimensions.get("screen");
+  const { width, height } = Dimensions.get("window");
   const [isEditable, setIsEditable] = useState(false);
   const [contentOne, setContentOne] = useState("");
   const [contentTwo, setContentTwo] = useState("");
@@ -61,7 +58,7 @@ const Food = () => {
   };
   const handleSaveContentOne = () => {
     try {
-      db.handleSaveToDB("social-life", "fika", "like-a-swede", contentOne);
+      db.handleSaveToDB("social-life", "food", "like-a-swede", contentOne);
     } catch (error) {
       console.log(error);
     } finally {
@@ -70,7 +67,7 @@ const Food = () => {
   };
   const handleSaveContentTwo = () => {
     try {
-      db.handleSaveToDB("social-life", "fika", "lingo", contentTwo);
+      db.handleSaveToDB("social-life", "food", "lingo", contentTwo);
     } catch (error) {
       console.log(error);
     } finally {
@@ -79,7 +76,7 @@ const Food = () => {
   };
   const handleSaveContentThree = () => {
     try {
-      db.handleSaveToDB("social-life", "fika", "price-level", contentThree);
+      db.handleSaveToDB("social-life", "food", "price-level", contentThree);
     } catch (error) {
       console.log(error);
     } finally {
@@ -116,7 +113,7 @@ const Food = () => {
           <EditBox
             editable={isEditable}
             onChangeText={(e) => setContentOne(e)}
-            onTouch={() => handleSaveContentOne()}
+            onTouch={handleSaveContentOne}
           />
         )
       }
@@ -130,7 +127,7 @@ const Food = () => {
           <EditBox
             editable={isEditable}
             onChangeText={(e) => setContentTwo(e)}
-            onTouch={() => handleSaveContentTwo()}
+            onTouch={handleSaveContentTwo}
           />
         )
       }
@@ -143,7 +140,7 @@ const Food = () => {
           <EditBox
             editable={isEditable}
             onChangeText={(e) => setContentThree(e)}
-            onTouch={() => handleSaveContentThree()}
+            onTouch={ handleSaveContentThree}
           />
         )
       }

@@ -5,6 +5,7 @@ import ButtonComponent from "./ButtonComponent";
 import { View } from "react-native-animatable";
 import { TextInput } from "react-native-gesture-handler";
 import { Dimensions } from "react-native";
+import appColors from "../assets/appColor";
 
 const EditBox = ({
   handleEdit,
@@ -14,10 +15,10 @@ const EditBox = ({
   onChangeText,
   ...props
 }) => {
-  const { width, height } = Dimensions.get("screen");
+  const { width, height } = Dimensions.get("window");
 
   return (
-    <View style={{ flexDirection: "row" }}>
+    <View style={{ flexDirection: "row", marginTop:20, marginLeft:10 }}>
       <TextInput
         style={{
           flex: 1,
@@ -25,6 +26,7 @@ const EditBox = ({
           borderColor: "grey",
           width: width,
           height: height / 10,
+          
         }}
         placeholder="Update content"
         editable={editable}
@@ -32,9 +34,9 @@ const EditBox = ({
       />
       <ButtonComponent
         onTouch={onTouch}
-        // style={{ borderColor: "green", borderWidth: 1 }}
+        style={{  marginHorizontal:7,marginTop:20 }}
       >
-        <Feather name="save" size={24} color="black" />
+        <Feather name="save" size={24} color={appColors.buttonActive} />
       </ButtonComponent>
     </View>
   );

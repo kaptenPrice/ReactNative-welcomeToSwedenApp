@@ -35,12 +35,13 @@ import ButtonComponent from "./components/ButtonComponent";
 import FeedBack from "./screens/settingScreens/FeedBack";
 import signoutScreen from "./screens/homeScreens/SignOutScreen";
 import SignOutScreen from "./screens/homeScreens/SignOutScreen";
+import AnimatedComponent from "./screens/socialLifeScreens/AnimatedComponent";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 
-const WelcomeToSweden = () => {
+const WelcomeToSwedenNavigation = () => {
   const { isloading, isSignedIn } = useSelector(
     (state) => state.authentication
   );
@@ -53,11 +54,7 @@ const WelcomeToSweden = () => {
     <NavigationContainer>
       {!isSignedIn ? (
         <Stack.Navigator
-          screenOptions={{
-            headerTransparent: true,
-            // headerStyle: { backgroundColor: appColors.bgColor },
-            // headerTintColor: appColors.whiteColor,
-          }}
+        
         >
           <Stack.Screen
             name="WelcomScreen"
@@ -75,17 +72,17 @@ const WelcomeToSweden = () => {
           />
         </Stack.Navigator>
       ) : (
-        <ActionSheetProvider>
-          <DrawerNavigator />
-        </ActionSheetProvider>
-      )}
+          <ActionSheetProvider>
+            <DrawerNavigator />
+          </ActionSheetProvider>
+        )}
     </NavigationContainer>
   );
 };
 const HomeTabNavigator = () => {
   return (
     <Tab.Navigator
-    backBehavior="initialRoute"
+      backBehavior="initialRoute"
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color }) => {
           let iconName;
@@ -109,7 +106,7 @@ const HomeTabNavigator = () => {
         showLabel: false,
         style: { backgroundColor: "transparent", borderTopWidth: 0 },
       }}
-      
+
     >
       <Tab.Screen name="Home" component={Homescreen} />
       <Tab.Screen name="SocialLife" component={SocialLifeNavigator} />
@@ -151,17 +148,22 @@ const SocialLifeNavigator = () => (
       name="Traditions"
       component={Traditions}
     />
+    <Stack.Screen
+      options={{ headerShown: true, headerBackTitle: " " }}
+      name="AnimatedComponent"
+      component={AnimatedComponent}
+    />
   </Stack.Navigator>
 );
 const SocietyFunctionsNavigator = () => (
   <Stack.Navigator
-  screenOptions={{
-    headerStyle: {
-      backgroundColor: appColors.bgColor,
-      shadowColor: "transparent",
-    },
-    headerTintColor: appColors.textColor,
-  }}
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: appColors.bgColor,
+        shadowColor: "transparent",
+      },
+      headerTintColor: appColors.textColor,
+    }}
   >
     <Stack.Screen
       options={{ headerShown: false, headerBackAccessibilityLabel: "true" }}
@@ -198,25 +200,18 @@ const getHeaderTitle = (route) => {
     case "Home":
       if (name) return `Welcome ${name}`;
       else {
-        // currentUser == undefined;
         return `Welcome ${currentUser.email}`;
       }
     case "SocialLife":
       return "Social life";
     case "SocietalFunctions":
       return "Society functions";
-    case "Profile":
-      return "Menu";
-    case "Fika":
-      return "Fika";
-    case "Food":
-      return "Food";
+
   }
 };
 const HomeStackNavigator = ({ navigation }) => (
   <Stack.Navigator
     screenOptions={{
-      // headerTransparent:true,
       headerStyle: { backgroundColor: appColors.bgColor },
       headerTintColor: appColors.textColor,
       headerRight: () => (
@@ -250,7 +245,7 @@ const MenuStackNavigator = () => (
     <Stack.Screen
       name="settings"
       component={UserProfile}
-      options={{ headerShown: false, headerBackAccessibilityLabel: "true" }}
+      options={{ headerBackTitleVisible: false, headerShown: false, headerBackAccessibilityLabel: "Khazar" }}
     />
   </Stack.Navigator>
 );
@@ -273,9 +268,9 @@ const DrawerNavigator = () => (
     <Drawer.Screen
       options={{
         headerShown: true,
-        headerBackAccessibilityLabel: "true",
-        headerTintColor:appColors.textColor,
-        
+        // headerBackAccessibilityLabel: "true",
+
+        headerTintColor: appColors.textColor,
         swipeEnabled: true,
         drawerIcon: () => (
           <Ionicons
@@ -292,7 +287,7 @@ const DrawerNavigator = () => (
       options={{
         headerShown: true,
         headerBackAccessibilityLabel: "true",
-        headerTintColor:appColors.textColor,
+        headerTintColor: appColors.textColor,
 
         drawerIcon: () => (
           <MaterialIcons
@@ -323,4 +318,4 @@ const DrawerNavigator = () => (
   </Drawer.Navigator>
 );
 
-export default WelcomeToSweden;
+export default WelcomeToSwedenNavigation;

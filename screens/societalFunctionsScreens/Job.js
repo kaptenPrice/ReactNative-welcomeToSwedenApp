@@ -1,35 +1,28 @@
-import React, { useState, useEffect } from "react";
-import {
-  Dimensions,
-  Linking,
-  Text,
-  TouchableOpacity,
-  View,
-  StyleSheet,
-} from "react-native";
-import ChildComponent from "../../components/ChildComponent";
+import React, { useState, useEffect } from 'react';
+import { Dimensions, Linking, Text, TouchableOpacity, View, StyleSheet } from 'react-native';
+import ChildComponent from '../../components/ChildComponent';
 // import study_unsplash from "../../assets/images/study_unsplash.jpg";
-import appColors from "../../assets/appColor";
-import { useSelector, useDispatch } from "react-redux";
-import ButtonComponent from "../../components/ButtonComponent";
-import { Ionicons, MaterialIcons, Feather } from "@expo/vector-icons";
-import { TextInput } from "react-native";
-import * as db from "../../firestore/FirebaseUtils";
-import EditBox from "../../components/EditBox";
-const job_pic = require("../../assets/images/job_unsplash.jpg");
+import appColors from '../../assets/appColor';
+import { useSelector, useDispatch } from 'react-redux';
+import ButtonComponent from '../../components/ButtonComponent';
+import { Ionicons, MaterialIcons, Feather } from '@expo/vector-icons';
+import { TextInput } from 'react-native';
+import * as db from '../../firestore/FirebaseUtils';
+import EditBox from '../../components/EditBox';
+const job_pic = require('../../assets/images/job_unsplash.jpg');
 
 const Job = () => {
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.authentication);
   const { isAdmin } = useSelector((state) => state.userAdditionalInfo);
 
-  const { width, height } = Dimensions.get("screen");
+  const { width, height } = Dimensions.get('window');
   const [isEditable, setIsEditable] = useState(false);
 
   const [contentOne, setContentOne] = useState();
   const [contentTwo, setContentTwo] = useState();
   const [contentThree, setContentThree] = useState();
-  const [phoneNumber, setPhoneNumber] = useState("0705083605"); //Testing call-function
+  const [phoneNumber, setPhoneNumber] = useState('0705083605'); //Testing call-function
 
   useEffect(() => {
     getFieldData();
@@ -37,19 +30,17 @@ const Job = () => {
 
   const getFieldData = () => {
     try {
-      db.getContentData("social-life", "traditions", "like-a-swede", (cb) => {
+      db.getContentData('societal-functions', 'job', 'like-a-swede', (cb) => {
         const data = cb.data();
-        !data?.content ? setContentOne("tomt") : setContentOne(data?.content);
+        !data?.content ? setContentOne('tomt') : setContentOne(data?.content);
       });
-      db.getContentData("social-life", "traditions", "lingo", (cb) => {
+      db.getContentData('societal-functions', 'job', 'lingo', (cb) => {
         const data = cb.data();
-        !data?.content ? setContentTwo("tomt") : setContentTwo(data?.content);
+        !data?.content ? setContentTwo('tomt') : setContentTwo(data?.content);
       });
-      db.getContentData("social-life", "traditions", "price-level", (cb) => {
+      db.getContentData('societal-functions', 'job', 'assistence', (cb) => {
         const data = cb.data();
-        !data?.content
-          ? setContentThree("tomt")
-          : setContentThree(data?.content);
+        !data?.content ? setContentThree('tomt') : setContentThree(data?.content);
       });
     } catch (error) {
       console.log(`contentOne ERROR: ${error}`);
@@ -65,21 +56,16 @@ const Job = () => {
   };
   const handleSaveStudyContentOne = () => {
     try {
-      db.handleSaveToDB(
-        "societal-functions",
-        "study",
-        "like-a-swede",
-        contentOne
-      );
+      db.handleSaveToDB('societal-functions', 'job', 'like-a-swede', contentOne);
     } catch (error) {
-      console.log("getContent study: ", error);
+      console.log('getContent study: ', error);
     } finally {
       setIsEditable(false);
     }
   };
   const handleSaveStudyContentTwo = () => {
     try {
-      db.handleSaveToDB("societal-functions", "study", "lingo", contentTwo);
+      db.handleSaveToDB('societal-functions', 'job', 'lingo', contentTwo);
     } catch (error) {
       console.log(error);
     } finally {
@@ -88,12 +74,7 @@ const Job = () => {
   };
   const handleSavecontentThree = () => {
     try {
-      db.handleSaveToDB(
-        "societal-functions",
-        "study",
-        "assistence",
-        contentThree
-      );
+      db.handleSaveToDB('societal-functions', 'job', 'assistence', contentThree);
     } catch (error) {
       console.log(error);
     } finally {
@@ -113,7 +94,7 @@ const Job = () => {
             <ButtonComponent
               onTouch={handleEdit}
               style={{
-                alignItems: "center",
+                alignItems: 'center',
               }}
             >
               <MaterialIcons name="edit" size={30} color="black" />
@@ -122,9 +103,7 @@ const Job = () => {
         )
       }
       children1={<Text style={styles.headers}>Like a Swede:</Text>}
-      children2={
-        <Text style={styles.childComponentTextContainers}>{contentOne}</Text>
-      }
+      children2={<Text style={styles.childComponentTextContainers}>{contentOne}</Text>}
       editBox1={
         isEditable && (
           <>
@@ -138,9 +117,7 @@ const Job = () => {
       }
       style={styles.childComponentTextContainers}
       children3={<Text style={styles.headers}>Lingo</Text>}
-      children4={
-        <Text style={styles.childComponentTextContainers}>{contentTwo}</Text>
-      }
+      children4={<Text style={styles.childComponentTextContainers}>{contentTwo}</Text>}
       editBox2={
         isEditable && (
           <>
@@ -153,9 +130,7 @@ const Job = () => {
         )
       }
       children5={<Text style={styles.headers}>Assistance:</Text>}
-      children6={
-        <Text style={styles.childComponentTextContainers}>{contentThree}</Text>
-      }
+      children6={<Text style={styles.childComponentTextContainers}>{contentThree}</Text>}
       editBox3={
         isEditable && (
           <>
@@ -168,15 +143,15 @@ const Job = () => {
         )
       }
       children7={
-        <TouchableOpacity style={{ margin: 7, flexDirection: "row" }}>
+        <TouchableOpacity style={{ margin: 7, flexDirection: 'row' }}>
           <Text
-            style={{ color: "blue", marginRight: 10 }}
-            onPress={() => Linking.openURL("https://www.google.com")}
+            style={{ color: 'blue', marginRight: 10 }}
+            onPress={() => Linking.openURL('https://www.google.com')}
           >
             google
           </Text>
           <Text
-            style={{ color: "blue", marginLeft: 10 }}
+            style={{ color: 'blue', marginLeft: 10 }}
             onPress={() => Linking.openURL(`Tel:${phoneNumber}`)}
           >
             Call up
@@ -189,7 +164,7 @@ const Job = () => {
             <TextInput
               style={{
                 borderWidth: 0.5,
-                borderColor: "red",
+                borderColor: 'red',
                 width: width,
                 height: height / 10,
               }}
@@ -208,14 +183,14 @@ export default Job;
 export const styles = StyleSheet.create({
   headers: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     // paddingBottom: 15,
     marginLeft: 5,
   },
   childComponentTextContainers: {
     // borderColor:"blue",
     // borderWidth:0.5,
-    fontWeight: "500",
+    fontWeight: '500',
     fontSize: 15,
     paddingBottom: 30,
     marginLeft: 5,

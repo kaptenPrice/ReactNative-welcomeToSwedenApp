@@ -45,24 +45,21 @@ const Styles = StyleSheet.create({
     flex: 0.5,
     alignItems: "center",
     justifyContent: "center",
-    // marginBottom: 30,
-    // borderColor:"green",
-    // borderWidth:4
+ 
   },
 
   loginScreenMain: {
     color: appColors.textColor,
     fontWeight: "600",
     fontSize: 40,
-    // borderColor:"red",
-    // borderWidth:1
+
   },
-  viewTextInput: {
-    flex: 1,
-    justifyContent: "center",
-    borderColor: "red",
-    borderWidth: 5,
-  },
+  // viewTextInput: {
+  //   flex: 1,
+  //   justifyContent: "center",
+  //   borderColor: "red",
+  //   borderWidth: 5,
+  // },
   textInputStyle: {
     borderColor: appColors.borderColor,
     color: appColors.placeHolderColor,
@@ -174,18 +171,7 @@ const Styles = StyleSheet.create({
   },
 
 
-  childComponentContentView: {
-    paddingTop: 10,
-    flex: 2,
-    alignItems: "flex-start",
-    justifyContent: "center",
-    backgroundColor: appColors.bgColor,
-    borderBottomWidth:1,
-    borderBottomColor:appColors.borderColor,
-    // marginLeft: 7,
-    // marginRight: 7,
-    marginTop: 10,
-  },
+
 
   profileButtons: {
     justifyContent: "center",

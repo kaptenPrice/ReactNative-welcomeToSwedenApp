@@ -8,6 +8,7 @@ import InputComponent from "./InputComponent";
 import * as db from "../firestore/FirebaseUtils";
 import ButtonComponent from "./ButtonComponent";
 
+
 const ModalSendMailComponent = ({
   visible,
   onTouch,
@@ -17,24 +18,13 @@ const ModalSendMailComponent = ({
   const [isFinish, setIsFinish] = useState(true);
   const [currentEmail, setCurrentEmail] = useState(false);
   const [isEmailValid, setIsEmailValid] = useState(false);
+  const [errorMessage, setErrorMesage] = useState("")
+  const [isError, setIsError] = useState(false)
 
   useEffect(() => {
-    // check_email();
   }, [currentEmail]);
 
-  //   function check_email() {
-  //     if (!currentEmail.match(/\S+@\S+\.\S+/)) {
-  //       // Jaymon's / Squirtle's solution
-  //       setIsEmailValid(false);
-  //       console.log("1", isEmailValid);
-  //     }
-  //     if (currentEmail.indexOf(" ") != -1 || currentEmail.indexOf("..") != -1) {
-  //       setIsEmailValid(false);
-  //       console.log("2", isEmailValid);
-  //     }
-  //     setIsEmailValid(true);
-  //     console.log("3", isEmailValid);
-  //   }
+
 
   const sendResetEmail = () => {
     db.auth
@@ -44,9 +34,9 @@ const ModalSendMailComponent = ({
         setCurrentEmail("");
         setIsEmailValid(false);
         setIsFinish(false)
-        
+
       })
-      .catch((error) => console.log(`Error: ${error}`));
+      .catch((error) => { setErrorMesage(error); setIsError(true) })
   };
 
   return (
@@ -54,10 +44,15 @@ const ModalSendMailComponent = ({
       <Modal animationType="slide" transparent={true} visible={visible}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
+
             <Text style={styles.modalText}>
               {"Please enter your registerd e-mail "}
             </Text>
+            {isError && <Text style={[styles.modalText, {fontSize:12, color:"#fa8200"}]}>
+              {`${errorMessage}`}
+            </Text>}
             <InputComponent
+            placeholder={"E-mail"}
               isLabel={false}
               editable={true}
               onChangeText={(email) => {
@@ -67,8 +62,6 @@ const ModalSendMailComponent = ({
               onEndEditing={() => setIsEmailValid(true)}
               clearTextOnFocus={true}
             />
-            {isEmailValid ? (
-              <>
                 <ButtonComponent
                   style={[
                     styles.confirmButtons,
@@ -82,18 +75,13 @@ const ModalSendMailComponent = ({
                   onTouch={() => sendResetEmail()}
                   children={
                     <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-                      send
+                      send E-mail
                     </Text>
                   }
                 />
-              </>
-            ) : (
-              <View style={styles.confirmButtons}>
-                <Text style={{ color: appColors.iconInActive }}>
-                  Send E-mail
-                </Text>
-              </View>
-            )}
+            
+
+            
             <ButtonComponent
               style={[
                 styles.confirmButtons,
@@ -136,7 +124,6 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   iconView: {
-    // zIndex: 100000,
     left: 90,
     bottom: 35,
   },

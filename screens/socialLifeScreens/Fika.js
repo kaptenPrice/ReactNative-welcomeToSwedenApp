@@ -7,10 +7,8 @@ import appColors from "../../assets/appColor";
 import ButtonComponent from "../../components/ButtonComponent";
 import { Ionicons, MaterialIcons, Feather } from "@expo/vector-icons";
 import { TextInput } from "react-native-gesture-handler";
-import ViewMoreText from "react-native-view-more-text";
 import AdminButtons from "../../components/EditBox";
 import * as db from "../../firestore/FirebaseUtils";
-import ContentComponent from "../../components/ContentComponent";
 import EditBox from "../../components/EditBox";
 
 const Fika = () => {
@@ -18,7 +16,7 @@ const Fika = () => {
   const { isAdmin } = useSelector((state) => state.userAdditionalInfo);
   const { currentUser } = useSelector((state) => state.authentication);
 
-  const { width, height } = Dimensions.get("screen");
+  const { width, height } = Dimensions.get("window");
   const [isEditable, setIsEditable] = useState(false);
   const [contentOne, setContentOne] = useState("");
   const [contentTwo, setContentTwo] = useState("");
@@ -26,9 +24,7 @@ const Fika = () => {
 
   useEffect(() => {
     getFieldData();
-    // return () => {
-    //   getFieldData();
-    // };
+ 
   }, []);
 
   const getFieldData = () => {

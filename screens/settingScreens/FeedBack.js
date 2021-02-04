@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
 import {
   View,
   Text,
@@ -7,7 +9,7 @@ import {
   TextInput,
   StyleSheet,
   RefreshControl,
-  LogBox
+  LogBox, Keyboard, FlatList, TouchableOpacity, TouchableWithoutFeedback
 } from "react-native";
 import Styles from "../../css/Styles";
 import {
@@ -16,30 +18,20 @@ import {
   MaterialIcons,
 } from "@expo/vector-icons/";
 
-import { AwesomeTextInput } from "react-native-awesome-text-input";
-import ButtonComponent from "../../components/ButtonComponent";
-import { useNavigation } from "@react-navigation/native";
-
-import { isSendingData } from "../../redux/store/actions";
-import { useDispatch, useSelector } from "react-redux";
-import { TextInputComponent } from "react-native";
-import appColors from "../../assets/appColor";
-import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
-import NpsComponent from "../../components/NpsComponent";
-import InputComponent from "../../components/InputComponent";
 import * as db from "../../firestore/FirebaseUtils";
+import appColors from "../../assets/appColor";
+import ButtonComponent from "../../components/ButtonComponent";
+import NpsComponent from "../../components/NpsComponent";
 import AfterFeedback from "../../components/AfterFeedback";
-import { ScrollView } from "react-native";
 import ReadMore from "react-native-read-more-text";
 import Loading from "../../components/Loading";
-import { ActivityIndicator } from "react-native";
-import { style } from "../socialLifeScreens/Fika";
+
 
 const FeedBack = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const textInputRef = useRef("");
-  const { width, height } = Dimensions.get("screen");
+  const { width, height } = Dimensions.get("window");
 
   const { name, email, phone, city, uid, isAdmin } = useSelector(
     (state) => state.userAdditionalInfo
@@ -96,7 +88,7 @@ const FeedBack = () => {
   const handleGetFeedback = async () => {
     setIsLoading(true);
 
-    const snapShot = await feedbackRef.orderBy("feedbackId").limit(3).get();
+    const snapShot = await feedbackRef.orderBy("feedbackId").limit(5).get();
 
     if (!snapShot.empty) {
       let newFeedback = [];
@@ -122,7 +114,7 @@ const FeedBack = () => {
         let snapshot = await feedbackRef
           .orderBy("feedbackId")
           .startAfter(lastDoc.data().feedbackId)
-          .limit(3)
+          .limit(5)
           .get();
 
         if (!snapshot.empty) {
@@ -187,19 +179,21 @@ const FeedBack = () => {
           </View>
 
           <View style={styles.container2}>
-            <View style={{ marginTop: 30 }}>
-              <Text style={styles.labelStyle}>Feedback</Text>
+            <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()} >
+              <View style={{ marginTop: 30 }}>
+                <Text style={styles.labelStyle}>Feedback</Text>
 
-              <TextInput
-                style={[styles.txtInputContainer, { width: width / 1.2 }]}
-                numberOfLines={0}
-                multiline={true}
-                onChangeText={(e) => setUserFeedback(e)}
-                onEndEditing={() => checkInputLength()}
-                ref={textInputRef}
-                blurOnSubmit={true}
-              />
-            </View>
+                <TextInput
+                  style={[styles.txtInputContainer, { width: width / 1.2 }]}
+                  numberOfLines={0}
+                  multiline={true}
+                  onChangeText={(e) => setUserFeedback(e)}
+                  onEndEditing={() => checkInputLength()}
+                  ref={textInputRef}
+                  blurOnSubmit={true}
+                />
+              </View>
+            </TouchableWithoutFeedback>
             <View style={[styles.footerView, { width: width / 1.2 }]}>
               <ButtonComponent
                 style={styles.sendButtonStyle}
@@ -213,7 +207,7 @@ const FeedBack = () => {
             {isFeedbackDone && (
               <AfterFeedback
                 visible={isFeedbackDone}
-                onPress={() => {setIsFeedbackDone(false), navigation.navigate("Home")}}
+                onPress={() => { setIsFeedbackDone(false), navigation.navigate("Home") }}
                 presseableText={"OK"}
                 boldText={"Thanks for feedback!"}
               />
@@ -221,32 +215,32 @@ const FeedBack = () => {
           </View>
         </>
       ) : (
-        <>
-          {/* ADMIN VIEW */}
-          <View style={{ flex: 1 }}>
-            <FlatList
-              data={adminFeedback}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={(item) => _renderItem(item)}
-              ListFooterComponent={renderFooter}
-              refreshControl={
-                <RefreshControl refreshing={isLoading} onRefresh={onRefresh} />
-              }
-              initialNumToRender={3}
-              onEndReachedThreshold={0.1}
-              onMomentumScrollBegin={() => {
-                onEndReachedCalledDuringMomentum = false;
-              }}
-              onScrollEndDrag={() => {
-                if (!onEndReachedCalledDuringMomentum && !isMoreLoading) {
-                  handleGetMore();
+          <>
+            {/* ADMIN VIEW */}
+            <View style={{ flex: 1 }}>
+              <FlatList
+                data={adminFeedback}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={(item) => _renderItem(item)}
+                ListFooterComponent={renderFooter}
+                refreshControl={
+                  <RefreshControl refreshing={isLoading} onRefresh={onRefresh} />
                 }
-              }}
-              showsVerticalScrollIndicator={false}
-            />
-          </View>
-        </>
-      )}
+                initialNumToRender={3}
+                onEndReachedThreshold={0.1}
+                onMomentumScrollBegin={() => {
+                  onEndReachedCalledDuringMomentum = false;
+                }}
+                onScrollEndDrag={() => {
+                  if (!onEndReachedCalledDuringMomentum && !isMoreLoading) {
+                    handleGetMore();
+                  }
+                }}
+                showsVerticalScrollIndicator={false}
+              />
+            </View>
+          </>
+        )}
     </View>
   );
 };
@@ -332,7 +326,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     flexDirection: "column",
-    marginTop:60
+    marginTop: 60
   },
   footerView: {
     flex: 1,

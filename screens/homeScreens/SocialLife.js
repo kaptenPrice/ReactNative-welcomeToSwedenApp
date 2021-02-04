@@ -15,7 +15,7 @@ const socialLife_pic = require("../../assets/images/socialLife_unsplash.jpg");
 
 export default function SocialLife() {
   const navigation = useNavigation();
-  const { width, height } = Dimensions.get("screen");
+  const { width, height } = Dimensions.get("window");
   const { isLoading, currentUser } = useSelector(
     (state) => state.authentication
   );
@@ -70,6 +70,16 @@ export default function SocialLife() {
               <Text style={childStyle.buttonTextStyle}>Traditions</Text>
               <SwedenMapSvg style={{ fill: appColors.iconActive }} />
             </ButtonComponent>
+            <ButtonComponent
+              style={childStyle.childButtons}
+              onTouch={() => navigation.navigate("AnimatedComponent")}
+              buttonStyle={childStyle.buttonStyle}
+            >
+              <Text style={childStyle.buttonTextStyle}>Animated</Text>
+              <SwedenMapSvg style={{ fill: appColors.iconActive }} />
+            </ButtonComponent>
+
+
           </View>
         </>
       )}

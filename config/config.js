@@ -1,13 +1,12 @@
 
-import {APIKEY,AUTHDOMAIN, DATABASURL,PROJEKTID,STORAGEBUCKET,MESSAGINGSENDERID,APPID,MEASUREMENTID} from '@env'
 
 export const firebaseConfig = {
-    apiKey:APIKEY,
-    authDomain: AUTHDOMAIN,
-    databaseURL: DATABASURL,
-    projectId: PROJEKTID,
-    storageBucket: STORAGEBUCKET,
-    messagingSenderId: MESSAGINGSENDERID,
-    appId: APPID,
-    measurementId: MEASUREMENTID
+    apiKey:process.env.APIKEY,
+    authDomain: process.env.AUTHDOMAIN,
+    databaseURL:process.env.DATABASURL,
+    projectId:process.env.PROJEKTID,
+    storageBucket: process.env.STORAGEBUCKET,
+    messagingSenderId: process.env.MESSAGINGSENDERID,
+    appId:process.env.APPID,
+    measurementId: process.env.MEASUREMENTID
   }

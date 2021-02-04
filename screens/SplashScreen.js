@@ -5,7 +5,7 @@ import splashAnim from "../assets/splashCode.json";
 import appColors from "../assets/appColor";
 
 const SplashScreen = () => {
-  const { width, height } = Dimensions.get("screen");
+  const { width, height } = Dimensions.get("window");
 
   return(
     
