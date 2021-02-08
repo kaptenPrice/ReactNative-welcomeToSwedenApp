@@ -17,7 +17,6 @@ const [isModalVisible, setIsModalVisible]=useState(true)
     useEffect(() => {
       setIsModalVisible(true)
       LogBox.ignoreLogs(['Setting a timer for a long period of time'])
-        // handleSignOut()
     }, [isModalVisible])
 
     const handleSignOut = async () => {
