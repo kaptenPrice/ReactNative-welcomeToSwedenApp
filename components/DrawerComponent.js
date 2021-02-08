@@ -1,42 +1,37 @@
-import React from "react";
-import { View, Text, StyleSheet, ScrollView , SafeAreaView, Platform} from "react-native";
-import {  } from "react-native-gesture-handler";
-import {  } from "react-native-safe-area-context";
-import Styles from "../css/Styles";
-import { Ionicons } from "@expo/vector-icons";
-import appColors from "../assets/appColor";
-import { DrawerItemList } from "@react-navigation/drawer";
-import {  } from "react-native";
+import React from 'react';
+import { View, Text, StyleSheet, ScrollView, SafeAreaView, Platform } from 'react-native';
+import {} from 'react-native-gesture-handler';
+import {} from 'react-native-safe-area-context';
+import Styles from '../css/Styles';
+import appColors from '../assets/appColor';
+import { DrawerItemList } from '@react-navigation/drawer';
+import {} from 'react-native';
+import MenuSvg from '../assets/svg/MenuSvg';
+import PersonSvg from '../assets/svg/PersonSvg';
 
 export default function DrawerComponent(props) {
   return (
-    
-      <SafeAreaView style={{backgroundColor:appColors.bgColor, flex:1}}>
-        <View style={styles.drawerComponentView}>
-          <Ionicons
-            name="ios-heart"
-            size={50}
-            color={appColors.placeHolderColor}
-          />
-          <Text style={Styles.drawerComponentText}>Menu</Text>
-        </View>
-        <DrawerItemList {...props} />
-      </SafeAreaView>
-
+    <SafeAreaView style={{ backgroundColor: appColors.bgColor, flex: 1 }}>
+      <View style={styles.drawerComponentView}>
+        <PersonSvg height="40" height="40" />
+        <Text style={styles.drawerComponentText}>Menu</Text>
+      </View>
+      <DrawerItemList {...props} />
+    </SafeAreaView>
   );
 }
-const styles=StyleSheet.create({
+const styles = StyleSheet.create({
   drawerComponentView: {
-        height: 150,
-        backgroundColor: appColors.bgColor,
-        alignItems: "center",
-        justifyContent: "center",
-        paddingTop: Platform.OS == "android" ? 20 : 0,
-      },
-    drawerComponentText: {
-          fontSize: 24,
-          color: appColors.textColor,
-          fontWeight: "100",
-        },
-
-})
+    height: 150,
+    backgroundColor: appColors.bgColor,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: Platform.OS == 'android' ? 20 : 0,
+  },
+  drawerComponentText: {
+    paddingTop: 10,
+    fontSize: 24,
+    color: appColors.textColor,
+    fontWeight: '300',
+  },
+});

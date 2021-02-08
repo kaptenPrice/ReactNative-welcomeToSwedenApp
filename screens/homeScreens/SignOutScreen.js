@@ -15,6 +15,7 @@ const dispatch= useDispatch()
 const [isModalVisible, setIsModalVisible]=useState(true)
     const navigation = useNavigation()
     useEffect(() => {
+      setIsModalVisible(true)
       LogBox.ignoreLogs(['Setting a timer for a long period of time'])
         // handleSignOut()
     }, [isModalVisible])
@@ -33,7 +34,7 @@ const [isModalVisible, setIsModalVisible]=useState(true)
         <>
         <ModalConfirmDeleteAccount
               onTouch={()=>handleSignOut()}
-              setValue={() => setIsModalVisible(false)}
+              setValue={() => {setIsModalVisible(false); navigation.navigate("Home")  }}
               value={isModalVisible}
               actionType={"Exit"}
             />

@@ -1,10 +1,13 @@
-import * as Permission from "expo-permissions";
+// import * as Permission from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
+import * as MediaLibrary from 'expo-media-library';
+
 import { Platform } from "react-native";
 
 
 export const openImageLibrary = async () => {
-  const { status } = await Permission.askAsync(Permission.CAMERA_ROLL);
+
+  const {status}=await MediaLibrary.requestPermissionsAsync()
 
   if (status !== "granted") {
     alert("sorry no acess to camera from YOU");
@@ -20,10 +23,8 @@ export const openImageLibrary = async () => {
   }
 };
 export const openCamera = async () => {
-  const { status } = await Permission.askAsync(
-    Permission.CAMERA_ROLL,
-    Permission.CAMERA
-  );
+ 
+  const {status}=await MediaLibrary.requestPermissionsAsync()
   if (status !== "granted") {
     alert("sorry no acess to camera from YOU");
     return false;

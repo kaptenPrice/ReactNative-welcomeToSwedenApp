@@ -6,10 +6,10 @@ import {
   FlatList,
   Dimensions,
   StyleSheet,
-  LogBox,
+  LogBox
+  
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-// import { API_URL } from '@env';
 
 import Styles from '../../css/Styles';
 import Axios from 'axios';
@@ -19,10 +19,9 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import appColors from '../../assets/appColor';
 import SocieltalFunctionsSvg from '../../assets/svg/SocieltalFunctionsSvg';
-import Ionicons from '@expo/vector-icons/Ionicons';
 import Loading from '../../components/Loading';
 import * as db from '../../firestore/FirebaseUtils';
-import { LinearGradient } from 'expo-linear-gradient';
+import FriendsSvg from '../../assets/svg/FriendsSvg';
 
 export default function HomeScreen() {
   const dispatch = useDispatch();
@@ -40,6 +39,7 @@ export default function HomeScreen() {
   const [uid, setUid] = useState(currentUser.uid || currentUser.id);
   const [_email, setEmail] = useState(currentUser.email);
 
+  
   useEffect(() => {
     LogBox.ignoreLogs(['Setting a timer for a long period of time']);
     saveInitialUserData();
@@ -51,9 +51,7 @@ export default function HomeScreen() {
       const pics = await Axios.get(process.env.API_URL).then((res) => {
         setHomeScreenImage(res.data.results);
       });
-      // const pics = await Axios.get(`${API_URL}`).then((res) => {
-      //   setHomeScreenImage(res.data.results);
-      // });
+  
     }
     getpics();
   }, []);
@@ -127,10 +125,7 @@ export default function HomeScreen() {
                   { width: width / 1.2 },
                 ]}>
                 <Text style={styles.homeButtonText}>EVERYDAY LIFE</Text>
-                <Ionicons
-                  name="ios-people"
-                  size={50}
-                  color={appColors.placeHolderColor}
+                <FriendsSvg
                 />
               </ButtonComponent>
 

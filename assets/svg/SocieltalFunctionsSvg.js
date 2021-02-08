@@ -1,11 +1,12 @@
 import React from "react";
 import { Svg, Path } from "react-native-svg";
+import appColors from "../appColor";
 
 const SocieltalFunctionsSvg = (props) => {
   return (
     <Svg
-      stroke="currentColor"
-      fill="currentColor"
+      stroke={appColors.placeHolderColor}
+      fill={appColors.placeHolderColor}
       strokeWidth="0"
       viewBox="0 0 24 24"
       height="30"

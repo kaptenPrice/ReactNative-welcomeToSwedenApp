@@ -5,10 +5,10 @@ const study_unsplash = require('../../assets/images/study_unsplash.jpg');
 import appColors from '../../assets/appColor';
 import { useSelector, useDispatch } from 'react-redux';
 import ButtonComponent from '../../components/ButtonComponent';
-import { Ionicons, MaterialIcons, Feather } from '@expo/vector-icons';
 import { TextInput } from 'react-native';
 import * as db from '../../firestore/FirebaseUtils';
 import EditBox from '../../components/EditBox';
+import EditSvg from '../../assets/svg/EditSvg';
 
 const HealthCare = () => {
   const dispatch = useDispatch();
@@ -96,7 +96,7 @@ const HealthCare = () => {
                 alignItems: 'center',
               }}
             >
-              <MaterialIcons name="edit" size={30} color="black" />
+              <EditSvg  />
             </ButtonComponent>
           </View>
         )

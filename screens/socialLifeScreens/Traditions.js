@@ -4,11 +4,12 @@ import { Dimensions, StyleSheet, Text, View } from 'react-native';
 import ChildComponent from '../../components/ChildComponent';
 import appColors from '../../assets/appColor';
 import ButtonComponent from '../../components/ButtonComponent';
-import { MaterialIcons } from '@expo/vector-icons';
 import { TextInput } from 'react-native-gesture-handler';
 import AdminButtons from '../../components/EditBox';
 import * as db from '../../firestore/FirebaseUtils';
 import EditBox from '../../components/EditBox';
+import EditSvg from '../../assets/svg/EditSvg';
+
 const traditions_pic = require('../../assets/images/dalahäst_unsplash.jpg');
 
 const Traditions = () => {
@@ -95,7 +96,7 @@ const Traditions = () => {
                 alignItems: 'center',
               }}
             >
-              <MaterialIcons name="edit" size={30} color="black" />
+              <EditSvg  />
             </ButtonComponent>
           </View>
         )

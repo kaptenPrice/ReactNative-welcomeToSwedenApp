@@ -7,7 +7,6 @@ const SwedenMapSvg = (props) => {
       xmlns="http://www.w3.org/2000/svg"
       id="comp_Sweden"
       viewBox="0 0 300.7 606.73"
-    //   scaleY="0.05"
       width="40"
       height="40"
       {...props}

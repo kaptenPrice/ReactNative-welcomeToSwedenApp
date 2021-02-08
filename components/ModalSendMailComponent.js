@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Dimensions } from "react-native";
 import { StyleSheet, Text, View, Modal } from "react-native";
 import appColors from "../assets/appColor";
-import { MaterialIcons } from "@expo/vector-icons/";
 import { TouchableHighlight } from "react-native-gesture-handler";
 import InputComponent from "./InputComponent";
 import * as db from "../firestore/FirebaseUtils";

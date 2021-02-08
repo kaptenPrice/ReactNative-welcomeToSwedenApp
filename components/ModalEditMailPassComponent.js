@@ -1,31 +1,32 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { signOut } from "../redux/store/actions";
-import { Feather } from "@expo/vector-icons";
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { signOut } from '../redux/store/actions';
 
-import { Dimensions } from "react-native";
-import { StyleSheet, Text, View, Modal } from "react-native";
-import appColors from "../assets/appColor";
-import { MaterialCommunityIcons } from "@expo/vector-icons/";
-import InputComponent from "./InputComponent";
-import ButtonComponent from "./ButtonComponent";
-import ModalConfirmDeleteAccount from "./ModalConfirmDeleteAccount";
+import { Dimensions } from 'react-native';
+import { StyleSheet, Text, View, Modal } from 'react-native';
+import appColors from '../assets/appColor';
+import InputComponent from './InputComponent';
+import ButtonComponent from './ButtonComponent';
+import ModalConfirmDeleteAccount from './ModalConfirmDeleteAccount';
 
-import * as db from "../firestore/FirebaseUtils";
-import firebase from "firebase/app";
-import ModalSuccessComponent from "./ModalSuccessComponent";
+import * as db from '../firestore/FirebaseUtils';
+import firebase from 'firebase/app';
+import ModalSuccessComponent from './ModalSuccessComponent';
+import ArrowRightSvg from '../assets/svg/ArrowRightSvg';
+import { color } from 'react-native-reanimated';
+import SuccesSvg from '../assets/svg/SuccesSvg';
 
 const ModalEditMailPassComponent = ({ onCancel, visible }) => {
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.authentication);
   const { email } = useSelector((state) => state.userAdditionalInfo);
-  const { height, width } = Dimensions.get("window");
+  const { height, width } = Dimensions.get('window');
 
-  const [uid, setUid] = useState("");
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
+  const [uid, setUid] = useState('');
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
   const [currentEmail, setCurrentEmail] = useState(currentUser.email);
-  const [newEmail, setNewEmail] = useState("");
+  const [newEmail, setNewEmail] = useState('');
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [isPassFieldsEmpty, setIsPassFieldsEmpty] = useState(true);
   const [isEmailFieldsEmpty, setIsEmailFieldsEmpty] = useState(true);
@@ -51,9 +52,7 @@ const ModalEditMailPassComponent = ({ onCancel, visible }) => {
   }, []);
 
   useEffect(() => {
-    newPassword.length < 6
-      ? setIsPassFieldsEmpty(true)
-      : setIsPassFieldsEmpty(false);
+    newPassword.length < 6 ? setIsPassFieldsEmpty(true) : setIsPassFieldsEmpty(false);
   }, [newPassword]);
 
   useEffect(() => {
@@ -64,14 +63,13 @@ const ModalEditMailPassComponent = ({ onCancel, visible }) => {
     setUid(currentUser.uid || currentUser.id);
   }, [uid]);
 
-
   const handleSignOut = async () => {
     try {
       db.signOut();
       dispatch(signOut());
     } catch (error) {
-      alert("Something fishy occurred, try again, or restart the app");
-      console.log("error: ", error);
+      alert('Something fishy occurred, try again, or restart the app');
+      console.log('error: ', error);
     }
   };
   const deleteUserData = async () => {
@@ -91,7 +89,7 @@ const ModalEditMailPassComponent = ({ onCancel, visible }) => {
       setIsEmailFieldsEmpty(true);
       return false;
     }
-    if (newEmail.indexOf(" ") != -1 || newEmail.indexOf("..") != -1) {
+    if (newEmail.indexOf(' ') != -1 || newEmail.indexOf('..') != -1) {
       setIsEmailFieldsEmpty(true);
       return false;
     }
@@ -103,10 +101,7 @@ const ModalEditMailPassComponent = ({ onCancel, visible }) => {
     try {
       const user = db.auth.currentUser;
       console.log(user.email);
-      var cred = firebase.auth.EmailAuthProvider.credential(
-        user.email,
-        currentPassword
-      );
+      var cred = firebase.auth.EmailAuthProvider.credential(user.email, currentPassword);
       return user.reauthenticateWithCredential(cred);
     } catch (error) {
       alert(error);
@@ -120,23 +115,18 @@ const ModalEditMailPassComponent = ({ onCancel, visible }) => {
         user
           .updatePassword(newPassword)
           .then(() => {
-            setIsSuccess(true)
+            setIsSuccess(true);
 
-            // alert("Password updated");
-            console.log("Password updated");
-
-            // setIsVisible(false);
+            console.log('Password updated');
           })
           .catch((error) => alert(`change password: ${error}`));
       })
       .catch((error) => {
         switch (error.code) {
-          case "auth/too-many-requests":
-            alert(
-              `Too many requests, I have to rest! Try to hit me again in a while `
-            );
+          case 'auth/too-many-requests':
+            alert(`Too many requests, I have to rest! Try to hit me again in a while `);
             break;
-          case "auth/wrong-password":
+          case 'auth/wrong-password':
             alert(`Try again with another password`);
             break;
           default:
@@ -153,10 +143,9 @@ const ModalEditMailPassComponent = ({ onCancel, visible }) => {
           .updateEmail(newEmail)
           .then(() => {
             alert(`E-mail updated, use ${newEmail} at next login`);
-            dispatch({ type: "ADD_EMAIL", payload: newEmail });
-            onCancel()
+            dispatch({ type: 'ADD_EMAIL', payload: newEmail });
+            onCancel();
             const [isSucces, setIsSuccess] = useState(false);
-
           })
           .catch((error) => alert(`change E-mail: ${error}`));
       })
@@ -170,12 +159,10 @@ const ModalEditMailPassComponent = ({ onCancel, visible }) => {
       .then(() => setIsAuthorized(true))
       .catch((error) => {
         switch (error.code) {
-          case "auth/too-many-requests":
-            alert(
-              `Too many requests, I have to rest! Try to hit me again in a while `
-            );
+          case 'auth/too-many-requests':
+            alert(`Too many requests, I have to rest! Try to hit me again in a while `);
             break;
-          case "auth/wrong-password":
+          case 'auth/wrong-password':
             alert(`password is misspelled? Try again`);
             break;
           default:
@@ -188,19 +175,17 @@ const ModalEditMailPassComponent = ({ onCancel, visible }) => {
       <Modal animationType="slide" transparent={true} visible={visible}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>{"Edit credentials"}</Text>
+            <Text style={styles.modalText}>{'Edit credentials'}</Text>
             {!isAuthorized && (
               <>
-                <Text style={[styles.modalText, { fontWeight: "400" }]}>
-                  {"Enter password to make changes"}
+                <Text style={[styles.modalText, { fontWeight: '400' }]}>
+                  {'Enter password to make changes'}
                 </Text>
                 <View style={styles.inputContainer}>
                   <InputComponent
-                    children={"Current password"}
+                    children={'Current password'}
                     editable={true}
-                    onChangeText={(currentPass) =>
-                      setCurrentPassword(currentPass)
-                    }
+                    onChangeText={(currentPass) => setCurrentPassword(currentPass)}
                     clearTextOnFocus={true}
                     onEndEditing={() =>
                       currentPassword.length >= 6 && setButtonIsVisible(true)
@@ -209,13 +194,12 @@ const ModalEditMailPassComponent = ({ onCancel, visible }) => {
                     autoCapitalize="none"
                   />
                   {buttonIsVisible && (
-                    <Feather
-                      onPress={() => authorizeUser(currentPassword)}
-                      style={styles.icon}
-                      name="arrow-right"
-                      size={30}
-                      color={appColors.buttonActive}
-                    />
+                    <ButtonComponent
+                      onTouch={() => authorizeUser(currentPassword)}
+                      style={{ padding: 2, right: 0, bottom: 7 }}
+                    >
+                      <ArrowRightSvg />
+                    </ButtonComponent>
                   )}
                 </View>
                 <ButtonComponent
@@ -229,9 +213,7 @@ const ModalEditMailPassComponent = ({ onCancel, visible }) => {
                   ]}
                   onTouch={onCancel}
                   children={
-                    <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-                      Cancel
-                    </Text>
+                    <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Cancel</Text>
                   }
                 />
               </>
@@ -240,7 +222,7 @@ const ModalEditMailPassComponent = ({ onCancel, visible }) => {
             {isAuthorized && (
               <>
                 <InputComponent
-                  children={"New password"}
+                  children={'New password'}
                   editable={true}
                   onChangeText={(newPassword) => setNewPassword(newPassword)}
                   secureTextEntry={true}
@@ -250,14 +232,14 @@ const ModalEditMailPassComponent = ({ onCancel, visible }) => {
                   clearTextOnFocus={true}
                 />
                 <InputComponent
-                  children={"Current E-mail"}
+                  children={'Current E-mail'}
                   editable={false}
                   value={currentEmail}
                   onFocus={() => setIsChangingPass(true)}
                   isLabel={true}
                 />
                 <InputComponent
-                  children={"New E-mail"}
+                  children={'New E-mail'}
                   editable={true}
                   keyboardType="email-address"
                   onChangeText={(newEmail) => setNewEmail(newEmail)}
@@ -270,7 +252,7 @@ const ModalEditMailPassComponent = ({ onCancel, visible }) => {
                 <View style={styles.buttonContainer}>
                   {isChangingPass ? (
                     <ButtonComponent
-                      style={styles.confirmButtons}
+                      style={[styles.confirmButtons, { borderColor: 'transparent' }]}
                       buttonStyle={{ padding: 7 }}
                       disabled={isPassFieldsEmpty}
                       onTouch={() => handleChangePassword()}
@@ -278,52 +260,53 @@ const ModalEditMailPassComponent = ({ onCancel, visible }) => {
                         isPassFieldsEmpty ? (
                           <Text style={styles.buttonInActive}>"-1337-"</Text>
                         ) : (
-                            <Text style={styles.buttonText}>
-                              Change password
-                            </Text>
-                          )
+                          <Text style={[styles.buttonText, { color: 'blue' }]}>
+                            Change password
+                          </Text>
+                        )
                       }
                     />
                   ) : null}
                   {isChangingEmail ? (
-
                     <ButtonComponent
-                      style={styles.confirmButtons}
+                      style={[styles.confirmButtons, { borderColor: 'transparent' }]}
                       disabled={isEmailFieldsEmpty}
                       onTouch={() => handleChangeEmail()}
                       children={
                         isEmailFieldsEmpty ? (
                           <Text style={styles.buttonInActive}>"-1337-"</Text>
                         ) : (
-                            <Text style={styles.buttonActive}>Change Email</Text>
-                          )
+                          <Text style={styles.buttonActive}>Change Email</Text>
+                        )
                       }
                     />
                   ) : null}
 
                   <ButtonComponent
-                    style={[
-                      styles.confirmButtons,
-                      { borderColor: "transparent" },
-                    ]}
+                    style={[styles.confirmButtons, { borderColor: 'transparent' }]}
                     onTouch={() => {
                       setIsModalVisible(true);
                     }}
                     children={
-                      <MaterialCommunityIcons
-                        name="trash-can-outline"
-                        size={30}
-                        color="red"
-                      />
+                      <Text
+                        style={{
+                          color: 'red',
+                          fontWeight: 'bold',
+                          fontSize: 18,
+                          paddingVertical: 5,
+                        }}
+                      >
+                        Delete account
+                      </Text>
                     }
                   />
                   <ButtonComponent
-                    style={[styles.confirmButtons]}
+                    style={[styles.confirmButtons, { borderColor: 'transparent' }]}
                     onTouch={onCancel}
                     children={
                       <Text
                         style={{
-                          fontWeight: "bold",
+                          fontWeight: 'bold',
                           paddingHorizontal: 25,
                           paddingVertical: 10,
                         }}
@@ -332,7 +315,6 @@ const ModalEditMailPassComponent = ({ onCancel, visible }) => {
                       </Text>
                     }
                   />
-
                 </View>
               </>
             )}
@@ -342,19 +324,22 @@ const ModalEditMailPassComponent = ({ onCancel, visible }) => {
               onTouch={deleteUserData}
               setValue={() => setIsModalVisible(false)}
               value={isModalVisible}
-              actionType={"Delete account"}
+              actionType={'Delete account'}
             />
           ) : null}
-          {isSucces && <ModalSuccessComponent
-            value={isSucces}
-            iconType={<MaterialCommunityIcons name="checkbox-multiple-marked-circle-outline" size={50} color={appColors.successColor} />}
-            textFat={"Success"}
-            textSmall={"Please log in with your new credential"}
-            onTouch={() => { setIsSuccess(false); handleSignOut() }}
-            buttonText={"OK"}
-
-
-          />}
+          {isSucces && (
+            <ModalSuccessComponent
+              value={isSucces}
+              iconType={<SuccesSvg />}
+              textFat={'Success'}
+              textSmall={'Please log in with your new credential'}
+              onTouch={() => {
+                // setIsSuccess(false);
+                handleSignOut();
+              }}
+              buttonText={'OK'}
+            />
+          )}
         </View>
       </Modal>
     </View>
@@ -364,19 +349,19 @@ export default ModalEditMailPassComponent;
 const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
-    justifyContent: "center",
-    flexDirection: "column",
-    alignItems: "center",
+    justifyContent: 'center',
+    flexDirection: 'column',
+    alignItems: 'center',
     marginTop: 22,
     backgroundColor: appColors.bgColor,
   },
   modalView: {
     margin: 20,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 20,
     padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
+    alignItems: 'center',
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -397,31 +382,31 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     color: appColors.textColor,
-    fontWeight: "bold",
-    textAlign: "center",
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   modalText: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 15,
-    textAlign: "center",
+    textAlign: 'center',
   },
   buttonContainer: {
     flex: 1,
-    flexDirection: "column",
-    alignItems: "center",
-    alignContent: "space-between",
+    flexDirection: 'column',
+    alignItems: 'center',
+    alignContent: 'space-between',
 
     marginTop: 100,
   },
   confirmButtons: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
 
     marginTop: 20,
     borderColor: appColors.borderColor,
     borderWidth: 1,
     paddingHorizontal: 10,
     borderRadius: 15,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -432,22 +417,23 @@ const styles = StyleSheet.create({
   },
 
   buttonInActive: {
-    color: "transparent",
-    fontWeight: "100",
+    color: 'transparent',
+    fontWeight: '100',
   },
-  buttonActive: { color: appColors.buttonActive, fontWeight: "bold" },
+  buttonActive: { color: 'blue', fontWeight: 'bold' },
   inputContainer: {
-    flexDirection: "row",
-    alignItems: "flex-end",
+    flexDirection: 'row',
+    alignItems: 'flex-end',
   },
   icon: {
-    right: 35,
-    bottom: 7,
-    backgroundColor: "#e2e2e2",
+    right: 30,
+    bottom: 10,
+
+    // backgroundColor: '#e2e2e2',
   },
   buttonText: {
     color: appColors.changePass,
     fontSize: 14,
-    fontWeight: "bold"
-  }
+    fontWeight: 'bold',
+  },
 });

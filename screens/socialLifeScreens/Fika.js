@@ -5,11 +5,11 @@ import ChildComponent from "../../components/ChildComponent";
 import fika_pic from "../../assets/images/fika_pic.jpg";
 import appColors from "../../assets/appColor";
 import ButtonComponent from "../../components/ButtonComponent";
-import { Ionicons, MaterialIcons, Feather } from "@expo/vector-icons";
 import { TextInput } from "react-native-gesture-handler";
 import AdminButtons from "../../components/EditBox";
 import * as db from "../../firestore/FirebaseUtils";
 import EditBox from "../../components/EditBox";
+import EditSvg from "../../assets/svg/EditSvg";
 
 const Fika = () => {
   const dispatch = useDispatch();
@@ -97,7 +97,7 @@ const Fika = () => {
                 alignItems: "center",
               }}
             >
-              <MaterialIcons name="edit" size={30} color="black" />
+              <EditSvg  />
             </ButtonComponent>
           </View>
         )

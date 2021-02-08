@@ -63,7 +63,6 @@ const ChildComponent = ({
         </View>
         <View
           style={[
-            // Styles.childComponentContentView,
             { paddingBottom: 20, flexDirection: 'column', marginTop: 20, marginLeft: 10 },
           ]}
         >

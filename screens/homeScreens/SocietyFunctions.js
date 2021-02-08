@@ -2,18 +2,15 @@ import React, { useEffect } from "react";
 import { View, Text, Dimensions, Platform, StyleSheet, LogBox , ScrollView} from "react-native";
 import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
-import {
-  Ionicons,
-  MaterialIcons,
-  Fontisto,
-  FontAwesome5,
-} from "@expo/vector-icons";
 import appColors from "../../assets/appColor";
 import ButtonComponent from "../../components/ButtonComponent";
 import Styles from "../../css/Styles";
 import { Image } from "react-native";
-import {  } from "react-native-gesture-handler";
 import Loading from "../../components/Loading";
+import SchoolSvg from "../../assets/svg/SchoolSvg";
+import WorkSvg from "../../assets/svg/WorkSvg";
+import HospitalSvg from "../../assets/svg/HospitalSvg";
+
 const pic = require("../../assets/images/sweden-flag.jpg");
 
 export default function SocietalFunctions() {
@@ -47,11 +44,12 @@ useEffect(()=>{
               buttonStyle={childStyles.buttonStyle}
             >
               <Text style={childStyles.buttonTextStyle}> STUDY</Text>
-              <Ionicons
+              <SchoolSvg/>
+              {/* <Ionicons
                 name="ios-school"
                 size={30}
                 color={appColors.iconInActive}
-              />
+              /> */}
             </ButtonComponent>
             <ButtonComponent
               style={childStyles.childButtons}
@@ -59,11 +57,12 @@ useEffect(()=>{
               buttonStyle={childStyles.buttonStyle}
             >
               <Text style={childStyles.buttonTextStyle}>JOB</Text>
-              <MaterialIcons
+              <WorkSvg/>
+              {/* <MaterialIcons
                 name="work"
                 size={24}
                 color={appColors.iconInActive}
-              />
+              /> */}
             </ButtonComponent>
             <ButtonComponent
               style={childStyles.childButtons}
@@ -71,11 +70,12 @@ useEffect(()=>{
               buttonStyle={childStyles.buttonStyle}
             >
               <Text style={childStyles.buttonTextStyle}>HEALTHCARE</Text>
-              <FontAwesome5
+              <HospitalSvg/>
+              {/* <FontAwesome5
                 name="hospital"
                 size={30}
                 color={appColors.iconInActive}
-              />
+              /> */}
             </ButtonComponent>
           </View>
         </>

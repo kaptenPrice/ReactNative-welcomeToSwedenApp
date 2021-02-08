@@ -17,6 +17,7 @@ const appColors = {
   buttonActive:"#20661c",
   editableText:"#206b21",
   successColor:"#69e49a",
+  mapColor:"#000e"
   
 };
 export default appColors;

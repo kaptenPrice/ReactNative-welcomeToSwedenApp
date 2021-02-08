@@ -2,19 +2,18 @@ import React from "react";
 import { Dimensions } from "react-native";
 import { StyleSheet, Text, View, Modal } from "react-native";
 import appColors from "../assets/appColor";
-import { MaterialIcons } from "@expo/vector-icons/";
 import { TouchableHighlight } from "react-native-gesture-handler";
 import ButtonComponent from "./ButtonComponent";
 
 
-const ModalSuccessComponent = ({ visible, onTouch, buttonText, iconType, textFat, textSmall }) => {
+const ModalSuccessComponent = ({ visible, onTouch, buttonText, iconType, textFat, textSmall,  },props) => {
   return (
     <View style={styles.centeredView}>
       <Modal animationType="slide" transparent={true} visible={visible} hasBackdrop={true}
         backdropOpacity={10} >
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <View style={styles.iconView}>{iconType}</View>
+            <View style={styles.iconView} {...props}>{iconType}</View>
             <Text style={styles.signinRegisterButtonText}>{textFat}</Text>
             <Text style={styles.textSmall}>{textSmall}</Text>
             <ButtonComponent buttonStyle={styles.loginButton} onTouch={onTouch} >

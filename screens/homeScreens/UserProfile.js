@@ -5,12 +5,10 @@ import { useActionSheet } from '@expo/react-native-action-sheet';
 import { ScrollView, TextInput, TouchableOpacity } from 'react-native';
 import firebase from 'firebase/app';
 import 'firebase-auth';
-import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
-
+import SuccesSvg from '../../assets/svg/SuccesSvg';
 import { signOut } from '../../redux/store/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { SafeAreaView } from 'react-navigation';
-
 import ButtonComponent from '../../components/ButtonComponent';
 import Styles from '../../css/Styles';
 import appColors from '../../assets/appColor';
@@ -22,7 +20,6 @@ import AfterFeedback from '../../components/AfterFeedback';
 import ModalEditMailPassComponent from '../../components/ModalEditMailPassComponent';
 import ModalConfirmDeleteAccount from '../../components/ModalConfirmDeleteAccount';
 import ModalSuccessComponent from '../../components/ModalSuccessComponent';
-// const pic=require("../../assets/images/moose.png")
 const pic =
   'https://i3.wp.com/hypebeast.com/image/2020/07/apple-memoji-update-headwear-masks-hairstyles-1.png?w=1600';
 
@@ -65,13 +62,6 @@ const UserProfile = () => {
     currentUser.id ? setIsOAuth(false) : setIsOAuth(true);
     setUid(currentUser.uid || currentUser.id);
   }, [uid]);
-
-  // useEffect(() => {
-  //   console.log("isOauth", isOAuth)
-  //   console.log("isModal", isModal)
-
-  //   !isOAuth && setIsOAuth(true)
-  // }, [isOAuth,isModal])
 
   const handleSaveUserData = () => {
     let data = {
@@ -147,12 +137,14 @@ const UserProfile = () => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView style={{ flex: 1 }}>
-        <View></View>
         <View style={[styles.imageMainContainer, { height: height / 5 }]}>
           {isLoading ? (
             <Loading />
           ) : (
-            <ButtonComponent onTouch={() => addProfileImage()} style={styles.imageContainer}>
+            <ButtonComponent
+              onTouch={() => addProfileImage()}
+              style={styles.imageContainer}
+            >
               <Image
                 style={[styles.userProfileImage]}
                 imageStyle={{ borderRadius: 70 }}
@@ -205,7 +197,7 @@ const UserProfile = () => {
           />
           {!editMode && (
             <ButtonComponent
-              style={{ marginTop: 25, height: height / 15 }}
+              style={{ marginTop: 25, height: height / 17 }}
               onTouch={() => handleEdit()}
               buttonStyle={styles.editButton}
               children={<Text style={styles.buttonText}>Edit info</Text>}
@@ -230,30 +222,22 @@ const UserProfile = () => {
           {/* isOuath user can edit email and password and delete the account, gmailAuth cannot edit password or mail */}
           {isOAuth && (
             <ButtonComponent
-              style={[
-                styles.oauthButton,
-                {
-                  height: height / 20,
-                },
-              ]}
+              style={[styles.oauthButton,{height: height / 20}]}
               onTouch={() => setIsModal(true)}
               buttonStyle={styles.editButton}
               children={<Text style={styles.buttonText}>Edit e-mail / password</Text>}
             />
           )}
 
-          <ModalEditMailPassComponent visible={isModal} onCancel={() => setIsModal(false)} />
+          <ModalEditMailPassComponent
+            visible={isModal}
+            onCancel={() => setIsModal(false)}
+          />
 
           {isSucces && (
             <ModalSuccessComponent
               visible={isSucces}
-              iconType={
-                <MaterialCommunityIcons
-                  name="checkbox-multiple-marked-circle-outline"
-                  size={50}
-                  color={appColors.successColor}
-                />
-              }
+              iconType={<SuccesSvg />}
               textFat={'Success'}
               textSmall={'Credentials are now updated'}
               onTouch={() => setIsSuccess(false)}
@@ -269,14 +253,6 @@ const UserProfile = () => {
 export default UserProfile;
 
 const styles = StyleSheet.create({
-  // homeButtonStyle: {
-  //   borderWidth: 1,
-  //   borderColor: "red",
-  //   flex: 1,
-  //   width: 40,
-  //   position: "absolute",
-  // },
-
   inputContainer: {
     flex: 1,
     justifyContent: 'flex-start',

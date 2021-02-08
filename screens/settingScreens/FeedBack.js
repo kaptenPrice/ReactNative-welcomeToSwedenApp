@@ -191,17 +191,17 @@ const FeedBack = () => {
                   onEndEditing={() => checkInputLength()}
                   ref={textInputRef}
                   blurOnSubmit={true}
+                  placeholder={disable?"Please give us som feedback":null}
                 />
               </View>
             </TouchableWithoutFeedback>
             <View style={[styles.footerView, { width: width / 1.2 }]}>
               <ButtonComponent
-                style={styles.sendButtonStyle}
-                buttonStyle={[styles.feedbackButton, { width: width / 10 }]}
+                buttonStyle={[styles.feedbackButton, { width: width / 5 }]}
                 onTouch={() => sendFeedbackToDB()}
                 disabled={disable}
               >
-                <Ionicons name="ios-send" color="white" size={26} />
+                <Text style={{color:"white"}}>Send</Text>
               </ButtonComponent>
             </View>
             {isFeedbackDone && (
@@ -209,7 +209,7 @@ const FeedBack = () => {
                 visible={isFeedbackDone}
                 onPress={() => { setIsFeedbackDone(false), navigation.navigate("Home") }}
                 presseableText={"OK"}
-                boldText={"Thanks for feedback!"}
+                boldText={"Thanks!"}
               />
             )}
           </View>
@@ -306,7 +306,7 @@ const styles = StyleSheet.create({
     backgroundColor: "grey",
     height: "auto",
     alignItems: "center",
-    paddingTop: 5,
+    padding: 5,
   },
   labelStyle: {
     marginLeft: 15,
