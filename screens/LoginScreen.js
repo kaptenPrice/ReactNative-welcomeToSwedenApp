@@ -24,84 +24,38 @@ import EyeSvg from '../assets/svg/EyeSvg';
 import EyeOffSvg from '../assets/svg/EyeOffSvg';
 
 const LoginScreen = () => {
-  useEffect(() => {}, []);
   const dispatch = useDispatch();
   const { currentUser, isLoading } = useSelector((state) => state.authentication);
   const _width = Dimensions.get('window').width;
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
   const [isAuthorized, setIsAuthorized] = useState(true);
   const [isSecure, setSecure] = useState(true);
   const [isModal, setIsModal] = useState(false);
 
-  const signInWithGoogleAsync = async () => {
-    try {
-      const res = await Google.logInAsync({
-        iosClientId: process.env.CLIENTKEY,
-        scopes: ['profile', 'email'],
-      });
-      if (res.type === 'success') {
-        dispatch({ type: 'SIGN_IN', payload: res.user });
-        return res.accessToken;
-      } else {
-        return { cancelled: true };
-      }
-    } catch (error) {
-      return { error: true };
-    }
+  const handleSignUp = () => {
+    return db.signUp(email, password).then((res) => {
+      res && dispatch({ type: 'SIGN_IN', payload: res.user });
+    });
+  };
+  const handleSignIn = () => {
+    return db.signIn(email, password).then((res) => {
+      res && dispatch({ type: 'SIGN_IN', payload: res.user });
+    });
+  };
+  const handleSignInWithGoogleAsync = (iosKey) => {
+    iosKey = process.env.CLIENTKEY;
+
+    return db.signInWithGoogleAsync(iosKey).then((res) => {
+      console.log(res.user);
+
+      dispatch({ type: 'SIGN_IN', payload: res.user });
+    });
   };
 
-  const signIn = async () => {
-    if (email && password) {
-      try {
-        const res = await firebase.auth().signInWithEmailAndPassword(email, password);
-        if (res) {
-          dispatch({ type: 'SIGN_IN', payload: res.user });
-        }
-      } catch (error) {
-        switch (error.code) {
-          case 'auth/user-not-found':
-            alert(`[${email}] IS NOT REGISTERED, CHOOSE "SIGN UP" `);
-            break;
-          case 'auth/invalid-email':
-            alert(`[${email}] is misspelled? Try again`);
-            break;
-          case 'auth/wrong-password':
-            alert(`INCORRECT PASSWORD`);
-            break;
-          default:
-            alert(error.code);
-        }
-      }
-    }
-  };
-  const register = async () => {
-    if (email && password) {
-      try {
-        const res = await firebase.auth().createUserWithEmailAndPassword(email, password);
-        if (res) {
-          const user = await firebase
-            .database()
-            .ref('users')
-            .child(res.user.uid)
-            .set({ email: res.user.email, uid: res.user.uid });
 
-          dispatch({ type: 'SIGN_IN', payload: res.user });
-        }
-      } catch (error) {
-        if (error.code == 'auth/email-already-in-use') {
-          alert(`[${email}] IS ALREADY TAKEN`);
-        }
-        if (error.code == 'auth/invalid-password') {
-          alert(
-            'INVALID PASSWORD. PASSWORD MUST BE MIN 6 CHARACTERS. '
-          );
-        } else {
-          signIn();
-        }
-      }
-    }
-  };
 
   return (
     // <LinearGradient colors={["#6c7578","#8E8887"]} style={styles.gradient}>
@@ -138,7 +92,6 @@ const LoginScreen = () => {
             />
             {isSecure ? (
               <EyeOffSvg onPress={() => setSecure(false)} style={styles.icon} />
-
             ) : (
               <EyeSvg onPress={() => setSecure(true)} style={styles.icon} />
             )}
@@ -147,23 +100,25 @@ const LoginScreen = () => {
       </TouchableWithoutFeedback>
 
       <View style={styles.buttonContainer}>
-        <ButtonComponent buttonStyle={styles.loginButton} onTouch={signIn}>
+        <ButtonComponent buttonStyle={styles.loginButton} onTouch={() => handleSignIn()}>
           <Text style={styles.signinRegisterButtonText}>SIGN IN BY EMAIL</Text>
         </ButtonComponent>
         <ButtonComponent
           buttonStyle={styles.loginButton}
-          onTouch={() => signInWithGoogleAsync()}
+          onTouch={handleSignInWithGoogleAsync}
         >
           <Text style={styles.signinRegisterButtonText}>SIGN IN WITH GOOGLE</Text>
         </ButtonComponent>
-        <ButtonComponent buttonStyle={styles.loginButton} onTouch={() => register()}>
+        <ButtonComponent buttonStyle={styles.loginButton} onTouch={() => handleSignUp()}>
           <Text style={styles.signinRegisterButtonText}>SIGN UP</Text>
         </ButtonComponent>
         <ButtonComponent
           buttonStyle={styles.loginButton}
           onTouch={() => setIsModal(true)}
         >
-          <Text style={[styles.signinRegisterButtonText], {color:"blue"}}>Forgot password</Text>
+          <Text style={([styles.signinRegisterButtonText], { color: 'blue' })}>
+            Forgot password
+          </Text>
         </ButtonComponent>
       </View>
       <View style={{ flex: 0 }}>
@@ -209,8 +164,9 @@ const styles = StyleSheet.create({
   icon: {
     right: 35,
     bottom: 6,
-    position:"relative",
-    height:50, width:50
+    position: 'relative',
+    height: 50,
+    width: 50,
   },
   buttonContainer: {
     flex: 1.1,
