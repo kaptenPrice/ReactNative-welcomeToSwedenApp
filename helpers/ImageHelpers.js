@@ -23,18 +23,25 @@ export const openImageLibrary = async () => {
   }
 };
 export const openCamera = async () => {
+  console.log('openCamera1')
  
   const {status}=await MediaLibrary.requestPermissionsAsync()
+  console.log('openCamera2')
+
   if (status !== "granted") {
     alert("sorry no acess to camera from YOU");
     return false;
   } else {
+    console.log('openCamera3')
+
     const result = await ImagePicker.launchCameraAsync({
       quality: 0.1,
       base64: true,
       allowsEditing: Platform.OS == "ios" ? false : true,
       aspect: [4, 3],
     });
+    console.log('openCamera4')
+
     return !result.cancelled ? result : false;
   }
 };

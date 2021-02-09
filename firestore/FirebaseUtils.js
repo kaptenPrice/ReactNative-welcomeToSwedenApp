@@ -14,14 +14,12 @@ export const db = firebase.firestore();
 export const auth = firebase.auth();
 export const storage = firebase.storage();
 
-//TODO Ändra rad 24 till auth
 export const signUp = async (email, password) => {
   if (!email || !password) {
-    alert('PLEASE ENTER YOUR CREDENTIALS')
-    
-  }else{
+    alert('PLEASE ENTER YOUR CREDENTIALS');
+  } else {
     try {
-      return res = await auth.createUserWithEmailAndPassword(email, password);
+      return (res = await auth.createUserWithEmailAndPassword(email, password));
       if (res) {
         db.collection('users')
           .doc(res.user.uid)
@@ -42,12 +40,10 @@ export const signUp = async (email, password) => {
 
 export const signIn = async (email, password) => {
   if (!email || !password) {
-    alert('PLEASE ENTER YOUR CREDENTIALS')
+    alert('PLEASE ENTER YOUR CREDENTIALS');
   } else
     try {
       return (res = await auth.signInWithEmailAndPassword(email, password));
-
-      
     } catch (error) {
       switch (error.code) {
         case 'auth/user-not-found':
@@ -67,10 +63,10 @@ export const signIn = async (email, password) => {
 
 export const signInWithGoogleAsync = async (iosClIdKey) => {
   try {
-    return res = await Google.logInAsync({
+    return (res = await Google.logInAsync({
       iosClientId: iosClIdKey,
       scopes: ['profile', 'email'],
-    });
+    }));
     if (res.type === 'success') {
       return res.user;
     } else {
@@ -150,5 +146,13 @@ export const updateUserDataDB = async (user, uid) => {
     await db.collection('users').doc(uid).update(user);
   } catch (error) {
     console.log('error från firebase', error);
+  }
+};
+
+export const uploadProfileAvatar = async (uid) => {
+  try {
+    return (ref = storage.ref('profileAvatar').child(uid));
+  } catch (error) {
+    alert(error);
   }
 };
