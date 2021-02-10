@@ -41,7 +41,7 @@ export default function HomeScreen() {
 
   
   useEffect(() => {
-    LogBox.ignoreLogs(['Setting a timer for a long period of time']);
+    // LogBox.ignoreLogs(['Setting a timer for a long period of time']);
     saveInitialUserData();
     getUserData();
     dispatch({ type: 'ADD_EMAIL', payload: currentUser.email });

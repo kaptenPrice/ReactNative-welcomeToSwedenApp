@@ -5,7 +5,6 @@ import { Svg, Path } from 'react-native-svg';
 import appColors from '../appColor';
 
 const ArrowRightSvg = (props) => {
-    console.log("PROPS",props)
   return (
     <Svg width="30" height="30" viewBox="0 0 38 43" fill="none" {...props}>
       <Path

@@ -1,9 +1,9 @@
-import React from "react";
-import { Dimensions } from "react-native";
-import { TextInput } from "react-native";
-import { StyleSheet } from "react-native";
-import { View, Text } from "react-native";
-import appColors from "../assets/appColor";
+import React from 'react';
+import { Dimensions } from 'react-native';
+import { TextInput } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { View, Text } from 'react-native';
+import appColors from '../assets/appColor';
 
 const InputComponent = ({
   children,
@@ -24,27 +24,28 @@ const InputComponent = ({
   clearTextOnFocus,
   valueColor,
   selectionColor,
-  props,
+  ...props
 }) => {
-  const { width, height } = Dimensions.get("window");
+  const { width, height } = Dimensions.get('window');
 
   return (
-    <View style={{ paddingTop:25 }}>
+    <View style={{ paddingTop: 25 }}>
       <View
         style={{
           marginLeft: 15,
-          marginRight: "auto",
+          marginRight: 'auto',
           marginBottom: -9,
           paddingHorizontal: 3,
           zIndex: 1000,
           backgroundColor: appColors.bgColor,
+          ...props,
         }}
       >
         {isLabel ? (
           <Text
             style={{
               color: appColors.lableHeader,
-              backgroundColor: appColors.bgColor,
+              // backgroundColor: appColors.bgColor,
             }}
           >
             {children}
@@ -60,7 +61,7 @@ const InputComponent = ({
           borderRadius: 10,
           height: 45,
           width: width / 1.3,
-          shadowColor: "#474747",
+          shadowColor: '#474747',
           shadowOffset: {
             width: 0,
             height: 10,
@@ -83,6 +84,7 @@ const InputComponent = ({
         onEndEditing={onEndEditing}
         clearTextOnFocus={clearTextOnFocus}
         selectionColor={selectionColor}
+        
         {...props}
       />
     </View>
@@ -94,7 +96,7 @@ export default InputComponent;
 const styles = StyleSheet.create({
   labelStyle: {
     marginLeft: 15,
-    marginRight: "auto",
+    marginRight: 'auto',
     marginBottom: -7,
     backgroundColor: appColors.bgColor,
     color: appColors.lableHeader,
@@ -103,10 +105,10 @@ const styles = StyleSheet.create({
   containerStyle: {
     backgroundColor: appColors.bgColor,
     borderWidth: 1,
-    borderColor: "grey",
+    borderColor: 'grey',
     borderRadius: 10,
     height: 45,
-    shadowColor: "#474747",
+    shadowColor: '#474747',
     shadowOffset: {
       width: 0,
       height: 3,

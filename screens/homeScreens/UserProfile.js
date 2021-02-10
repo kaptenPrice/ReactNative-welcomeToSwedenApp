@@ -20,6 +20,7 @@ import AfterFeedback from '../../components/AfterFeedback';
 import ModalEditMailPassComponent from '../../components/ModalEditMailPassComponent';
 import ModalConfirmDeleteAccount from '../../components/ModalConfirmDeleteAccount';
 import ModalSuccessComponent from '../../components/ModalSuccessComponent';
+import EditImageSvg from '../../assets/svg/EditImageSvg';
 const pic =
   'https://i3.wp.com/hypebeast.com/image/2020/07/apple-memoji-update-headwear-masks-hairstyles-1.png?w=1600';
 
@@ -96,7 +97,8 @@ const UserProfile = () => {
 
   const handleUploadImage = async (image, profileAvatar) => {
     setIsLoading(true);
-    const ref = firebase.storage().ref('profileAvatar').child(uid);
+    const ref = db.storage.ref('profileAvatar').child(uid);
+
     try {
       const blob = await ImageHelpers.prepareBlob(image.uri);
       const snapShot = await ref.put(blob);
@@ -150,6 +152,7 @@ const UserProfile = () => {
                 imageStyle={{ borderRadius: 70 }}
                 source={{ uri: localAvatar }}
               />
+              <EditImageSvg />
             </ButtonComponent>
           )}
         </View>
@@ -163,7 +166,8 @@ const UserProfile = () => {
               setLocalUserName(e);
             }}
             isLabel={true}
-            valueColor={!editMode ? appColors.textColor : appColors.editableText}
+            // valueColor={!editMode ? appColors.textColor : appColors.editableText}
+         
           />
           <InputComponent
             children={'E-mail'}
@@ -171,6 +175,7 @@ const UserProfile = () => {
             editable={false}
             isLabel={true}
             valueColor={appColors.textColor}
+           
           />
           <InputComponent
             editable={isEditable}
@@ -182,7 +187,7 @@ const UserProfile = () => {
               setLocalPhone(e);
             }}
             isLabel={true}
-            valueColor={!editMode ? appColors.textColor : appColors.editableText}
+       
           />
           <InputComponent
             editable={isEditable}
@@ -193,7 +198,7 @@ const UserProfile = () => {
               setLocalCity(e);
             }}
             isLabel={true}
-            valueColor={!editMode ? appColors.textColor : appColors.editableText}
+       
           />
           {!editMode && (
             <ButtonComponent
@@ -222,7 +227,7 @@ const UserProfile = () => {
           {/* isOuath user can edit email and password and delete the account, gmailAuth cannot edit password or mail */}
           {isOAuth && (
             <ButtonComponent
-              style={[styles.oauthButton,{height: height / 20}]}
+              style={[styles.oauthButton, { height: height / 20 }]}
               onTouch={() => setIsModal(true)}
               buttonStyle={styles.editButton}
               children={<Text style={styles.buttonText}>Edit e-mail / password</Text>}
@@ -305,6 +310,9 @@ const styles = StyleSheet.create({
   },
 
   imageContainer: {
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+
     borderRadius: 70,
     shadowColor: '#000',
     shadowOffset: {
@@ -318,24 +326,48 @@ const styles = StyleSheet.create({
   },
   imageMainContainer: {
     marginVertical: 10,
-
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+    flexDirection: 'column',
   },
   userProfileImage: {
     height: 140,
     width: 140,
     borderRadius: 70,
   },
+  originalMode: {
+    color: appColors.textColor,
+    backgroundColor: appColors.bgColor,
+    borderWidth: 1,
+    borderColor: appColors.borderColor,
+    borderRadius: 10,
+    height: 45,
+    shadowColor: '#474747',
+    shadowOffset: {
+      width: 0,
+      height: 10,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3,
+    elevation: 10,
+    paddingLeft: 10,
+  },
+  editableMode: {
+    color: appColors.textColor,
+    backgroundColor: appColors.editmode,
+    borderWidth: 1,
+    borderColor: appColors.borderColor,
+    borderRadius: 10,
+    height: 45,
+    shadowColor: '#474747',
+    shadowOffset: {
+      width: 0,
+      height: 10,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3,
+    elevation: 10,
+    paddingLeft: 10,
+  },
 });
 
-// ((  {/* {isSucces && <ModalSuccessComponent
-//   value={isSucces}
-//   iconType={<MaterialCommunityIcons name="checkbox-multiple-marked-circle-outline" size={50} color={appColors.successColor} />}
-//   textFat={"Success"}
-//   textSmall={"Credentials are now updated"}
-//   onTouch={() => setIsSuccess(false)}
-//   buttonText={"OK"}
 
-// />} */}))
