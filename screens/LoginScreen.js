@@ -8,8 +8,10 @@ import {
   SafeAreaView,
   TouchableWithoutFeedback,
   Keyboard,
+  TextInput,
+  TouchableOpacity,
+  Switch,
 } from 'react-native';
-import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import appColors from '../assets/appColor';
 import ButtonComponent from '../components/ButtonComponent';
 import Styles from '../css/Styles';
@@ -26,7 +28,7 @@ import EyeOffSvg from '../assets/svg/EyeOffSvg';
 const LoginScreen = () => {
   const dispatch = useDispatch();
   const { currentUser, isLoading } = useSelector((state) => state.authentication);
-  const _width = Dimensions.get('window').width;
+  const { width, height } = Dimensions.get('screen');
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -34,6 +36,7 @@ const LoginScreen = () => {
   const [isAuthorized, setIsAuthorized] = useState(true);
   const [isSecure, setSecure] = useState(true);
   const [isModal, setIsModal] = useState(false);
+  const [isEnabled, setIsEnabled] = useState(true);
 
   const handleSignUp = () => {
     return db.signUp(email, password).then((res) => {
@@ -49,16 +52,37 @@ const LoginScreen = () => {
     iosKey = process.env.CLIENTKEY;
 
     return db.signInWithGoogleAsync(iosKey).then((res) => {
-
       dispatch({ type: 'SIGN_IN', payload: res.user });
     });
   };
-
-
+  const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
   return (
     // <LinearGradient colors={["#6c7578","#8E8887"]} style={styles.gradient}>
     <SafeAreaView style={{ flex: 1 }}>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'flex-end',
+          marginRight: 15,
+          marginTop: 15,
+        }}
+      >
+        {isEnabled ? (
+          <Text style={{ marginTop: 5, marginRight: 7, fontWeight: '500' }}>Sign in</Text>
+        ) : (
+          <Text style={{ marginTop: 5, marginRight: 2, fontWeight: '500' }}>Sign up</Text>
+        )}
+        <Switch
+          trackColor={{ false: '#d3d5d1', true: '#d3d5d1' }}
+          thumbColor={isEnabled ? '#f9f9f9' : '#f4f3f4'}
+          ios_backgroundColor="#d3d5d1"
+          onValueChange={toggleSwitch}
+          value={isEnabled}
+          style={styles.shadowEffekt}
+        />
+      </View>
+
       <View style={styles.welcomeViewLoginScreen}>
         <Text style={styles.loginScreenMain}>Welcome</Text>
         <Text style={styles.header}>Free for everyone to join</Text>
@@ -95,29 +119,42 @@ const LoginScreen = () => {
               <EyeSvg onPress={() => setSecure(true)} style={styles.icon} />
             )}
           </View>
+          {isEnabled ? (
+            <ButtonComponent onTouch={() => setIsModal(true)}>
+              <Text
+                style={
+                  ([styles.signinRegisterButtonText],
+                  {
+                    color: 'blue',
+                    textDecorationLine: 'underline',
+                    fontStyle: 'italic',
+                    marginRight: width / 2.2,
+                    marginTop: 10,
+                  })
+                }
+              >
+                FORGOT PASSWORD
+              </Text>
+            </ButtonComponent>
+          ) : (
+            <Text style={{ color: 'transparent', marginTop: 10 }}>13337</Text>
+          )}
         </View>
       </TouchableWithoutFeedback>
 
-      <View style={styles.buttonContainer}>
-        <ButtonComponent buttonStyle={styles.loginButton} onTouch={() => handleSignIn()}>
-          <Text style={styles.signinRegisterButtonText}>SIGN IN BY EMAIL</Text>
-        </ButtonComponent>
-        <ButtonComponent
-          buttonStyle={styles.loginButton}
-          onTouch={handleSignInWithGoogleAsync}
-        >
+      <View style={[styles.buttonContainer]}>
+        {isEnabled ? (
+          <ButtonComponent buttonStyle={styles.loginButton} onTouch={() => handleSignIn()}>
+            <Text style={styles.signinRegisterButtonText}>SIGN IN </Text>
+          </ButtonComponent>
+        ) : (
+          <ButtonComponent buttonStyle={styles.loginButton} onTouch={() => handleSignUp()}>
+            <Text style={styles.signinRegisterButtonText}>SIGN UP</Text>
+          </ButtonComponent>
+        )}
+
+        <ButtonComponent buttonStyle={styles.loginButton} onTouch={handleSignInWithGoogleAsync}>
           <Text style={styles.signinRegisterButtonText}>SIGN IN WITH GOOGLE</Text>
-        </ButtonComponent>
-        <ButtonComponent buttonStyle={styles.loginButton} onTouch={() => handleSignUp()}>
-          <Text style={styles.signinRegisterButtonText}>SIGN UP</Text>
-        </ButtonComponent>
-        <ButtonComponent
-          buttonStyle={styles.loginButton}
-          onTouch={() => setIsModal(true)}
-        >
-          <Text style={([styles.signinRegisterButtonText], { color: 'blue' })}>
-            Forgot password
-          </Text>
         </ButtonComponent>
       </View>
       <View style={{ flex: 0 }}>
@@ -159,6 +196,7 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'flex-end',
+    marginBottom: 10,
   },
   icon: {
     right: 35,
@@ -198,5 +236,15 @@ const styles = StyleSheet.create({
     color: appColors.textColor,
     fontWeight: '600',
     fontSize: 16,
+  },
+  shadowEffekt: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 12,
   },
 });
