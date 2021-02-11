@@ -7,7 +7,7 @@ const EditImageSvg = (props) => {
     <Svg
       width="20"
       height="20"
-      style={{ left:110, bottom:140, opacity:0.9  }}
+      style={{ left: 110, bottom: 140, opacity: 0.9 }}
       viewBox="0 0 84 80"
     >
       <Path
@@ -15,6 +15,8 @@ const EditImageSvg = (props) => {
         fill={appColors.placeHolderColor}
       />
     </Svg>
+
   );
 };
 export default EditImageSvg;
+

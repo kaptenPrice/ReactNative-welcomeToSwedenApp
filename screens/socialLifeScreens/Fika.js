@@ -44,7 +44,7 @@ const Fika = () => {
           : setContentThree(data?.content);
       });
     } catch (error) {
-      console.log(`contentOne ERROR: ${error}`);
+      alert(`contentOne ERROR: ${error}`);
     }
   };
 
@@ -59,7 +59,7 @@ const Fika = () => {
     try {
       db.handleSaveToDB("social-life", "fika", "like-a-swede", contentOne);
     } catch (error) {
-      console.log(error);
+    alert(error);
     } finally {
       setIsEditable(false);
     }
@@ -68,7 +68,7 @@ const Fika = () => {
     try {
       db.handleSaveToDB("social-life", "fika", "lingo", contentTwo);
     } catch (error) {
-      console.log(error);
+      alert(error);
     } finally {
       setIsEditable(false);
     }
@@ -77,7 +77,7 @@ const Fika = () => {
     try {
       db.handleSaveToDB("social-life", "fika", "price-level", contentThree);
     } catch (error) {
-      console.log(error);
+      alert(error);
     } finally {
     }
   };

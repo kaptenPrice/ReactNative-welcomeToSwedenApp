@@ -41,7 +41,7 @@ const Traditions = () => {
         !data?.content ? setContentThree('tomt') : setContentThree(data?.content);
       });
     } catch (error) {
-      console.log(`contentOne ERROR: ${error}`);
+      alert(`contentOne ERROR: ${error}`);
     }
   };
 
@@ -56,7 +56,7 @@ const Traditions = () => {
     try {
       db.handleSaveToDB('social-life', 'traditions', 'like-a-swede', contentOne);
     } catch (error) {
-      console.log(error);
+      alert(error);
     } finally {
       setIsEditable(false);
     }
@@ -65,7 +65,7 @@ const Traditions = () => {
     try {
       db.handleSaveToDB('social-life', 'traditions', 'lingo', contentTwo);
     } catch (error) {
-      console.log(error);
+      alert(error);
     } finally {
       setIsEditable(false);
     }
@@ -74,7 +74,7 @@ const Traditions = () => {
     try {
       db.handleSaveToDB('social-life', 'traditions', 'price-level', contentThree);
     } catch (error) {
-      console.log(error);
+      alert(error);
     } finally {
       setIsEditable(false);
 

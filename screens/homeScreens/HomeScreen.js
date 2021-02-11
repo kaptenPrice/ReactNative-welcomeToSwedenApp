@@ -65,7 +65,7 @@ export default function HomeScreen() {
     try {
       db.saveUserToDB(data, uid);
     } catch (error) {
-      console.log(error);
+      alert(error);
     }
   };
 
@@ -83,7 +83,7 @@ export default function HomeScreen() {
         });
       });
     } catch (error) {
-      console.log(error);
+      alert(error);
     }
   };
 

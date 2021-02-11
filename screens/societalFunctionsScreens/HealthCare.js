@@ -42,7 +42,7 @@ const HealthCare = () => {
         !data?.content ? setContentThree('tomt') : setContentThree(data?.content);
       });
     } catch (error) {
-      console.log(`contentOne ERROR: ${error}`);
+      alert(`contentOne ERROR: ${error}`);
     }
   };
 
@@ -57,7 +57,7 @@ const HealthCare = () => {
     try {
       db.handleSaveToDB('societal-functions', 'healthCare', 'like-a-swede', contentOne);
     } catch (error) {
-      console.log('getContent healthCare: ', error);
+      alert('getContent healthCare: ', error);
     } finally {
       setIsEditable(false);
     }
@@ -66,7 +66,7 @@ const HealthCare = () => {
     try {
       db.handleSaveToDB('societal-functions', 'healthCare', 'lingo', contentTwo);
     } catch (error) {
-      console.log(error);
+      alert(error);
     } finally {
       setIsEditable(false);
     }
@@ -75,7 +75,7 @@ const HealthCare = () => {
     try {
       db.handleSaveToDB('societal-functions', 'healthCare', 'assistence', contentThree);
     } catch (error) {
-      console.log(error);
+      alert(error);
     } finally {
       setIsEditable(false);
     }
@@ -169,7 +169,7 @@ const HealthCare = () => {
               }}
               editable={isEditable}
               name="price-level"
-              onChangeText={(e) => console.log(e)}
+              onChangeText={(e) => alert(e)}
             ></TextInput>
           </>
         )

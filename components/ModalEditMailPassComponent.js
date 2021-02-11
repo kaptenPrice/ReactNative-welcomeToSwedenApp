@@ -69,7 +69,7 @@ const ModalEditMailPassComponent = ({ onCancel, visible }) => {
       dispatch(signOut());
     } catch (error) {
       alert('Something fishy occurred, try again, or restart the app');
-      console.log('error: ', error);
+      alert('error: ', error);
     }
   };
   const deleteUserData = async () => {
@@ -100,7 +100,6 @@ const ModalEditMailPassComponent = ({ onCancel, visible }) => {
   const reAuthenticated = () => {
     try {
       const user = db.auth.currentUser;
-      console.log(user.email);
       var cred = firebase.auth.EmailAuthProvider.credential(user.email, currentPassword);
       return user.reauthenticateWithCredential(cred);
     } catch (error) {
@@ -117,7 +116,6 @@ const ModalEditMailPassComponent = ({ onCancel, visible }) => {
           .then(() => {
             setIsSuccess(true);
 
-            console.log('Password updated');
           })
           .catch((error) => alert(`change password: ${error}`));
       })
@@ -150,7 +148,7 @@ const ModalEditMailPassComponent = ({ onCancel, visible }) => {
           .catch((error) => alert(`change E-mail: ${error}`));
       })
       .catch((error) => {
-        console.log(`password change: ${error}`);
+        alert(`password change: ${error}`);
       });
   };
 

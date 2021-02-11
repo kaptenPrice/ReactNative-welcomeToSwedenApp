@@ -49,7 +49,6 @@ const LoginScreen = () => {
     iosKey = process.env.CLIENTKEY;
 
     return db.signInWithGoogleAsync(iosKey).then((res) => {
-      console.log(res.user);
 
       dispatch({ type: 'SIGN_IN', payload: res.user });
     });

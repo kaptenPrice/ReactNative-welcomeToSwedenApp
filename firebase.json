@@ -31,7 +31,5 @@
       "enabled": true
     }
   },
-  "remoteconfig": {
-   
-  }
+  "remoteconfig": {}
 }

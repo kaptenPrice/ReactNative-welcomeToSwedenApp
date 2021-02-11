@@ -24,7 +24,7 @@ const [isModalVisible, setIsModalVisible]=useState(true)
           db.signOut();
           dispatch(signOut());
         } catch (error) {
-          console.log("Error från signout",error)
+          alert("Error från signout",error)
           alert("Something fishy occurred, try again, or restart the app");
         }
       };

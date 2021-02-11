@@ -79,7 +79,7 @@ const FeedBack = () => {
     try {
       db.handleSaveFeedback("feedback", data);
     } catch (error) {
-      console.log(error);
+      alert(error);
     } finally {
       setIsFeedbackDone(true);
     }

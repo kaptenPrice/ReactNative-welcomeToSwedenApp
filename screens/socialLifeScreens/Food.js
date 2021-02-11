@@ -44,7 +44,7 @@ const Food = () => {
         !data?.content ? setContentThree('tomt') : setContentThree(data?.content);
       });
     } catch (error) {
-      console.log(`contentOne ERROR: ${error}`);
+      alert(`contentOne ERROR: ${error}`);
     }
   };
 
@@ -59,7 +59,7 @@ const Food = () => {
     try {
       db.handleSaveToDB('social-life', 'food', 'like-a-swede', contentOne);
     } catch (error) {
-      console.log(error);
+      alert(error);
     } finally {
       setIsEditable(false);
     }
@@ -68,7 +68,7 @@ const Food = () => {
     try {
       db.handleSaveToDB('social-life', 'food', 'lingo', contentTwo);
     } catch (error) {
-      console.log(error);
+      alert(error);
     } finally {
       setIsEditable(false);
     }
@@ -77,7 +77,7 @@ const Food = () => {
     try {
       db.handleSaveToDB('social-life', 'food', 'price-level', contentThree);
     } catch (error) {
-      console.log(error);
+      alert(error);
     } finally {
       setIsEditable(false);
     }

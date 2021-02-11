@@ -18,7 +18,9 @@ const appColors = {
   editableText:"#206b21",
   successColor:"#69e49a",
   mapColor:"#000e", 
-  editmode:'#f9f9f9'
+  editmode:'#f9f9f9',
+  unlock:"#9ae4b8",
+
   
 };
 export default appColors;

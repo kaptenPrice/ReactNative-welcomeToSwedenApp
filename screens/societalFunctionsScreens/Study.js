@@ -42,7 +42,7 @@ const Study = () => {
         !data?.content ? setContentThree('tomt') : setContentThree(data?.content);
       });
     } catch (error) {
-      console.log(`contentOne ERROR: ${error}`);
+      alert(`contentOne ERROR: ${error}`);
     }
   };
 
@@ -57,7 +57,7 @@ const Study = () => {
     try {
       db.handleSaveToDB('societal-functions', 'study', 'like-a-swede', contentOne);
     } catch (error) {
-      console.log('getContent study: ', error);
+      alert('getContent study: ', error);
     } finally {
       setIsEditable(false);
     }
@@ -66,7 +66,7 @@ const Study = () => {
     try {
       db.handleSaveToDB('societal-functions', 'study', 'lingo', contentTwo);
     } catch (error) {
-      console.log(error);
+      alert(error);
     } finally {
       setIsEditable(false);
     }
@@ -75,7 +75,7 @@ const Study = () => {
     try {
       db.handleSaveToDB('societal-functions', 'study', 'assistence', contentThree);
     } catch (error) {
-      console.log(error);
+      alert(error);
     } finally {
       setIsEditable(false);
     }
@@ -169,7 +169,7 @@ const Study = () => {
               }}
               editable={isEditable}
               name="price-level"
-              onChangeText={(e) => console.log(e)}
+              onChangeText={(e) => alert(e)}
             ></TextInput>
           </>
         )

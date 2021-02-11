@@ -29,7 +29,7 @@ const InputComponent = ({
   const { width, height } = Dimensions.get('window');
 
   return (
-    <View style={{ paddingTop: 25 }}>
+    <View style={{ paddingTop: 25, }}>
       <View
         style={{
           marginLeft: 15,
@@ -52,6 +52,7 @@ const InputComponent = ({
           </Text>
         ) : null}
       </View>
+      <View style={{flexDirection:"row"}}>
       <TextInput
         style={{
           color: valueColor,
@@ -87,6 +88,8 @@ const InputComponent = ({
         
         {...props}
       />
+      {icon}
+      </View>
     </View>
   );
 };

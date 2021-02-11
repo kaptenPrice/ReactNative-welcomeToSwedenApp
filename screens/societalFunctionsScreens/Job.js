@@ -45,7 +45,7 @@ const Job = () => {
         !data?.content ? setContentThree('tomt') : setContentThree(data?.content);
       });
     } catch (error) {
-      console.log(`contentOne ERROR: ${error}`);
+      alert(`contentOne ERROR: ${error}`);
     }
   };
 
@@ -60,7 +60,7 @@ const Job = () => {
     try {
       db.handleSaveToDB('societal-functions', 'job', 'like-a-swede', contentOne);
     } catch (error) {
-      console.log('getContent study: ', error);
+      alert('getContent study: ', error);
     } finally {
       setIsEditable(false);
     }
@@ -69,7 +69,7 @@ const Job = () => {
     try {
       db.handleSaveToDB('societal-functions', 'job', 'lingo', contentTwo);
     } catch (error) {
-      console.log(error);
+      alert(error);
     } finally {
       setIsEditable(false);
     }
@@ -78,7 +78,7 @@ const Job = () => {
     try {
       db.handleSaveToDB('societal-functions', 'job', 'assistence', contentThree);
     } catch (error) {
-      console.log(error);
+      alert(error);
     } finally {
       setIsEditable(false);
     }
@@ -172,7 +172,7 @@ const Job = () => {
               }}
               editable={isEditable}
               name="price-level"
-              onChangeText={(e) => console.log(e)}
+              onChangeText={(e) => alert(e)}
             ></TextInput>
           </>
         )

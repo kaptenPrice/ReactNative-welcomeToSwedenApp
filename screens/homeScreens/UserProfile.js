@@ -21,6 +21,9 @@ import ModalEditMailPassComponent from '../../components/ModalEditMailPassCompon
 import ModalConfirmDeleteAccount from '../../components/ModalConfirmDeleteAccount';
 import ModalSuccessComponent from '../../components/ModalSuccessComponent';
 import EditImageSvg from '../../assets/svg/EditImageSvg';
+import LockSvg from '../../assets/svg/LockSvg';
+import UnLockSvg from '../../assets/svg/UnLockSvg';
+// import { app } from 'firebase-admin';
 const pic =
   'https://i3.wp.com/hypebeast.com/image/2020/07/apple-memoji-update-headwear-masks-hairstyles-1.png?w=1600';
 
@@ -75,7 +78,7 @@ const UserProfile = () => {
         db.updateUserDataDB(data, uid);
       }
     } catch (error) {
-      console.log('Error från feedback', error);
+      alert('Error från feedback', error);
     }
     setIsEditable(false);
     setEditMode(false);
@@ -108,7 +111,7 @@ const UserProfile = () => {
       setIsLoading(false);
       return downLoadedUrl;
     } catch (error) {
-      console.log(error);
+      alert(error);
     }
   };
   const openImageLibrary = async (profileAvatar) => {
@@ -138,7 +141,7 @@ const UserProfile = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView style={{ flex: 1 }}>
+      <ScrollView style={{ flex: 1, backgroundColor: appColors.bgColor }}>
         <View style={[styles.imageMainContainer, { height: height / 5 }]}>
           {isLoading ? (
             <Loading />
@@ -166,8 +169,8 @@ const UserProfile = () => {
               setLocalUserName(e);
             }}
             isLabel={true}
-            // valueColor={!editMode ? appColors.textColor : appColors.editableText}
-         
+            icon={!editMode? <LockSvg />: <UnLockSvg/>}
+
           />
           <InputComponent
             children={'E-mail'}
@@ -175,8 +178,9 @@ const UserProfile = () => {
             editable={false}
             isLabel={true}
             valueColor={appColors.textColor}
-           
+            icon={ <LockSvg />}
           />
+
           <InputComponent
             editable={isEditable}
             children={'Phone'}
@@ -187,7 +191,8 @@ const UserProfile = () => {
               setLocalPhone(e);
             }}
             isLabel={true}
-       
+            icon={!editMode? <LockSvg />: <UnLockSvg/>}
+
           />
           <InputComponent
             editable={isEditable}
@@ -198,7 +203,8 @@ const UserProfile = () => {
               setLocalCity(e);
             }}
             isLabel={true}
-       
+            icon={!editMode? <LockSvg />: <UnLockSvg/>}
+
           />
           {!editMode && (
             <ButtonComponent
@@ -321,7 +327,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.4,
     shadowRadius: 8,
-
     elevation: 12,
   },
   imageMainContainer: {
@@ -369,5 +374,3 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
   },
 });
-
-

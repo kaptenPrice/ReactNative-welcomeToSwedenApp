@@ -88,7 +88,7 @@ export const deleteUserFromFireStore = (uid) => {
   try {
     return db.doc(`users/${uid}`).delete();
   } catch (error) {
-    console.log(error);
+    alert(error);
   }
 };
 
@@ -118,7 +118,7 @@ export const getUserData = async (uid, cb) => {
   try {
     return db.collection('users').doc(uid).onSnapshot(cb);
   } catch (error) {
-    console.log('User dosnt exist');
+    alert('User dosnt exist');
   }
 };
 
@@ -126,7 +126,7 @@ export const getFeedbackDataDB = async (cb) => {
   try {
     return db.collection('user-feedback').onSnapshot(cb);
   } catch (error) {
-    console.log('Error FB: ', error);
+    alert('Error FB: ', error);
   }
 };
 
@@ -138,14 +138,14 @@ export const saveUserToDB = async (user, uid) => {
       await db.collection('users').doc(uid).set(user);
     }
   } catch (error) {
-    console.log('error från firebase', error);
+    alert('error från firebase', error);
   }
 };
 export const updateUserDataDB = async (user, uid) => {
   try {
     await db.collection('users').doc(uid).update(user);
   } catch (error) {
-    console.log('error från firebase', error);
+    alert('error från firebase', error);
   }
 };
 
