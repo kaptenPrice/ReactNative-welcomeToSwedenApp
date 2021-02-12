@@ -65,7 +65,7 @@ export default function HomeScreen() {
     let data = {
       email: _email,
       uid: uid,
-      created: new Date(),
+      created: new Date().toUTCString().toString(),
     };
     try {
       db.saveUserToDB(data, uid);

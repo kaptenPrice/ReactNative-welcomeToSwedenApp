@@ -1,5 +1,5 @@
 import React, {useEffect} from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Image, } from "react-native";
 import ButtonComponent from "../components/ButtonComponent";
 import Styles from "../css/Styles";
 import { useNavigation } from "@react-navigation/native";
@@ -8,6 +8,7 @@ import appColors from "../assets/appColor";
 import { SafeAreaView } from "react-navigation";
 import { Dimensions } from "react-native";
 // import LinearGradient from 'react-native-linear-gradient'
+const bgImage= require('../assets/images/background-unsplash.jpg')
 
 //Logo?
 const WelcomeScreen = () => {
@@ -26,6 +27,10 @@ const WelcomeScreen = () => {
         flex: 1,
       }}
     >
+      <View style={{flex:3}}>
+      <Image style={{width:width, height:height,position:"absolute",top:0,left:0,}} source={bgImage} />
+
+      </View>
       <View
         style={{
           flex: 1,
@@ -35,6 +40,7 @@ const WelcomeScreen = () => {
           backgroundColor: appColors.bgColor,
         }}
       >
+        
         <TouchableOpacity
           style={{
             backgroundColor: "transparent",

@@ -6,8 +6,8 @@ import Loading from './Loading';
 
 export default function UserProfileAdmin() {
   const [documentData, setDocumentData] = useState([]);
-  const [limit, setLimit] = useState(10);
-  const [lastVisible, setLastVisible] = useState('');
+  const [limit, setLimit] = useState(1);
+  const [lastVisible, setLastVisible] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const { width, height } = Dimensions.get('window');
@@ -15,47 +15,60 @@ export default function UserProfileAdmin() {
   useEffect(() => {
     handleFetchData();
     LogBox.ignoreLogs(['Setting a timer for a long period of time']);
-
-    
   }, []);
 
+  // useEffect(() => {
+  //   handleFetchMore();
+  //   console.log('lastVisible rad 20:', lastVisible);
+  // }, [lastVisible]);
+
   const handleFetchData = async () => {
+    if (documentData?.length > 0) {
+      setIsLoading(true);
 
-    setIsLoading(true);
+      let documentSnapshots = await db.db.collection('users').orderBy('uid').limit(limit).get();
 
-    let documentSnapshots = await db.db.collection('users').orderBy('uid').limit(limit).get();
+      let documentData = documentSnapshots.docs.map((document) => document.data());
 
-    let documentData = documentSnapshots.docs.map((document) => document.data());
+      setLastVisible(documentSnapshots.docs[documentSnapshots.docs.length - 1].id);
+
+      setDocumentData(documentData);
+    }
 
     // setDocumentData(documentSnapshots.docs.map((document) => document.data()));
 
-    const lastVisible = documentData[documentData.length - 1].uid;
-    // console.log('lastVisible i getFeedback', lastVisible);
-    setLastVisible(lastVisible);
-
-    setDocumentData(documentData);
+    // const lastVisible1 = documentSnapshots.docs[documentSnapshots.docs.length - 1].id;
+    // setLastVisible(lastVisible1);
   };
 
-  const handleGetMoreData = async () => {
-    setRefreshing(true);
+  const handleFetchMore = async () => {
+    if (documentData.length > 0) {
+      setRefreshing(true);
 
-    let documentSnapshots = await db.db
-      .collection('users')
-      .orderBy('uid')
-      .startAfter(lastVisible)
-      .limit(limit)
-      .get();
+      let documentSnapshots = await db.db
+        .collection('users')
+        .orderBy('uid')
+        .startAfter(lastVisible)
+        .limit(limit)
+        .get();
+      if (documentSnapshots.docs.length > 0) {
+        setLastVisible(documentSnapshots.docs[documentSnapshots.docs.length - 1].id);
+        setDocumentData((current) => [
+          ...current,
+          ...documentSnapshots.docs.map((document) => document.data()),
+        ]);
+        setRefreshing(false);
+      } else setIsLoading(false);
+      return;
+    }
 
-    const lastVisible = documentSnapshots[documentSnapshots.docs.length - 1].uid;
+    // console.log('lastVisible before:', lastVisible);
+    // const lastVisible2 = documentSnapshots.docs[documentSnapshots.docs.length - 1].id;
+    // console.log('lastVisible after:', lastVisible2);
+    // setLastVisible(lastVisible)
+    // console.log('lastVisible rad 50:', lastVisible);
 
-    setLastVisible(lastVisible);
-
-    setDocumentData((current) => [
-      ...current,
-      ...documentSnapshots.docs.map((document) => document.data()),
-    ]);
-
-    setRefreshing(false);
+    // setLastVisible((current) => [...current, lastVisible]);
   };
 
   const renderFooter = () => {
@@ -65,6 +78,7 @@ export default function UserProfileAdmin() {
       return null;
     }
   };
+
   const _renderItem = ({ item, index }) => (
     <View style={[styles.list, styles.shadoEffekt, { width: width / 1.1 }]}>
       <Text style={{ fontWeight: '500' }}>{`User: ${index + 1}`}</Text>
@@ -81,9 +95,8 @@ export default function UserProfileAdmin() {
         <Text style={{ fontWeight: '500', marginTop: 10 }}>{'Phone: '}</Text>
         <Text style={{ fontWeight: 'bold', marginTop: 5 }}>{item.phone}</Text>
         <Text style={{ fontWeight: '500', marginTop: 10 }}>{'Created: '}</Text>
-        <Text style={{ fontWeight: 'bold', marginTop: 5 }}>
-          {/* {item.created.toDate().toUTCString().substring(0, 26)} */}
-        </Text>
+
+        <Text style={{ fontWeight: 'bold', marginTop: 5 }}>{item.created}</Text>
       </View>
     </View>
   );
@@ -94,8 +107,8 @@ export default function UserProfileAdmin() {
         renderItem={(item) => _renderItem(item)}
         keyExtractor={(item, index) => index.toString()}
         ListFooterComponent={renderFooter}
-        // onEndReached={handleGetMoreData}
-        // onEndReachedThreshold={0}
+        onEndReached={handleFetchMore}
+        onEndReachedThreshold={0.1}
         refreshing={refreshing}
         showsVerticalScrollIndicator={false}
       />

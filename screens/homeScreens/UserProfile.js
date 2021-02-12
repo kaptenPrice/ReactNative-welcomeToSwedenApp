@@ -24,7 +24,6 @@ import EditImageSvg from '../../assets/svg/EditImageSvg';
 import LockSvg from '../../assets/svg/LockSvg';
 import UnLockSvg from '../../assets/svg/UnLockSvg';
 import UserProfileAdmin from '../../components/UserProfileAdmin';
-// import { app } from 'firebase-admin';
 const pic =
   'https://i3.wp.com/hypebeast.com/image/2020/07/apple-memoji-update-headwear-masks-hairstyles-1.png?w=1600';
 

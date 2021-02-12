@@ -83,8 +83,6 @@ const FeedBack = () => {
     handleFetchData();
   }, []);
 
- 
-
   const handleFetchData = async () => {
     console.log('start handleFetchData');
 
@@ -108,7 +106,7 @@ const FeedBack = () => {
     setDocumentData(documentData);
   };
 
-  const handleGetMoreData = async () => {
+  const handleFetchMore = async () => {
     setRefreshing(true);
 
     let documentSnapshots = await db.db
@@ -117,16 +115,17 @@ const FeedBack = () => {
       .startAfter(lastVisible)
       .limit(limit)
       .get();
+    if (documentSnapshots.docs.length > 0) {
+      setLastVisible(documentSnapshots.docs[documentSnapshots.docs.length - 1]);
 
-    setLastVisible(documentSnapshots.docs[documentSnapshots.docs.length - 1]);
+      setDocumentData((current) => [
+        ...current,
+        ...documentSnapshots.docs.map((document) => document.data()),
+      ]);
 
-    setDocumentData((current) => [
-      ...current,
-      ...documentSnapshots.docs.map((document) => document.data()),
-    ]);
-
-   
-    setRefreshing(false);
+      setRefreshing(false);
+    } else setIsLoading(false);
+    return;
   };
 
   const renderFooter = () => {
@@ -138,7 +137,7 @@ const FeedBack = () => {
   };
 
   const _renderItem = ({ item, index }) => (
-    <View style={[styles.list,styles.shadoEffekt, { width: width / 1.1 }]}>
+    <View style={[styles.list, styles.shadoEffekt, { width: width / 1.1 }]}>
       <Text style={{ fontWeight: '500' }}>{'Feedback: '}</Text>
       <View style={{ marginVertical: 10 }}>
         <ReadMore>
@@ -223,9 +222,9 @@ const FeedBack = () => {
               renderItem={(item) => _renderItem(item)}
               keyExtractor={(item, index) => index.toString()}
               ListFooterComponent={renderFooter}
-              onEndReached={handleGetMoreData}
+              onEndReached={handleFetchMore}
               onEndReachedThreshold={0}
-               refreshing={refreshing}
+              refreshing={refreshing}
               showsVerticalScrollIndicator={false}
             />
           </View>
@@ -335,8 +334,8 @@ const styles = StyleSheet.create({
     padding: 10,
     marginTop: 20,
     marginBottom: 20,
-    backgroundColor:"white",
-    borderRadius:15
+    backgroundColor: 'white',
+    borderRadius: 15,
   },
   listingGradeContainer: {
     flexDirection: 'column',
@@ -353,7 +352,7 @@ const styles = StyleSheet.create({
     marginLeft: 12,
     marginBottom: 12,
   },
-  shadoEffekt:{
+  shadoEffekt: {
     shadowColor: '#474747',
     shadowOffset: {
       width: 0,
@@ -362,5 +361,5 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3,
     elevation: 10,
-  }
+  },
 });
