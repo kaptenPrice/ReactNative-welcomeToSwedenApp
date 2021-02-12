@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -17,16 +17,21 @@ import ButtonComponent from '../../components/ButtonComponent';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
 
+
 import appColors from '../../assets/appColor';
 import SocieltalFunctionsSvg from '../../assets/svg/SocieltalFunctionsSvg';
 import Loading from '../../components/Loading';
 import * as db from '../../firestore/FirebaseUtils';
 import FriendsSvg from '../../assets/svg/FriendsSvg';
+import Dots from "react-native-dots-pagination";
+
 
 export default function HomeScreen() {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const { width, height } = Dimensions.get('screen');
+  const [activeDot, setActiveDot] = useState(0);
+
 
   const { isLoading, currentUser } = useSelector(
     (state) => state.authentication
@@ -35,7 +40,7 @@ export default function HomeScreen() {
     (state) => state.userAdditionalInfo
   );
 
-  const [homeScreenImage, setHomeScreenImage] = useState([]);
+  const [homeScreenImages, setHomeScreenImages] = useState([]);
   const [uid, setUid] = useState(currentUser.uid || currentUser.id);
   const [_email, setEmail] = useState(currentUser.email);
 
@@ -49,7 +54,7 @@ export default function HomeScreen() {
 
     async function getpics() {
       const pics = await Axios.get(process.env.API_URL).then((res) => {
-        setHomeScreenImage(res.data.results);
+        setHomeScreenImages(res.data.results);
       });
   
     }
@@ -94,6 +99,12 @@ export default function HomeScreen() {
       </View>
     );
   };
+  const handleVieweableItemsChanged = useCallback(({ viewableItems }) => {
+    setActiveDot(viewableItems[0].index);
+  }, []);
+  const viewabilityConfig = {
+    itemVisiblePercentThreshold: 50,
+  };
 
   return (
     <ScrollView
@@ -111,11 +122,23 @@ export default function HomeScreen() {
               <FlatList
                 horizontal
                 pagingEnabled
-                data={homeScreenImage}
+                onViewableItemsChanged={handleVieweableItemsChanged}
+                viewabilityConfig={viewabilityConfig}
+                showsHorizontalScrollIndicator={false}
+                data={homeScreenImages}
                 renderItem={({ item }) => _renderItem(item)}
                 keyExtractor={(item) => item.id}
               />
             </View>
+            <Dots
+                activeDotWidth={6}
+                activeDotHeight={6}
+                passiveDotHeight={6}
+                passiveDotWidth={6}
+                length={homeScreenImages.length}
+                activeColor={"#7D7D7D"}
+                active={activeDot}
+              />
             <View style={styles.buttonContainer}>
               <ButtonComponent
                 onTouch={() => navigation.navigate('SocialLife')}
@@ -149,7 +172,7 @@ export default function HomeScreen() {
     </ScrollView>
   );
 }
-
+//bakgroundsign in istch
 const styles = StyleSheet.create({
   gradient: { flex: 1 },
   image: {

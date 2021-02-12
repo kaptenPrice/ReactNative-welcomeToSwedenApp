@@ -37,7 +37,7 @@ const ChildComponent = ({
         <View style={styles.childComponentContentView}>
           {children1}
           <View style={styles.content}>
-            <ReadMore renderTruncatedFooter={null} renderRevealedFooter={null} numberOfLines={3}>
+            <ReadMore  numberOfLines={3}>
               {children2}
             </ReadMore>
           </View>
@@ -46,7 +46,7 @@ const ChildComponent = ({
         <View style={styles.childComponentContentView}>
           {children3}
           <View style={styles.content}>
-            <ReadMore renderTruncatedFooter={null} renderRevealedFooter={null} numberOfLines={3}>
+            <ReadMore  numberOfLines={3}>
               {children4}
             </ReadMore>
           </View>
@@ -55,7 +55,7 @@ const ChildComponent = ({
         <View style={styles.childComponentContentView}>
           {children5}
           <View style={styles.content}>
-            <ReadMore renderTruncatedFooter={null} renderRevealedFooter={null} numberOfLines={3}>
+            <ReadMore  numberOfLines={3}>
               {children6}
             </ReadMore>
           </View>

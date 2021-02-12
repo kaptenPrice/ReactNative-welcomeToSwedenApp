@@ -23,6 +23,7 @@ import ModalSuccessComponent from '../../components/ModalSuccessComponent';
 import EditImageSvg from '../../assets/svg/EditImageSvg';
 import LockSvg from '../../assets/svg/LockSvg';
 import UnLockSvg from '../../assets/svg/UnLockSvg';
+import UserProfileAdmin from '../../components/UserProfileAdmin';
 // import { app } from 'firebase-admin';
 const pic =
   'https://i3.wp.com/hypebeast.com/image/2020/07/apple-memoji-update-headwear-masks-hairstyles-1.png?w=1600';
@@ -34,7 +35,7 @@ const UserProfile = () => {
   const { showActionSheetWithOptions } = useActionSheet();
 
   const { currentUser } = useSelector((state) => state.authentication);
-  const { name, email, phone, city, reduxProfileAvatar } = useSelector(
+  const { name, email, phone, city, reduxProfileAvatar, isAdmin } = useSelector(
     (state) => state.userAdditionalInfo
   );
   const { width, height } = Dimensions.get('window');
@@ -141,122 +142,119 @@ const UserProfile = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <ScrollView style={{ flex: 1, backgroundColor: appColors.bgColor }}>
-        <View style={[styles.imageMainContainer, { height: height / 5 }]}>
-          {isLoading ? (
-            <Loading />
-          ) : (
-            <ButtonComponent
-              onTouch={() => addProfileImage()}
-              style={styles.imageContainer}
-            >
-              <Image
-                style={[styles.userProfileImage]}
-                imageStyle={{ borderRadius: 70 }}
-                source={{ uri: localAvatar }}
-              />
-              <EditImageSvg />
-            </ButtonComponent>
-          )}
-        </View>
+      {isAdmin ? (
+        <UserProfileAdmin />
+      ) : (
+        <ScrollView style={{ flex: 1, backgroundColor: appColors.bgColor }}>
+          <View style={[styles.imageMainContainer, { height: height / 5 }]}>
+            {isLoading ? (
+              <Loading />
+            ) : (
+              <ButtonComponent onTouch={() => addProfileImage()} style={styles.imageContainer}>
+                <Image
+                  style={[styles.userProfileImage]}
+                  imageStyle={{ borderRadius: 70 }}
+                  source={{ uri: localAvatar }}
+                />
+                <View style={styles.editImage}>
+                  <EditImageSvg />
+                </View>
+              </ButtonComponent>
+            )}
+          </View>
 
-        <View style={styles.inputContainer}>
-          <InputComponent
-            editable={isEditable}
-            children={'Name'}
-            value={localUserName}
-            onChangeText={(e) => {
-              setLocalUserName(e);
-            }}
-            isLabel={true}
-            icon={!editMode? <LockSvg />: <UnLockSvg/>}
-
-          />
-          <InputComponent
-            children={'E-mail'}
-            value={localEmail}
-            editable={false}
-            isLabel={true}
-            valueColor={appColors.textColor}
-            icon={ <LockSvg />}
-          />
-
-          <InputComponent
-            editable={isEditable}
-            children={'Phone'}
-            keyboardType="phone-pad"
-            dataDetectorTypes="phoneNumber"
-            value={localPhone}
-            onChangeText={(e) => {
-              setLocalPhone(e);
-            }}
-            isLabel={true}
-            icon={!editMode? <LockSvg />: <UnLockSvg/>}
-
-          />
-          <InputComponent
-            editable={isEditable}
-            children={'City'}
-            dataDetectorTypes="address"
-            value={localCity}
-            onChangeText={(e) => {
-              setLocalCity(e);
-            }}
-            isLabel={true}
-            icon={!editMode? <LockSvg />: <UnLockSvg/>}
-
-          />
-          {!editMode && (
-            <ButtonComponent
-              style={{ marginTop: 25, height: height / 17 }}
-              onTouch={() => handleEdit()}
-              buttonStyle={styles.editButton}
-              children={<Text style={styles.buttonText}>Edit info</Text>}
+          <View style={styles.inputContainer}>
+            <InputComponent
+              editable={isEditable}
+              children={'Name'}
+              value={localUserName}
+              onChangeText={(e) => {
+                setLocalUserName(e);
+              }}
+              isLabel={true}
+              icon={!editMode ? <LockSvg /> : <UnLockSvg />}
             />
-          )}
-          {editMode && (
-            <View style={[styles.afterEditButtons, { height: height / 15 }]}>
+            <InputComponent
+              children={'E-mail'}
+              value={localEmail}
+              editable={false}
+              isLabel={true}
+              valueColor={appColors.textColor}
+              icon={<LockSvg />}
+            />
+
+            <InputComponent
+              editable={isEditable}
+              children={'Phone'}
+              keyboardType="phone-pad"
+              dataDetectorTypes="phoneNumber"
+              value={localPhone}
+              onChangeText={(e) => {
+                setLocalPhone(e);
+              }}
+              isLabel={true}
+              icon={!editMode ? <LockSvg /> : <UnLockSvg />}
+            />
+            <InputComponent
+              editable={isEditable}
+              children={'City'}
+              dataDetectorTypes="address"
+              value={localCity}
+              onChangeText={(e) => {
+                setLocalCity(e);
+              }}
+              isLabel={true}
+              icon={!editMode ? <LockSvg /> : <UnLockSvg />}
+            />
+            {!editMode && (
               <ButtonComponent
-                style={{ height: height / 15, marginLeft: 5 }}
-                onTouch={() => discardChanges()}
+                style={{ marginTop: 25, height: height / 17 }}
+                onTouch={() => handleEdit()}
                 buttonStyle={styles.editButton}
-                children={<Text style={styles.buttonText}>Cancel</Text>}
+                children={<Text style={styles.buttonText}>Edit info</Text>}
               />
+            )}
+            {editMode && (
+              <View style={[styles.afterEditButtons, { height: height / 15 }]}>
+                <ButtonComponent
+                  style={{ height: height / 15, marginLeft: 5 }}
+                  onTouch={() => discardChanges()}
+                  buttonStyle={styles.editButton}
+                  children={<Text style={styles.buttonText}>Cancel</Text>}
+                />
+                <ButtonComponent
+                  style={{ height: height / 15 }}
+                  onTouch={() => handleSaveUserData()}
+                  buttonStyle={styles.editButton}
+                  children={<Text style={styles.buttonText}>Save</Text>}
+                />
+              </View>
+            )}
+            {/* isOuath user can edit email and password and delete the account, gmailAuth cannot edit password or mail */}
+            {isOAuth && (
               <ButtonComponent
-                style={{ height: height / 15 }}
-                onTouch={() => handleSaveUserData()}
+                style={[styles.oauthButton, { height: height / 20 }]}
+                onTouch={() => setIsModal(true)}
                 buttonStyle={styles.editButton}
-                children={<Text style={styles.buttonText}>Save</Text>}
+                children={<Text style={styles.buttonText}>Edit e-mail / password</Text>}
               />
-            </View>
-          )}
-          {/* isOuath user can edit email and password and delete the account, gmailAuth cannot edit password or mail */}
-          {isOAuth && (
-            <ButtonComponent
-              style={[styles.oauthButton, { height: height / 20 }]}
-              onTouch={() => setIsModal(true)}
-              buttonStyle={styles.editButton}
-              children={<Text style={styles.buttonText}>Edit e-mail / password</Text>}
-            />
-          )}
+            )}
 
-          <ModalEditMailPassComponent
-            visible={isModal}
-            onCancel={() => setIsModal(false)}
-          />
+            <ModalEditMailPassComponent visible={isModal} onCancel={() => setIsModal(false)} />
 
-          {isSucces && (
-            <ModalSuccessComponent
-              visible={isSucces}
-              iconType={<SuccesSvg />}
-              textFat={'Success'}
-              textSmall={'Credentials are now updated'}
-              onTouch={() => setIsSuccess(false)}
-              buttonText={'OK'}
-            />
-          )}
-        </View>
-      </ScrollView>
+            {isSucces && (
+              <ModalSuccessComponent
+                visible={isSucces}
+                iconType={<SuccesSvg />}
+                textFat={'Success'}
+                textSmall={'Credentials are now updated'}
+                onTouch={() => setIsSuccess(false)}
+                buttonText={'OK'}
+              />
+            )}
+          </View>
+        </ScrollView>
+      )}
     </SafeAreaView>
   );
 };
@@ -372,5 +370,14 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
     elevation: 10,
     paddingLeft: 10,
+  },
+  editImage: {
+    borderRadius: 20,
+    left: 110,
+    bottom: 140,
+    width: 30,
+    padding: 5,
+    backgroundColor: appColors.bgColor,
+    opacity: 0.9,
   },
 });

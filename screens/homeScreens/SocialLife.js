@@ -67,14 +67,7 @@ export default function SocialLife() {
               <Text style={childStyle.buttonTextStyle}>Traditions</Text>
               <SwedenMapSvg style={{ fill: appColors.mapColor }} />
             </ButtonComponent>
-            <ButtonComponent
-              style={childStyle.childButtons}
-              onTouch={() => navigation.navigate('AnimatedComponent')}
-              buttonStyle={childStyle.buttonStyle}
-            >
-              <Text style={childStyle.buttonTextStyle}>Animated</Text>
-              {/* <SwedenMapSvg style={{ fill: appColors.placeHolderColor }} /> */}
-            </ButtonComponent>
+        
           </View>
         </>
       )}
@@ -121,3 +114,13 @@ export const childStyle = StyleSheet.create({
     textAlign: 'left',
   },
 });
+
+
+// <ButtonComponent
+// style={childStyle.childButtons}
+// onTouch={() => navigation.navigate('AnimatedComponent')}
+// buttonStyle={childStyle.buttonStyle}
+// >
+// <Text style={childStyle.buttonTextStyle}>Animated</Text>
+// {/* <SwedenMapSvg style={{ fill: appColors.placeHolderColor }} /> */}
+// </ButtonComponent>

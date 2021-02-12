@@ -29,15 +29,15 @@ const HealthCare = () => {
 
   const getFieldData = () => {
     try {
-      db.getContentData('social-life', 'healthCare', 'like-a-swede', (cb) => {
+      db.getContentData('societal-functions', 'healthCare', 'like-a-swede', (cb) => {
         const data = cb.data();
         !data?.content ? setContentOne('tomt') : setContentOne(data?.content);
       });
-      db.getContentData('social-life', 'healthCare', 'lingo', (cb) => {
+      db.getContentData('societal-functions', 'healthCare', 'lingo', (cb) => {
         const data = cb.data();
         !data?.content ? setContentTwo('tomt') : setContentTwo(data?.content);
       });
-      db.getContentData('social-life', 'healthCare', 'assistence', (cb) => {
+      db.getContentData('societal-functions', 'healthCare', 'assistence', (cb) => {
         const data = cb.data();
         !data?.content ? setContentThree('tomt') : setContentThree(data?.content);
       });

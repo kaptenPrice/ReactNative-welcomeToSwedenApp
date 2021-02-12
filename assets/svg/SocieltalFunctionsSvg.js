@@ -1,6 +1,6 @@
-import React from "react";
-import { Svg, Path } from "react-native-svg";
-import appColors from "../appColor";
+import React from 'react';
+import { Svg, Path } from 'react-native-svg';
+import appColors from '../appColor';
 
 const SocieltalFunctionsSvg = (props) => {
   return (
@@ -20,4 +20,3 @@ const SocieltalFunctionsSvg = (props) => {
 };
 
 export default SocieltalFunctionsSvg;
-

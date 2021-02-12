@@ -20,6 +20,8 @@ const appColors = {
   mapColor:"#000e", 
   editmode:'#f9f9f9',
   unlock:"#9ae4b8",
+  gradeColorGreen: "#3fe482", 
+  gradeColorRed:"#e03a36"
 
   
 };

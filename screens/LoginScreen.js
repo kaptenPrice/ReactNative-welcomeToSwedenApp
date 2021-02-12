@@ -69,14 +69,14 @@ const LoginScreen = () => {
         }}
       >
         {isEnabled ? (
-          <Text style={{ marginTop: 5, marginRight: 7, fontWeight: '500' }}>Sign in</Text>
+          <Text style={{ marginTop: 5, marginRight: 3, fontWeight: '500' }}>Sign up</Text>
         ) : (
-          <Text style={{ marginTop: 5, marginRight: 2, fontWeight: '500' }}>Sign up</Text>
+          <Text style={{ marginTop: 5, marginRight: 8, fontWeight: '500' }}>Sign in</Text>
         )}
         <Switch
-          trackColor={{ false: '#d3d5d1', true: '#d3d5d1' }}
-          thumbColor={isEnabled ? '#f9f9f9' : '#f4f3f4'}
-          ios_backgroundColor="#d3d5d1"
+          trackColor={{ false: '#FED326', true: '#006AA7' }}
+          thumbColor={isEnabled ? '#FECC00' : '#006AA7'}
+          ios_backgroundColor="#FECC00"
           onValueChange={toggleSwitch}
           value={isEnabled}
           style={styles.shadowEffekt}
@@ -125,11 +125,12 @@ const LoginScreen = () => {
                 style={
                   ([styles.signinRegisterButtonText],
                   {
-                    color: 'blue',
+                    color: '#006AA7',
                     textDecorationLine: 'underline',
-                    fontStyle: 'italic',
+                    // fontStyle: 'italic',
                     marginRight: width / 2.2,
                     marginTop: 10,
+                    fontSize:12
                   })
                 }
               >
@@ -238,7 +239,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   shadowEffekt: {
-    shadowColor: '#000',
+    shadowColor: '#303030',
     shadowOffset: {
       width: 0,
       height: 4,

@@ -7,7 +7,7 @@ const EditImageSvg = (props) => {
     <Svg
       width="20"
       height="20"
-      style={{ left: 110, bottom: 140, opacity: 0.9 }}
+      style={{ opacity: 0.9 }}
       viewBox="0 0 19 19"
     >
       <Path

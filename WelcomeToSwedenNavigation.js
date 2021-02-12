@@ -82,23 +82,24 @@ const HomeTabNavigator = () => {
         tabBarIcon: ({ focused, color }) => {
           let iconName;
           if (route.name === 'Home') {
-            return  <HomeSvg /> 
-            // focused ? <HomeSvg /> : <HomeSvg />;
-            // color = focused ? '#2f3030' : '#7d7d7d';
+            return focused ? (
+              <HomeSvg props={appColors.iconActive} />
+            ) : (
+              <HomeSvg props={appColors.iconInActive} />
+            );
           } else if (route.name === 'SocialLife') {
-            return <FriendsSvg/>
-            // focused ? <HomeSvg /> : <HomeSvg />;
-
-            // iconName = 'human-male-male';
-            // color = focused ? '#2f3030' : '#7d7d7d';
+            return focused ? (
+              <FriendsSvg props={appColors.iconActive} />
+            ) : (
+              <FriendsSvg props={appColors.iconInActive} />
+            );
           } else if (route.name === 'SocietalFunctions') {
-            return <SocieltalFunctionsSvg/>
-            // focused ? <HomeSvg /> : <HomeSvg />;
-            // iconName = 'office-building';
-            // color = focused ? '#2f3030' : '#7d7d7d';
+            return focused ? (
+              <SocieltalFunctionsSvg fill={appColors.iconActive} />
+            ) : (
+              <SocieltalFunctionsSvg fill={appColors.iconInActive} />
+            );
           }
-
-          // return <MaterialCommunityIcons name={iconName} size={30} color={color} />;
         },
       })}
       tabBarOptions={{
@@ -123,11 +124,7 @@ const SocialLifeNavigator = () => (
       headerTintColor: appColors.textColor,
     }}
   >
-    <Stack.Screen
-      options={{ headerShown: false }}
-      name="SocialLife"
-      component={SocialLife}
-    />
+    <Stack.Screen options={{ headerShown: false }} name="SocialLife" component={SocialLife} />
     <Stack.Screen
       options={{ headerShown: true, headerBackTitle: ' ' }}
       name="Fika"
@@ -247,7 +244,7 @@ const DrawerNavigator = () => (
   >
     <Drawer.Screen
       options={{
-        drawerIcon: () => <HomeSvg />,
+        drawerIcon: () => <HomeSvg props={appColors.placeHolderColor}/>,
       }}
       name="Home"
       component={HomeStackNavigator}
@@ -256,7 +253,6 @@ const DrawerNavigator = () => (
     <Drawer.Screen
       options={{
         headerShown: true,
-        // headerBackAccessibilityLabel: "true",
 
         headerTintColor: appColors.textColor,
         swipeEnabled: true,
@@ -279,12 +275,11 @@ const DrawerNavigator = () => (
     <Drawer.Screen
       options={{
         drawerIcon: () => (
-          
           <SignOutSvg
-            // style={{ marginRight: 0 }}
-            // name="sign-out"
-            // size={24}
-            // color={appColors.iconInActive}
+          // style={{ marginRight: 0 }}
+          // name="sign-out"
+          // size={24}
+          // color={appColors.iconInActive}
           />
         ),
       }}

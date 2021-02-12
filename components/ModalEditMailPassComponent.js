@@ -101,7 +101,9 @@ const ModalEditMailPassComponent = ({ onCancel, visible }) => {
     try {
       const user = db.auth.currentUser;
       var cred = firebase.auth.EmailAuthProvider.credential(user.email, currentPassword);
+
       return user.reauthenticateWithCredential(cred);
+    
     } catch (error) {
       alert(error);
     }
