@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { View, Image, Dimensions, Text } from 'react-native';
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
-// import ViewMoreText from "react-native-view-more-text";
 import Styles from '../css/Styles';
 import appColors from '../assets/appColor';
 import ReadMore from 'react-native-read-more-text';

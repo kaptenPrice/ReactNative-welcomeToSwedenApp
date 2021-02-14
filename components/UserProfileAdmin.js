@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, FlatList, Dimensions, RefreshControl, LogBox } from 'react-native';
 import appColors from '../assets/appColor';
 import * as db from '../firestore/FirebaseUtils';
+import ButtonComponent from './ButtonComponent';
 import Loading from './Loading';
 
 export default function UserProfileAdmin() {
   const [documentData, setDocumentData] = useState([]);
-  const [limit, setLimit] = useState(1);
+  const [limit, setLimit] = useState(2);
   const [lastVisible, setLastVisible] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -16,33 +17,29 @@ export default function UserProfileAdmin() {
     handleFetchData();
     LogBox.ignoreLogs(['Setting a timer for a long period of time']);
   }, []);
-
-  // useEffect(() => {
-  //   handleFetchMore();
-  //   console.log('lastVisible rad 20:', lastVisible);
-  // }, [lastVisible]);
+  useEffect(()=>{},[handleDeleteUser])
 
   const handleFetchData = async () => {
-    if (documentData?.length > 0) {
-      setIsLoading(true);
+    setIsLoading(true);
 
-      let documentSnapshots = await db.db.collection('users').orderBy('uid').limit(limit).get();
+    let documentSnapshots = await db.db.collection('users').orderBy('uid').limit(limit).get();
 
-      let documentData = documentSnapshots.docs.map((document) => document.data());
+    let documentDataTemp = documentSnapshots.docs.map((document) => document.data());
 
-      setLastVisible(documentSnapshots.docs[documentSnapshots.docs.length - 1].id);
+    setLastVisible(documentSnapshots.docs[documentSnapshots.docs.length - 1].id);
 
-      setDocumentData(documentData);
-    }
+    setDocumentData(documentDataTemp);
 
-    // setDocumentData(documentSnapshots.docs.map((document) => document.data()));
-
-    // const lastVisible1 = documentSnapshots.docs[documentSnapshots.docs.length - 1].id;
-    // setLastVisible(lastVisible1);
+    setIsLoading(false);
   };
 
+
+  //REFAKT TO ONSNAPSHOT
+  //ADD MODAL "DO U REALLY WANNA DELETE USER?"
   const handleFetchMore = async () => {
     if (documentData.length > 0) {
+      setIsLoading(true);
+
       setRefreshing(true);
 
       let documentSnapshots = await db.db
@@ -61,17 +58,19 @@ export default function UserProfileAdmin() {
       } else setIsLoading(false);
       return;
     }
-
-    // console.log('lastVisible before:', lastVisible);
-    // const lastVisible2 = documentSnapshots.docs[documentSnapshots.docs.length - 1].id;
-    // console.log('lastVisible after:', lastVisible2);
-    // setLastVisible(lastVisible)
-    // console.log('lastVisible rad 50:', lastVisible);
-
-    // setLastVisible((current) => [...current, lastVisible]);
   };
+  const handleDeleteUser=(uid)=>{
+    db.db.collection('users').doc(uid).delete()
+  }
 
   const renderFooter = () => {
+    if (isLoading) {
+      return <Loading />;
+    } else {
+      return null;
+    }
+  };
+  const renderHeader = () => {
     if (isLoading) {
       return <Loading />;
     } else {
@@ -81,14 +80,15 @@ export default function UserProfileAdmin() {
 
   const _renderItem = ({ item, index }) => (
     <View style={[styles.list, styles.shadoEffekt, { width: width / 1.1 }]}>
-      <Text style={{ fontWeight: '500' }}>{`User: ${index + 1}`}</Text>
+      <Text style={{ fontWeight: '600', marginBottom: 5, alignSelf: 'center' }}>{`customer ${
+        index + 1
+      }`}</Text>
 
-      <Text style={{ fontWeight: '500', marginLeft: 5 }}>{'Name: '}</Text>
-      <View style={{ marginTop: 10 }}>
-        <Text style={{ fontSize: 14 }}>{item.name}</Text>
-      </View>
       <View style={styles.listingGradeContainer}>
-        <Text style={{ fontWeight: '500' }}>{'Email: '}</Text>
+        <Text style={{ fontWeight: '500', marginBottom: 10 }}>{'Name: '}</Text>
+        <Text style={{ fontWeight: 'bold', marginBottom: 10 }}>{item.name}</Text>
+
+        <Text style={{ fontWeight: '500', marginBottom: 5 }}>{'Email: '}</Text>
 
         <Text style={{ fontWeight: 'bold' }}> {item.email}</Text>
 
@@ -98,6 +98,32 @@ export default function UserProfileAdmin() {
 
         <Text style={{ fontWeight: 'bold', marginTop: 5 }}>{item.created}</Text>
       </View>
+      <ButtonComponent
+        style={{
+          backgroundColor:appColors.bgFeedBack,
+          height: 'auto',
+          width: 'auto',
+          alignSelf: 'flex-end',
+          marginVertical: 10,
+          borderRadius:14
+        }}
+        onTouch={()=>console.log(item.email)}
+      >
+        <Text style={{color:"white", fontWeight:"bold", padding:10}}>E-mail user</Text>
+      </ButtonComponent>
+      <ButtonComponent
+        style={{
+          backgroundColor:appColors.gradeColorRed,
+          height: 'auto',
+          width: 'auto',
+          alignSelf: 'flex-end',
+          marginVertical: 10,
+          borderRadius:14
+        }}
+        onTouch={()=>handleDeleteUser(item.uid)}
+      >
+        <Text style={{color:"white", fontWeight:"bold", padding:10}}>Delete</Text>
+      </ButtonComponent>
     </View>
   );
   return (
@@ -108,9 +134,10 @@ export default function UserProfileAdmin() {
         keyExtractor={(item, index) => index.toString()}
         ListFooterComponent={renderFooter}
         onEndReached={handleFetchMore}
-        onEndReachedThreshold={0.1}
+        onEndReachedThreshold={0.2}
         refreshing={refreshing}
         showsVerticalScrollIndicator={false}
+        onScrollToTop={handleFetchData}
       />
     </View>
   );
@@ -140,9 +167,8 @@ const styles = StyleSheet.create({
   },
   listingGradeContainer: {
     flexDirection: 'column',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     justifyContent: 'space-between',
     marginVertical: 10,
-    marginLeft: 5,
   },
 });

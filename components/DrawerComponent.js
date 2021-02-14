@@ -1,11 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, SafeAreaView, Platform } from 'react-native';
-import {} from 'react-native-gesture-handler';
-import {} from 'react-native-safe-area-context';
-import Styles from '../css/Styles';
 import appColors from '../assets/appColor';
 import { DrawerItemList } from '@react-navigation/drawer';
-import {} from 'react-native';
 import MenuSvg from '../assets/svg/MenuSvg';
 import PersonSvg from '../assets/svg/PersonSvg';
 

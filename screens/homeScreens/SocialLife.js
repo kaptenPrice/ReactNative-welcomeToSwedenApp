@@ -67,6 +67,13 @@ export default function SocialLife() {
               <Text style={childStyle.buttonTextStyle}>Traditions</Text>
               <SwedenMapSvg style={{ fill: appColors.mapColor }} />
             </ButtonComponent>
+            <ButtonComponent
+              style={childStyle.childButtons}
+              onTouch={() => navigation.navigate('PARALLAX_TEST')}
+              buttonStyle={childStyle.buttonStyle}
+            >
+              <Text style={childStyle.buttonTextStyle}>PARALLAX_TEST</Text>
+            </ButtonComponent>
         
           </View>
         </>

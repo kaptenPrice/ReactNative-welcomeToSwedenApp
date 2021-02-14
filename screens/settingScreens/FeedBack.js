@@ -98,10 +98,6 @@ const FeedBack = () => {
 
     let documentData = documentSnapshots.docs.map((document) => document.data());
 
-    // setDocumentData(documentSnapshots.docs.map((document) => document.data()));
-
-    /*let lastVisible = documentData[documentData.length - 1].feedbackId;
-    console.log('lastVisible i getFeedback', lastVisible);*/
 
     setDocumentData(documentData);
   };

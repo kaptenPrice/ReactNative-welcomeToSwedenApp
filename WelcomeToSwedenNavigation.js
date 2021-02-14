@@ -141,8 +141,8 @@ const SocialLifeNavigator = () => (
       component={Traditions}
     />
     <Stack.Screen
-      options={{ headerShown: true, headerBackTitle: ' ' }}
-      name="AnimatedComponent"
+      options={{ headerShown: false, headerBackTitle: ' ' }}
+      name="PARALLAX_TEST"
       component={AnimatedComponent}
     />
   </Stack.Navigator>
