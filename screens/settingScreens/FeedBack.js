@@ -84,7 +84,6 @@ const FeedBack = () => {
   }, []);
 
   const handleFetchData = async () => {
-    console.log('start handleFetchData');
 
     setIsLoading(true);
 

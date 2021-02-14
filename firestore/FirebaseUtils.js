@@ -32,7 +32,7 @@ export const signUp = async (email, password) => {
       if (error.code == 'auth/invalid-password') {
         alert('INVALID PASSWORD. PASSWORD MUST BE MIN 6 CHARACTERS. ');
       } else {
-        alert('Error: ', error.code);
+        alert('Error: ', error);
       }
     }
   }
