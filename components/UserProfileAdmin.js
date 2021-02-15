@@ -17,22 +17,38 @@ export default function UserProfileAdmin() {
     handleFetchData();
     LogBox.ignoreLogs(['Setting a timer for a long period of time']);
   }, []);
-  useEffect(()=>{},[handleDeleteUser])
+  useEffect(() => {}, [handleDeleteUser]);
 
   const handleFetchData = async () => {
     setIsLoading(true);
+    db.db
+      .collection('users')
+      .orderBy('created')
+      .onSnapshot((doc) => {
+        const tempList = [];
+        doc.docs.forEach((snapShot) => {
+          tempList.push(snapShot.data());
+        });
+        setDocumentData(tempList);
+        setLastVisible(tempList[tempList.length-1])
 
-    let documentSnapshots = await db.db.collection('users').orderBy('uid').limit(limit).get();
-
-    let documentDataTemp = documentSnapshots.docs.map((document) => document.data());
-
-    setLastVisible(documentSnapshots.docs[documentSnapshots.docs.length - 1].id);
-
-    setDocumentData(documentDataTemp);
-
+      });
     setIsLoading(false);
   };
 
+  // const handleFetchData = async () => {
+  //   setIsLoading(true);
+
+  //   let documentSnapshots = await db.db.collection('users').orderBy('uid').limit(limit).get();
+
+  //   let documentDataTemp = documentSnapshots.docs.map((document) => document.data());
+
+  //   setLastVisible(documentSnapshots.docs[documentSnapshots.docs.length - 1].id);
+
+  //   setDocumentData(documentDataTemp);
+
+  //   setIsLoading(false);
+  // };
 
   //REFAKT TO ONSNAPSHOT
   //ADD MODAL "DO U REALLY WANNA DELETE USER?"
@@ -59,9 +75,9 @@ export default function UserProfileAdmin() {
       return;
     }
   };
-  const handleDeleteUser=(uid)=>{
-    db.db.collection('users').doc(uid).delete()
-  }
+  const handleDeleteUser = (uid) => {
+    db.db.collection('users').doc(uid).delete();
+  };
 
   const renderFooter = () => {
     if (isLoading) {
@@ -100,29 +116,29 @@ export default function UserProfileAdmin() {
       </View>
       <ButtonComponent
         style={{
-          backgroundColor:appColors.bgFeedBack,
+          backgroundColor: appColors.bgFeedBack,
           height: 'auto',
           width: 'auto',
           alignSelf: 'flex-end',
           marginVertical: 10,
-          borderRadius:14
+          borderRadius: 14,
         }}
-        onTouch={()=>console.log(item.email)}
+        onTouch={() => console.log(item.email)}
       >
-        <Text style={{color:"white", fontWeight:"bold", padding:10}}>E-mail user</Text>
+        <Text style={{ color: 'white', fontWeight: 'bold', padding: 10 }}>E-mail user</Text>
       </ButtonComponent>
       <ButtonComponent
         style={{
-          backgroundColor:appColors.gradeColorRed,
+          backgroundColor: appColors.gradeColorRed,
           height: 'auto',
           width: 'auto',
           alignSelf: 'flex-end',
           marginVertical: 10,
-          borderRadius:14
+          borderRadius: 14,
         }}
-        onTouch={()=>handleDeleteUser(item.uid)}
+        onTouch={() => handleDeleteUser(item.uid)}
       >
-        <Text style={{color:"white", fontWeight:"bold", padding:10}}>Delete</Text>
+        <Text style={{ color: 'white', fontWeight: 'bold', padding: 10 }}>Delete</Text>
       </ButtonComponent>
     </View>
   );
