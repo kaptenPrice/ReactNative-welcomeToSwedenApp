@@ -1,9 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, FlatList, Dimensions, RefreshControl, LogBox } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  Dimensions,
+  RefreshControl,
+  LogBox,
+  Modal,
+} from 'react-native';
+import Swipeout from 'react-native-swipeout';
 import appColors from '../assets/appColor';
+import DeleteAccountSvg from '../assets/svg/DeleteAccountSvg';
 import * as db from '../firestore/FirebaseUtils';
 import ButtonComponent from './ButtonComponent';
 import Loading from './Loading';
+import ModalConfirmDeleteAccount from './ModalConfirmDeleteAccount';
+import MailSvg from '../assets/svg/MailSvg';
 
 export default function UserProfileAdmin() {
   const [documentData, setDocumentData] = useState([]);
@@ -11,6 +24,7 @@ export default function UserProfileAdmin() {
   const [lastVisible, setLastVisible] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const { width, height } = Dimensions.get('window');
 
   useEffect(() => {
@@ -30,8 +44,7 @@ export default function UserProfileAdmin() {
           tempList.push(snapShot.data());
         });
         setDocumentData(tempList);
-        setLastVisible(tempList[tempList.length-1])
-
+        setLastVisible(tempList[tempList.length - 1]);
       });
     setIsLoading(false);
   };
@@ -75,6 +88,7 @@ export default function UserProfileAdmin() {
       return;
     }
   };
+
   const handleDeleteUser = (uid) => {
     db.db.collection('users').doc(uid).delete();
   };
@@ -93,55 +107,91 @@ export default function UserProfileAdmin() {
       return null;
     }
   };
+  const swipeOutButtons = [
+    {
+      text: 'Delete user',
+      component: (
+        <View
+          style={[styles.shadowEffekt, { flex: 1, alignItems: 'center', justifyContent: 'center' }]}
+        >
+          <DeleteAccountSvg width="22" height="22" fill={appColors.bgColor} />
+        </View>
+      ),
+      backgroundColor: appColors.gradeColorRed,
+      onPress: () => setIsModalVisible(true),
+    },
+    {
+      text: 'Delete user',
+      component: (
+        <View
+          style={[styles.shadowEffekt, { flex: 1, alignItems: 'center', justifyContent: 'center' }]}
+        >
+          <MailSvg width="22" height="22" fill={appColors.bgColor} />
+        </View>
+      ),
+      backgroundColor: appColors.bgFeedBack,
+      onPress: () => alert('EMAIL USER'),
+    },
+  ];
 
   const _renderItem = ({ item, index }) => (
-    <View style={[styles.list, styles.shadoEffekt, { width: width / 1.1 }]}>
-      <Text style={{ fontWeight: '600', marginBottom: 5, alignSelf: 'center' }}>{`customer ${
-        index + 1
-      }`}</Text>
+    <View style={[styles.list, styles.shadowEffekt, { width: width / 1.1 }]}>
+      <View>
+        <Swipeout
+          autoClose={true}
+          style={{ marginHorizontal: 0, marginVertical: 5 }}
+          backgroundColor={appColors.bgColor}
+          right={swipeOutButtons}
+          sensitivity={10}
+        >
+          <Text style={{ fontWeight: '600', marginBottom: 5, alignSelf: 'center' }}>{`customer ${
+            index + 1
+          }`}</Text>
 
-      <View style={styles.listingGradeContainer}>
-        <Text style={{ fontWeight: '500', marginBottom: 10 }}>{'Name: '}</Text>
-        <Text style={{ fontWeight: 'bold', marginBottom: 10 }}>{item.name}</Text>
+          <View style={styles.listingGradeContainer}>
+            <Text style={{ fontWeight: '500', marginBottom: 10 }}>{'Name: '}</Text>
+            <Text style={{ fontWeight: 'bold', marginBottom: 10 }}>{item.name}</Text>
 
-        <Text style={{ fontWeight: '500', marginBottom: 5 }}>{'Email: '}</Text>
+            <Text style={{ fontWeight: '500', marginBottom: 5 }}>{'Email: '}</Text>
 
-        <Text style={{ fontWeight: 'bold' }}> {item.email}</Text>
+            <Text style={{ fontWeight: 'bold' }}> {item.email}</Text>
 
-        <Text style={{ fontWeight: '500', marginTop: 10 }}>{'Phone: '}</Text>
-        <Text style={{ fontWeight: 'bold', marginTop: 5 }}>{item.phone}</Text>
-        <Text style={{ fontWeight: '500', marginTop: 10 }}>{'Created: '}</Text>
+            <Text style={{ fontWeight: '500', marginTop: 10 }}>{'Phone: '}</Text>
+            <Text style={{ fontWeight: 'bold', marginTop: 5 }}>{item.phone}</Text>
+            <Text style={{ fontWeight: '500', marginTop: 10 }}>{'Created: '}</Text>
 
-        <Text style={{ fontWeight: 'bold', marginTop: 5 }}>{item.created}</Text>
+            <Text style={{ fontWeight: 'bold', marginTop: 5 }}>{item.created}</Text>
+          </View>
+          {/* <ButtonComponent
+            style={{
+              backgroundColor: appColors.bgFeedBack,
+              height: 'auto',
+              width: 'auto',
+              alignSelf: 'flex-end',
+              marginVertical: 10,
+              borderRadius: 14,
+            }}
+            onTouch={() => console.log(item.email)}
+          >
+            <Text style={{ color: 'white', fontWeight: 'bold', padding: 10 }}>E-mail user</Text>
+          </ButtonComponent> */}
+
+          {isModalVisible && (
+            <ModalConfirmDeleteAccount
+              onTouch={() => {
+                handleDeleteUser(item.uid);
+                setIsModalVisible(false);
+              }}
+              setValue={() => setIsModalVisible(false)}
+              value={isModalVisible}
+              actionType={'Delete account'}
+            />
+          )}
+        </Swipeout>
       </View>
-      <ButtonComponent
-        style={{
-          backgroundColor: appColors.bgFeedBack,
-          height: 'auto',
-          width: 'auto',
-          alignSelf: 'flex-end',
-          marginVertical: 10,
-          borderRadius: 14,
-        }}
-        onTouch={() => console.log(item.email)}
-      >
-        <Text style={{ color: 'white', fontWeight: 'bold', padding: 10 }}>E-mail user</Text>
-      </ButtonComponent>
-      <ButtonComponent
-        style={{
-          backgroundColor: appColors.gradeColorRed,
-          height: 'auto',
-          width: 'auto',
-          alignSelf: 'flex-end',
-          marginVertical: 10,
-          borderRadius: 14,
-        }}
-        onTouch={() => handleDeleteUser(item.uid)}
-      >
-        <Text style={{ color: 'white', fontWeight: 'bold', padding: 10 }}>Delete</Text>
-      </ButtonComponent>
     </View>
   );
+
   return (
     <View style={{ flex: 1 }}>
       <FlatList
@@ -171,7 +221,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 15,
   },
-  shadoEffekt: {
+  shadowEffekt: {
     shadowColor: '#474747',
     shadowOffset: {
       width: 0,
