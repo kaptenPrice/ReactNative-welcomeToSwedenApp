@@ -31,15 +31,6 @@ const data = images.map((image, index) => ({
 
 const AnimatedComponent = () => {
   const [_images, setImages] = useState([]);
- 
-  useEffect(() => {
-    async function getpics() {
-      const pics = await Axios.get(process.env.API_URL).then((res) => {
-        setImages(res.data.results);
-      });
-    }
-    getpics();
-  }, []);
 
   const scrollX = useRef(new Animated.Value(0)).current;
   console.log(scrollX);

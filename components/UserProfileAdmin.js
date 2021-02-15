@@ -112,7 +112,7 @@ export default function UserProfileAdmin() {
       text: 'Delete user',
       component: (
         <View
-          style={[styles.shadowEffekt, { flex: 1, alignItems: 'center', justifyContent: 'center' }]}
+          style={[styles.shadowEffekt, { flex: 1, alignItems: 'center', justifyContent: 'center', }]}
         >
           <DeleteAccountSvg width="22" height="22" fill={appColors.bgColor} />
         </View>
@@ -121,7 +121,7 @@ export default function UserProfileAdmin() {
       onPress: () => setIsModalVisible(true),
     },
     {
-      text: 'Delete user',
+      text: 'Email user',
       component: (
         <View
           style={[styles.shadowEffekt, { flex: 1, alignItems: 'center', justifyContent: 'center' }]}
@@ -139,8 +139,9 @@ export default function UserProfileAdmin() {
       <View>
         <Swipeout
           autoClose={true}
-          style={{ marginHorizontal: 0, marginVertical: 5 }}
-          backgroundColor={appColors.bgColor}
+          style={{ marginHorizontal: 0, marginVertical: 5 , borderRadius: 15}}
+          // backgroundColor={appColors.bgColor}
+          backgroundColor={"white"}
           right={swipeOutButtons}
           sensitivity={10}
         >
@@ -162,19 +163,7 @@ export default function UserProfileAdmin() {
 
             <Text style={{ fontWeight: 'bold', marginTop: 5 }}>{item.created}</Text>
           </View>
-          {/* <ButtonComponent
-            style={{
-              backgroundColor: appColors.bgFeedBack,
-              height: 'auto',
-              width: 'auto',
-              alignSelf: 'flex-end',
-              marginVertical: 10,
-              borderRadius: 14,
-            }}
-            onTouch={() => console.log(item.email)}
-          >
-            <Text style={{ color: 'white', fontWeight: 'bold', padding: 10 }}>E-mail user</Text>
-          </ButtonComponent> */}
+     
 
           {isModalVisible && (
             <ModalConfirmDeleteAccount
