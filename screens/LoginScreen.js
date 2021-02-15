@@ -87,82 +87,81 @@ const LoginScreen = () => {
         <Text style={styles.loginScreenMain}>Welcome</Text>
         <Text style={styles.header}>Free for everyone to join</Text>
       </View>
-      <TouchableWithoutFeedback
+      {/* <TouchableWithoutFeedback
         onPress={() => {
           Keyboard.dismiss();
         }}
-      >
-        <View style={[styles.container]}>
-          <View style={[styles.inputContainer]}>
-            <InputComponent
-              autoCapitalize="none"
-              placeholder="Email*"
-              placeholderTextColor={appColors.placeHolderColor}
-              keyboardType="email-address"
-              onChangeText={(e) => setEmail(e)}
-            />
-            <MailSvg style={styles.icon} />
-          </View>
-          <View style={styles.inputContainer}>
-            <InputComponent
-              autoCapitalize="none"
-              placeholder="Password*"
-              placeholderTextColor={appColors.placeHolderColor}
-              keyboardType="default"
-              secureTextEntry={isSecure}
-              onChangeText={(password) => setPassword(password)}
-              clearTextOnFocus={true}
-            />
-            {isSecure ? (
-              <EyeOffSvg onPress={() => setSecure(false)} style={styles.icon} />
-            ) : (
-              <EyeSvg onPress={() => setSecure(true)} style={styles.icon} />
-            )}
-          </View>
-          {isEnabled ? (
-            <ButtonComponent onTouch={() => setIsModal(true)}>
-              <Text
-                style={
-                  ([styles.signinRegisterButtonText],
-                  {
-                    color: '#006AA7',
-                    textDecorationLine: 'underline',
-                    // fontStyle: 'italic',
-                    marginRight: width / 2.2,
-                    marginTop: 10,
-                    fontSize:12
-                  })
-                }
-              >
-                FORGOT PASSWORD
-              </Text>
-            </ButtonComponent>
+      > */}
+      <View style={[styles.container]}>
+        <View style={[styles.inputContainer]}>
+          <InputComponent
+            autoCapitalize="none"
+            placeholder="Email*"
+            placeholderTextColor={appColors.placeHolderColor}
+            keyboardType="email-address"
+            onChangeText={(e) => setEmail(e)}
+          />
+          <MailSvg style={styles.icon} />
+        </View>
+        <View style={styles.inputContainer}>
+          <InputComponent
+            autoCapitalize="none"
+            placeholder="Password*"
+            placeholderTextColor={appColors.placeHolderColor}
+            keyboardType="default"
+            secureTextEntry={isSecure}
+            onChangeText={(password) => setPassword(password)}
+            clearTextOnFocus={true}
+          />
+          {isSecure ? (
+            <EyeOffSvg onPress={() => setSecure(false)} style={styles.icon} />
           ) : (
-            <Text style={{ color: 'transparent', marginTop: 10 }}>13337</Text>
+            <EyeSvg onPress={() => setSecure(true)} style={styles.icon} />
           )}
         </View>
-      </TouchableWithoutFeedback>
-
-      <View style={[styles.buttonContainer]}>
-        {isEnabled ? (
+      </View>
+      {/* </TouchableWithoutFeedback> */}
+      {isEnabled ? (
+        <View style={[styles.buttonContainer]}>
+          <ButtonComponent
+            style={{ padding: 5 }}
+            onTouch={() => {
+              setIsModal(true);
+              console.log('Forgot pass');
+            }}
+          >
+            <Text
+              style={[
+                styles.signinRegisterButtonText,
+                styles.passReminder,
+                { marginRight: width / 2.3 },
+              ]}
+            >
+              FORGOT PASSWORD
+            </Text>
+          </ButtonComponent>
           <ButtonComponent buttonStyle={styles.loginButton} onTouch={() => handleSignIn()}>
             <Text style={styles.signinRegisterButtonText}>SIGN IN </Text>
           </ButtonComponent>
-        ) : (
+          <ButtonComponent buttonStyle={styles.loginButton} onTouch={handleSignInWithGoogleAsync}>
+            <Text style={styles.signinRegisterButtonText}>SIGN IN WITH GOOGLE</Text>
+          </ButtonComponent>
+        </View>
+      ) : (
+        <View style={[styles.buttonContainer]}>
           <ButtonComponent buttonStyle={styles.loginButton} onTouch={() => handleSignUp()}>
             <Text style={styles.signinRegisterButtonText}>SIGN UP</Text>
           </ButtonComponent>
-        )}
+          <ButtonComponent buttonStyle={styles.loginButton} onTouch={handleSignInWithGoogleAsync}>
+            <Text style={styles.signinRegisterButtonText}>SIGN IN WITH GOOGLE</Text>
+          </ButtonComponent>
+        </View>
+      )}
 
-        <ButtonComponent buttonStyle={styles.loginButton} onTouch={handleSignInWithGoogleAsync}>
-          <Text style={styles.signinRegisterButtonText}>SIGN IN WITH GOOGLE</Text>
-        </ButtonComponent>
-      </View>
       <View style={{ flex: 0 }}>
         <ModalSendMailComponent visible={isModal} onCancel={() => setIsModal(false)} />
       </View>
     </SafeAreaView>
-    // </LinearGradient>
   );
 };
 
@@ -247,5 +246,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 4,
     elevation: 12,
+  },
+  passReminder: {
+    color: '#006AA7',
+    textDecorationLine: 'underline',
+
+    marginTop: 10,
+    fontSize: 12,
   },
 });
