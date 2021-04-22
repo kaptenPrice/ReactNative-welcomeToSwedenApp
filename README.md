@@ -1,8 +1,9 @@
-# ReactNative-welcomeToSwedenApp
-EXPO SDK40/n
-1. npm install --global expo-cli/n
-TO RUN project. /n
-1.run npm i firebase@8.1.1 /n
+# WelcomeToSweden iOS && Android
+
+EXPO SDK40 managed workflow
+1. npm install --global expo-cli
+TO RUN project:
+1.run npm i firebase@8.1.1
 2.npm install
 
 
